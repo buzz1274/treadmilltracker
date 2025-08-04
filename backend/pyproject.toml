@@ -5,7 +5,6 @@ description = ""
 authors = [
     {name = "David Exelby"}
 ]
-readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi (>=0.116.1,<0.117.0)",
