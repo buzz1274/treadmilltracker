@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "$ENVIRONMENT" == "development" ] ; then
-  uvicorn main:app --host 0.0.0.0 --reload --log-level debug
+  uvicorn main:app --host 0.0.0.0:8000 --reload --log-level debug
 else
-  sleep infinity
+  uvicorn main:app --host 0.0.0.0:8000 --log-level warning
 fi

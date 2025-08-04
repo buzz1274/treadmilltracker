@@ -4,3 +4,4 @@ treadmilltracker.ipr
 treadmilltracker.iws
 
 __pycache__/
+.env
