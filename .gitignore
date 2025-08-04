@@ -2,3 +2,5 @@
 treadmilltracker.iml
 treadmilltracker.ipr
 treadmilltracker.iws
+
+__pycache__/
