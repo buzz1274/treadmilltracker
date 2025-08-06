@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-x = 1
+x = 12
 </script>
 
 <template>
