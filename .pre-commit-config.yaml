@@ -27,16 +27,14 @@ repos:
           - flake8-bugbear
           - flake8-simplify
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: "v8.54.0"
+    rev: "v9.32.0"
     hooks:
       - id: eslint
         types: [file]
         args:
           [
             "-c",
-            "frontend/.eslintrc.json",
-            "--ignore-path",
-            "frontend/.eslintignore",
+            "frontend/eslint.config.js",
             "--quiet",
           ]
   - repo: https://github.com/pre-commit/mirrors-prettier

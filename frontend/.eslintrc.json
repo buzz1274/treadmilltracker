@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended",
+    "@vue/eslint-config-typescript",
+    "@vue/eslint-config-typescript/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "parser": "@typescript-eslint/parser"
+  },
+  "plugins": ["@typescript-eslint", "vue"],
+  "rules": {
+    "vue/comment-directive": 0
+  },
+  "ignores": ["volt/**", "node_modules/"]
+}
