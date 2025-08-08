@@ -8,5 +8,3 @@ import SiteFooter from '@/components/SiteFooter.vue'
   <div class="min-h-[800px] p-2 bg-white flex"></div>
   <SiteFooter />
 </template>
-
-<style scoped></style>
