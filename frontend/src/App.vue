@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
-const x: string = 1
+import SiteHeader from '@/components/SiteHeader.vue'
+import SiteFooter from '@/components/SiteFooter.vue'
 </script>
 
 <template>
-  <Header />
+  <SiteHeader />
   <div class="min-h-[800px] p-2 bg-white flex"></div>
-  <Footer />
+  <SiteFooter />
 </template>
 
 <style scoped></style>
