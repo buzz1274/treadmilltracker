@@ -4,19 +4,27 @@ import pluginVue from 'eslint-plugin-vue'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
+import { configureVueProject } from '@vue/eslint-config-typescript'
+configureVueProject({ scriptLangs: ['ts', 'tsx', 'js', 'jsx'] })
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
 export default defineConfigWithVueTs(
   {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
+    name: 'treadmilltracker',
+    files: ['src/**/*.{ts,mts,tsx,vue,js,json,html,yaml}'],
+    languageOptions: {parserOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      ecmaFeatures: {
+        jsx: false,
+      },
+      project: './tsconfig.json',
+    }},
   },
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/volt/**']),
 
-  pluginVue.configs['flat/essential'],
-  vueTsConfigs.recommended,
+  pluginVue.configs['flat/recommended'],
+  vueTsConfigs.recommendedTypeChecked,
   skipFormatting,
 )

@@ -1,9 +1,0 @@
-*.yaml
-*.toml
-*.py
-*.lock
-*.sh
-*.css
-*.json
-backend/public/media
-volt/**
