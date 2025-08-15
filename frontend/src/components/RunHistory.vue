@@ -1,18 +1,38 @@
 <script setup lang="ts">
-import DataTable from '@/volt/DataTable.vue';
-import Column from 'primevue/column';
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 
-const products = [{'code': 1}];
+const runs = [
+  { date: '2025-08-01', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+  { date: '2025-08-02', distance: '5km', time: '1:30', calories: '120' },
+]
 </script>
 
 <template>
-  <DataTable :value="products">
-    <Column field="code" header="Code"></Column>
-    <Column field="name" header="Name"></Column>
-    <Column field="category" header="Category"></Column>
-    <Column field="quantity" header="Quantity"></Column>
+  <DataTable
+    :value="runs"
+    stripedRows
+    :pt="{
+      table: { class: 'text-xs px-2' },
+      headerRow: { class: 'h-7' },
+      bodyRow: { class: 'h-5 text-xs' },
+    }"
+  >
+    <template #header>
+      <div class="font-semibold h-3 text-sm">Run History</div>
+    </template>
+
+    <Column field="date" header="Date" class="border-gray:50"></Column>
+    <Column field="distance" header="Distance"></Column>
+    <Column field="calories" header="Calories"></Column>
+    <Column field="time" header="Time"></Column>
   </DataTable>
 </template>
-
-<style scoped>
-</style>
