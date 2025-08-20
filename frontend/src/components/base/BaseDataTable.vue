@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
-import {
-  PlusIcon,
-  ChevronDoubleLeftIcon,
-  ChevronLeftIcon,
-  ChevronDoubleRightIcon,
-  ChevronRightIcon,
-} from '@heroicons/vue/24/solid'
 
 const props = withDefaults(
   defineProps<{
@@ -22,14 +15,12 @@ const props = withDefaults(
     newRecordTitle: '',
   },
 )
-
-console.log(props)
 </script>
 
 <template>
   <DataTable
     :value="props.tableData"
-    :rows="10"
+    :rows="5"
     paginator
     unstyled
     :pt="{
@@ -47,7 +38,7 @@ console.log(props)
       <div class="flex p-1 text-sm justify-between">
         <div class="font-semibold">{{ props.tableTitle }}</div>
         <div v-if="newRecord" class="pt-1 pr-4" :title="props.newRecordTitle">
-          <PlusIcon class="size-4" @click="props.newRecord" />
+          <button class="size-4 pi pi-plus" @click="props.newRecord" />
         </div>
       </div>
     </template>
@@ -55,14 +46,14 @@ console.log(props)
     <template #paginatorcontainer="{ first, last, page, pageCount, totalRecords }">
       <div v-if="props.paginate && pageCount > 1" class="flex w-full justify-center">
         <div class="flex items-middle justify-center border-b border-black w-95 py-3">
-          <ChevronDoubleLeftIcon
-            class="size-4 disabled:size-20"
+          <button
+            class="size-4 pi pi-angle-double-left disabled:text-gray-200"
             text
             :disabled="page === 0"
             @click="props.paginate(0)"
           />
-          <ChevronLeftIcon
-            class="size-4"
+          <button
+            class="size-4 pi pi-angle-left disabled:text-gray-200"
             text
             :disabled="page === 0"
             @click="props.paginate(page - 1)"
@@ -73,16 +64,16 @@ console.log(props)
             >
             <span class="block sm:hidden">Page {{ page + 1 }} of {{ pageCount }}</span>
           </div>
-          <ChevronRightIcon
-            class="size-4"
+          <button
+            class="size-4 pi pi-angle-right disabled:text-gray-200"
             text
-            :disabled="page === 0"
+            :disabled="page === totalRecords"
             @click="props.paginate(page + 1)"
           />
-          <ChevronDoubleRightIcon
-            class="size-4"
+          <button
+            class="size-4 pi pi-angle-double-right disabled:text-gray-200"
             text
-            :disabled="page === 0"
+            :disabled="page === totalRecords"
             @click="props.paginate(pageCount)"
           />
         </div>

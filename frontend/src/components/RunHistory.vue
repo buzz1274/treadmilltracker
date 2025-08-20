@@ -17,7 +17,7 @@ const runs = [
 ]
 
 const paginate = (page: number): void => {
-  console.log('PAGINATE ' + toString(page))
+  console.log('PAGINATE ' + page.toString())
 }
 
 const addRun = (): void => {
