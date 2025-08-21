@@ -5,13 +5,15 @@ const props = withDefaults(
   defineProps<{
     tableData: Array<Record<string, any>>
     tableTitle: string
-    paginate?: boolean | ((page: number) => void)
+    paginate?: boolean
+    rowsPerPage?: number
     newRecord?: boolean | (() => void)
     newRecordTitle?: string
   }>(),
   {
     paginate: false,
     newRecord: false,
+    rowsPerPage: 10,
     newRecordTitle: '',
   },
 )
@@ -20,7 +22,7 @@ const props = withDefaults(
 <template>
   <DataTable
     :value="props.tableData"
-    :rows="5"
+    :rows="props.rowsPerPage"
     paginator
     unstyled
     :pt="{
@@ -43,20 +45,32 @@ const props = withDefaults(
       </div>
     </template>
 
-    <template #paginatorcontainer="{ first, last, page, pageCount, totalRecords }">
+    <template
+      #paginatorcontainer="{
+        first,
+        last,
+        page,
+        pageCount,
+        totalRecords,
+        firstPageCallback,
+        lastPageCallback,
+        prevPageCallback,
+        nextPageCallback,
+      }"
+    >
       <div v-if="props.paginate && pageCount > 1" class="flex w-full justify-center">
         <div class="flex items-middle justify-center border-b border-black w-95 py-3">
           <button
             class="size-4 pi pi-angle-double-left disabled:text-gray-200"
             text
             :disabled="page === 0"
-            @click="props.paginate(0)"
+            @click="firstPageCallback"
           />
           <button
             class="size-4 pi pi-angle-left disabled:text-gray-200"
             text
             :disabled="page === 0"
-            @click="props.paginate(page - 1)"
+            @click="prevPageCallback"
           />
           <div class="text-color font-medium -mt-0.5">
             <span class="hidden sm:block"
@@ -68,13 +82,13 @@ const props = withDefaults(
             class="size-4 pi pi-angle-right disabled:text-gray-200"
             text
             :disabled="page === totalRecords"
-            @click="props.paginate(page + 1)"
+            @click="nextPageCallback"
           />
           <button
             class="size-4 pi pi-angle-double-right disabled:text-gray-200"
             text
             :disabled="page === totalRecords"
-            @click="props.paginate(pageCount)"
+            @click="lastPageCallback"
           />
         </div>
       </div>

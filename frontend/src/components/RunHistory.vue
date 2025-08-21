@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
 import BaseDataTable from './base/BaseDataTable.vue'
-import { PencilIcon, TrashIcon } from '@heroicons/vue/24/solid'
 
 const runs = [
   { date: '2025-08-01', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
@@ -16,8 +15,12 @@ const runs = [
   { date: '2025-08-10', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
 ]
 
-const paginate = (page: number): void => {
-  console.log('PAGINATE ' + page.toString())
+const editRun = (id: number): void => {
+  console.log('EDIT RUN' + id.toString())
+}
+
+const deleteRun = (id: number): void => {
+  console.log('EDIT RUN' + id.toString())
 }
 
 const addRun = (): void => {
@@ -29,7 +32,8 @@ const addRun = (): void => {
   <BaseDataTable
     :table-data="runs"
     table-title="Run History"
-    :paginate="paginate"
+    :paginate="true"
+    :rows-per-page="10"
     :new-record="addRun"
     new-record-title="Add run"
   >
@@ -44,8 +48,8 @@ const addRun = (): void => {
         </template>
         <template #body="{ data }">
           <div class="flex items-center space-x-1">
-            <span @click="selectRow(data)"><PencilIcon class="size-4" /></span>
-            <span @click="selectRow(data)"><TrashIcon class="size-4" /></span>
+            <button class="size-4 pi pi-pencil" @click="editRun(data)" />
+            <button class="size-4 pi pi-trash" @click="deleteRun(data)" />
           </div>
         </template>
       </Column>
