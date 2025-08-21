@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
+import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -7,14 +8,11 @@ const props = withDefaults(
     tableTitle: string
     paginate?: boolean
     rowsPerPage?: number
-    newRecord?: boolean | (() => void)
-    newRecordTitle?: string
   }>(),
   {
     paginate: false,
     newRecord: false,
     rowsPerPage: 10,
-    newRecordTitle: '',
   },
 )
 </script>
@@ -28,7 +26,7 @@ const props = withDefaults(
     :pt="{
       tableContainer: 'w-100 pt-1 pl-2',
       table: 'w-95',
-      header: 'bg-black text-white pl-2 ',
+      header: 'bg-black text-white',
       bodyRow: 'leading-loose text-xs hover:bg-surface-100 hover:pointer',
       column: {
         headerCell: 'text-left border-b border-black pb-2',
@@ -37,12 +35,11 @@ const props = withDefaults(
     }"
   >
     <template #header>
-      <div class="flex p-1 text-sm justify-between">
-        <div class="font-semibold">{{ props.tableTitle }}</div>
-        <div v-if="newRecord" class="pt-1 pr-4" :title="props.newRecordTitle">
-          <button class="size-4 pi pi-plus" @click="props.newRecord" />
-        </div>
-      </div>
+      <BaseComponentHeader :table-title="props.tableTitle">
+        <template #header_action>
+          <slot name="header_action" />
+        </template>
+      </BaseComponentHeader>
     </template>
 
     <template

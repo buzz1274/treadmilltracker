@@ -5,8 +5,6 @@ const props = defineProps<{
   user: ref<any>
 }>()
 
-console.log(props.user.isAuthenticated)
-
 const logout = (): void => {}
 </script>
 

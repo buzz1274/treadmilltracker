@@ -34,22 +34,35 @@ const addRun = (): void => {
     table-title="Run History"
     :paginate="true"
     :rows-per-page="10"
-    :new-record="addRun"
     new-record-title="Add run"
   >
+    <template #header_action>
+      <button class="pi pi-plus pr-4" title="Add Run" style="font-size: 0.95em" @click="addRun" />
+    </template>
+
     <template #data>
       <Column field="date" header="Date"></Column>
       <Column field="distance" header="Distance"></Column>
       <Column field="calories" header="Calories"></Column>
       <Column field="time" header="Time"></Column>
-      <Column class="w-5 !text-end">
+      <Column class="w-4 !text-end">
         <template #header>
           <div class="text-center">-</div>
         </template>
         <template #body="{ data }">
-          <div class="flex items-center space-x-1">
-            <button class="size-4 pi pi-pencil" @click="editRun(data)" />
-            <button class="size-4 pi pi-trash" @click="deleteRun(data)" />
+          <div class="flex items-center">
+            <button
+              class="size-4 pi pi-pencil"
+              title="Edit Run"
+              style="font-size: 0.95em"
+              @click="editRun(data)"
+            />
+            <button
+              class="size-4 pi pi-trash"
+              title="Delete Run"
+              style="font-size: 0.95em"
+              @click="deleteRun(data)"
+            />
           </div>
         </template>
       </Column>
