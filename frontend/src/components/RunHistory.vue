@@ -31,7 +31,7 @@ const addRun = (): void => {
 <template>
   <BaseDataTable
     :table-data="runs"
-    table-title="Run History"
+    table-title="History"
     :paginate="true"
     :rows-per-page="10"
     new-record-title="Add run"
@@ -43,7 +43,6 @@ const addRun = (): void => {
     <template #data>
       <Column field="date" header="Date"></Column>
       <Column field="distance" header="Distance"></Column>
-      <Column field="calories" header="Calories"></Column>
       <Column field="time" header="Time"></Column>
       <Column class="w-4 !text-end">
         <template #header>

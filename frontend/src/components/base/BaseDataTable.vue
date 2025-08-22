@@ -24,7 +24,7 @@ const props = withDefaults(
     paginator
     unstyled
     :pt="{
-      tableContainer: 'w-100 pt-1 pl-2',
+      tableContainer: 'w-full pt-1 pl-2',
       table: 'w-95',
       header: 'bg-black text-white',
       bodyRow: 'leading-loose text-xs hover:bg-surface-100 hover:pointer',

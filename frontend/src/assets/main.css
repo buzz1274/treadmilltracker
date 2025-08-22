@@ -1,8 +1,18 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
+@import 'vue3-calendar-heatmap/dist/style.css';
 
 #app {
   font-weight: normal;
   font-size: 0.8rem;
+}
+
+text.vch__month__label,
+text.vch__day__label {
+  font-size: 0.55rem !important;
+}
+
+.vch__legend {
+  display: none !important;
 }

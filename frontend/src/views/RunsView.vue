@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import RunHistory from '../components/RunHistory.vue'
 import PersonalBests from '../components/PersonalBests.vue'
-import RunLog from '../components/RunLog.vue'
+import RunChart from '../components/RunChart.vue'
+import RunHeatmap from '../components/RunHeatmap.vue'
 </script>
 
 <template>
@@ -11,7 +12,9 @@ import RunLog from '../components/RunLog.vue'
       <RunHistory class="mb-6" />
     </div>
     <div class="col-span-7">
-      <RunLog />
+      <RunChart />
+      <div class="mb-6" />
+      <RunHeatmap />
     </div>
   </div>
 </template>
