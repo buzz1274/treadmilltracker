@@ -29,7 +29,11 @@ const changeYear = (year: string) => {
     <template #header_action>
       <select class="bg-white text-black text-xs" @change="changeYear($event.target.value)">
         <option value="">Last 12 months</option>
-        <option v-for="(availableYear, index) in availableYears" :key="index" value="availableYear">
+        <option
+          v-for="(availableYear, index) in availableYears"
+          :key="index"
+          :value="availableYear"
+        >
           {{ availableYear }}
         </option>
       </select>
