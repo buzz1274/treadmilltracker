@@ -4,7 +4,10 @@ import { CalendarHeatmap, type CalendarItem } from 'vue3-calendar-heatmap'
 import moment from 'moment'
 import { ref } from 'vue'
 
+//dummy data
 const runs = [{ date: '2025-8-1', count: 7600 }]
+const availableYears = [2025, 2024]
+//end dummy data
 
 const endDate: ref<Date> = ref(new Date())
 
@@ -26,8 +29,9 @@ const changeYear = (year: string) => {
     <template #header_action>
       <select class="bg-white text-black text-xs" @change="changeYear($event.target.value)">
         <option value="">Last 12 months</option>
-        <option value="2025">2025</option>
-        <option value="2024">2024</option>
+        <option v-for="availableYear in availableYears" :value="availableYear">
+          {{ availableYear }}
+        </option>
       </select>
     </template>
   </BaseComponentHeader>
