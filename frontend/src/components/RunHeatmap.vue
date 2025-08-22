@@ -43,6 +43,7 @@ const changeYear = (year: string) => {
     :values="runs"
     :no-data-text="'No runs recorded'"
     :tooltip-formatter="(v) => tooltipFormatter(v)"
+    :range-color="['#ebedf0', '#ebedf0', '#000000']"
     :end-date="endDate"
   />
 </template>
