@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
 import BaseDataTable from './base/BaseDataTable.vue'
+import BaseIcon from '@/components/base/BaseIcon.vue'
 
 const personalBests = [
   { title: 'Fastest 5km', date: '2025-08-01', time: '21:13' },
@@ -24,10 +25,9 @@ const viewPersonalBests = (id: number): void => {
         </template>
         <template #body="{ data }">
           <div class="flex items-center">
-            <button
-              class="pi pi-search-plus"
-              title="View Top 10"
-              style="font-size: 0.95em"
+            <BaseIcon
+              icon-css="pi pi-search-plus"
+              icon-title="View Top 10"
               @click="viewPersonalBests(data)"
             />
           </div>

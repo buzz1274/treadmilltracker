@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
 import BaseDataTable from './base/BaseDataTable.vue'
+import BaseIcon from '@/components/base/BaseIcon.vue'
 
 const runs = [
   { date: '2025-08-01', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
@@ -20,7 +21,7 @@ const editRun = (id: number): void => {
 }
 
 const deleteRun = (id: number): void => {
-  console.log('EDIT RUN' + id.toString())
+  console.log('DELETE RUN' + id.toString())
 }
 
 const addRun = (): void => {
@@ -37,7 +38,7 @@ const addRun = (): void => {
     new-record-title="Add run"
   >
     <template #header_action>
-      <button class="pi pi-plus pr-4" title="Add Run" style="font-size: 0.95em" @click="addRun" />
+      <BaseIcon icon-css="pi pi-plus pr-4" icon-title="Add Run" @click="addRun" />
     </template>
 
     <template #data>
@@ -50,18 +51,8 @@ const addRun = (): void => {
         </template>
         <template #body="{ data }">
           <div class="flex items-center">
-            <button
-              class="size-4 pi pi-pencil"
-              title="Edit Run"
-              style="font-size: 0.95em"
-              @click="editRun(data)"
-            />
-            <button
-              class="size-4 pi pi-trash"
-              title="Delete Run"
-              style="font-size: 0.95em"
-              @click="deleteRun(data)"
-            />
+            <BaseIcon icon-css="pi pi-pencil pr-1" icon-title="Edit Run" @click="editRun(data)" />
+            <BaseIcon icon-css="pi pi-trash" icon-title="Delete Run" @click="deleteRun(data)" />
           </div>
         </template>
       </Column>

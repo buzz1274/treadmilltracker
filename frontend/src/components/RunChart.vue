@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import Chart from 'primevue/chart'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
+import BaseIcon from '@/components/base/BaseIcon.vue'
 
+//dummy data
 const runs = [
   { date: '2025-08-01', distance: '7600' },
   { date: '2025-08-02', distance: '8900' },
@@ -26,9 +28,18 @@ const chartData = {
     },
   ],
 }
+//end dummy data
+
+const filterGraph = (): void => {
+  console.log('filterGraph')
+}
 </script>
 
 <template>
-  <BaseComponentHeader table-title="Chart" />
+  <BaseComponentHeader table-title="Chart">
+    <template #header_action>
+      <BaseIcon icon-css="pi pi-filter pr-4" icon-title="Filter Graph" @click="filterGraph" />
+    </template>
+  </BaseComponentHeader>
   <Chart type="bar" :data="chartData" />
 </template>
