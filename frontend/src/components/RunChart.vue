@@ -7,6 +7,7 @@ import { ref } from 'vue'
 import DatePicker from 'primevue/datepicker'
 import Button from 'primevue/button'
 import RadioButton from 'primevue/radiobutton'
+import RadioButtonGroup from 'primevue/radiobuttongroup'
 
 //dummy data
 const runs = [
@@ -35,6 +36,26 @@ const chartData = {
 }
 //end dummy data
 
+const filterModel = defineModel<{
+  startDate: string
+  endData: string
+  xAxis: string
+  yAxis: string
+}>({
+  type: Object,
+  default: (): {
+    startDate: string
+    endData: string
+    xAxis: string
+    yAxis: string
+  } => ({
+    startDate: '',
+    endData: '',
+    xAxis: 'distance',
+    yAxis: 'monthly',
+  }),
+})
+
 const graphFilterVisible: ref<boolean> = ref(false)
 const xAxisChoices: { label: string; value: string }[] = [
   { label: 'Distance(km)', value: 'distance' },
@@ -51,6 +72,7 @@ const yAxisChoices: { label: string; value: string }[] = [
 
 const filterGraph = (reset: boolean = false): void => {
   console.log('filterGraph ' + reset)
+  console.log(filterModel.value)
   graphFilterVisible.value = false
 }
 </script>
@@ -77,37 +99,27 @@ const filterGraph = (reset: boolean = false): void => {
     :style="{ width: '40rem' }"
   >
     <div class="flex items-center gap-4 mb-4">
-      <label for="start_date" class="font-semibold w-24">Start Date</label>
-      <DatePicker v-model="start_date" date-format="dd/mm/yy" />
+      <label for="startDate" class="font-semibold w-24">Start Date</label>
+      <DatePicker v-model="filterModel.startDate" date-format="dd/mm/yy" />
     </div>
     <div class="flex items-center gap-4 mb-4">
-      <label for="end_date" class="font-semibold w-24">End Date</label>
-      <DatePicker v-model="end_date" date-format="dd/mm/yy" />
+      <label for="endData" class="font-semibold w-24">End Date</label>
+      <DatePicker v-model="filterModel.endData" date-format="dd/mm/yy" />
     </div>
-    <div class="flex flex-wrap gap-4 mb-4">
-      <label for="end_date" class="font-semibold w-24">X-axis</label>
+    <RadioButtonGroup v-model="filterModel.xAxis" name="xaxis" class="flex flex-wrap gap-4 mb-4">
+      <label for="xaxis" class="font-semibold w-24">X-axis</label>
       <div v-for="(choice, index) in xAxisChoices" :key="index" class="flex items-center gap-2">
-        <RadioButton
-          v-model="x_axis"
-          :input-id="'x_axis_' + index"
-          :name="choice.value"
-          :value="choice.value"
-        />
-        <label :for="'x_axis' + index">{{ choice.label }}</label>
+        <RadioButton :input-id="'xaxis_' + index" :value="choice.value" />
+        <label :for="'axis_' + index">{{ choice.label }}</label>
       </div>
-    </div>
-    <div class="flex flex-wrap gap-4">
-      <label for="end_date" class="font-semibold w-24">Y-axis</label>
+    </RadioButtonGroup>
+    <RadioButtonGroup v-model="filterModel.yAxis" name="yaxis" class="flex flex-wrap gap-4">
+      <label for="yaxis" class="font-semibold w-24">Y-axis</label>
       <div v-for="(choice, index) in yAxisChoices" :key="index" class="flex items-center gap-2">
-        <RadioButton
-          v-model="y_axis"
-          :input-id="'y_axis_' + index"
-          :name="choice.value"
-          :value="choice.value"
-        />
-        <label :for="'y_axis' + index">{{ choice.label }}</label>
+        <RadioButton :input-id="'yaxis_' + index" :value="choice.value" />
+        <label :for="'yaxis_' + index">{{ choice.label }}</label>
       </div>
-    </div>
+    </RadioButtonGroup>
     <div class="flex justify-end gap-2 mt-10">
       <Button
         type="button"

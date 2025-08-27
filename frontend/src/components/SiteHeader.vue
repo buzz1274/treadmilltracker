@@ -14,7 +14,7 @@ const logout = (): void => {}
     <h1 class="text-4xl font-bold pl-4">TreadmillTracker</h1>
     <nav v-if="props.user.isAuthenticated" class="absolute top-0 right-0 pr-4 pt-1 text-[0.90rem]">
       Welcome back, {{ props.user.name }}
-      <BaseIcon icon-css="pi pi-sign-out ml-2" icon-title="View Top 10" @click="logout" />
+      <BaseIcon icon-css="pi pi-sign-out ml-2" icon-title="Logout" @click="logout" />
     </nav>
   </header>
 </template>
