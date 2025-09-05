@@ -3,7 +3,7 @@ import Chart from 'primevue/chart'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
@@ -12,6 +12,7 @@ import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
 import { object, string, number, date, ObjectSchema } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
+import { onClickOutside } from '@vueuse/core'
 
 //dummy data
 const runs = [
@@ -40,7 +41,7 @@ const chartData = {
 }
 //end dummy data
 
-let filterSchema: ObjectSchema<{
+const filterSchema: ObjectSchema<{
   startDate: Date
   endDate: Date
   xAxis: number
@@ -102,6 +103,11 @@ const filterGraph = (reset: boolean = false): void => {
   console.log(filterModel.value)
   graphFilterVisible.value = false
 }
+
+const target = useTemplateRef<HTMLElement>('filter_graph')
+onClickOutside(target, () => {
+  graphFilterVisible.value = false
+})
 </script>
 
 <template>
@@ -117,6 +123,7 @@ const filterGraph = (reset: boolean = false): void => {
   <Chart type="bar" :data="chartData" />
 
   <Dialog
+    ref="filter_graph"
     v-model:visible="graphFilterVisible"
     modal
     header="Filter Graph"
@@ -128,7 +135,7 @@ const filterGraph = (reset: boolean = false): void => {
     <Form
       v-slot="$form"
       v-model="filterModel"
-      :validateOnBlur="true"
+      :validate-on-blur="true"
       :resolver="yupResolver(filterSchema)"
       class="p-4"
     >

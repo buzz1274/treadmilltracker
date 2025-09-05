@@ -47,7 +47,7 @@ const addRun = (): void => {
           @change="historyDisplay = $event.target.value"
         >
           <option value="distance">Distance/Time</option>
-          <option value="calories">Calories</option>
+          <option value="calories">Calories/Time</option>
           <option value="vo2">VO₂ Max</option>
         </select>
         <BaseIcon icon-css="pi pi-plus pr-2" icon-title="Add Run" @click="addRun" />
@@ -57,8 +57,12 @@ const addRun = (): void => {
     <template #data>
       <Column field="date" header="Date"></Column>
       <Column v-if="historyDisplay === 'distance'" field="distance" header="Distance"></Column>
-      <Column v-if="historyDisplay === 'distance'" field="time" header="Time"></Column>
       <Column v-if="historyDisplay === 'calories'" field="calories" header="Calories"></Column>
+      <Column
+        v-if="historyDisplay === 'distance' || historyDisplay === 'calories'"
+        field="time"
+        header="Time"
+      ></Column>
       <Column v-if="historyDisplay === 'vo2'" field="vo2" header="VO₂ Max"></Column>
       <Column class="w-4 !text-end">
         <template #header>
