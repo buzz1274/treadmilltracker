@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import DatePicker from 'primevue/datepicker'
 
+const props = defineProps<{
+  name: string
+}>()
+
 const model = defineModel<{
   date: Date
 }>()
@@ -8,6 +12,7 @@ const model = defineModel<{
 
 <template>
   <DatePicker
+    :name="props.name"
     v-model="model"
     :pt="{
       header: 'text-sm',

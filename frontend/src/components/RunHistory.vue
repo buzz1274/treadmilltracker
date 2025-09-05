@@ -2,6 +2,7 @@
 import Column from 'primevue/column'
 import BaseDataTable from './base/BaseDataTable.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
+import { ref } from 'vue'
 
 const runs = [
   { date: '2025-08-01', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
@@ -15,6 +16,8 @@ const runs = [
   { date: '2025-08-09', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
   { date: '2025-08-10', distance: '5km', time: '1:30', calories: '120', vo2: '39' },
 ]
+
+const historyDisplay: ref<string> = ref('distance')
 
 const editRun = (id: number): void => {
   console.log('EDIT RUN' + id.toString())
@@ -38,13 +41,25 @@ const addRun = (): void => {
     new-record-title="Add run"
   >
     <template #header_action>
-      <BaseIcon icon-css="pi pi-plus pr-4" icon-title="Add Run" @click="addRun" />
+      <div>
+        <select
+          class="bg-white text-black text-xs mr-4"
+          @change="historyDisplay = $event.target.value"
+        >
+          <option value="distance">Distance/Time</option>
+          <option value="calories">Calories</option>
+          <option value="vo2">VO₂ Max</option>
+        </select>
+        <BaseIcon icon-css="pi pi-plus pr-2" icon-title="Add Run" @click="addRun" />
+      </div>
     </template>
 
     <template #data>
       <Column field="date" header="Date"></Column>
-      <Column field="distance" header="Distance"></Column>
-      <Column field="time" header="Time"></Column>
+      <Column v-if="historyDisplay === 'distance'" field="distance" header="Distance"></Column>
+      <Column v-if="historyDisplay === 'distance'" field="time" header="Time"></Column>
+      <Column v-if="historyDisplay === 'calories'" field="calories" header="Calories"></Column>
+      <Column v-if="historyDisplay === 'vo2'" field="vo2" header="VO₂ Max"></Column>
       <Column class="w-4 !text-end">
         <template #header>
           <div class="text-center">-</div>

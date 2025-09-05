@@ -5,10 +5,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="flex p-1 text-sm justify-between bg-black text-white pl-2">
+  <div class="flex p-1 text-sm justify-between bg-black text-white">
     <div class="font-semibold">
       {{ props.tableTitle }}
     </div>
-    <slot name="header_action"></slot>
+    <slot name="header_action" class="text-end"></slot>
   </div>
 </template>

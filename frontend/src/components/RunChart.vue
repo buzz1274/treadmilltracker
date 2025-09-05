@@ -8,6 +8,10 @@ import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
+import Message from 'primevue/message'
+import { Form } from '@primevue/forms'
+import { object, string, number, date, ObjectSchema } from 'yup'
+import { yupResolver } from '@primeuix/forms/resolvers/yup'
 
 //dummy data
 const runs = [
@@ -36,6 +40,29 @@ const chartData = {
 }
 //end dummy data
 
+let filterSchema: ObjectSchema<{
+  startDate: Date
+  endDate: Date
+  xAxis: number
+  yAxis: string
+}> = object({
+  startDate: date().required('Please enter a valid date'),
+  endDate: date().required(),
+  xAxis: number().required(),
+  yAxis: string().required(),
+})
+
+console.log(filterSchema.fields.startDate)
+
+/*
+let filterSchema = object({
+  startDate: date().required('Please enter a valid date'),
+  endDate: date().required(),
+  xAxis: number().required(),
+  yAxis: string().required(),
+})
+ */
+
 const filterModel = defineModel<{
   startDate: Date
   endData: Date
@@ -56,7 +83,7 @@ const filterModel = defineModel<{
   }),
 })
 
-const graphFilterVisible: ref<boolean> = ref(false)
+const graphFilterVisible = ref<boolean>(false)
 const xAxisChoices: { label: string; value: string }[] = [
   { label: 'Distance(km)', value: 'distance' },
   { label: 'Time(hrs)', value: 'time' },
@@ -98,32 +125,53 @@ const filterGraph = (reset: boolean = false): void => {
     :draggable="false"
     :style="{ width: '40rem' }"
   >
-    <div class="flex items-center gap-4 mb-4">
-      <label for="startDate" class="font-semibold w-24">Start Date</label>
-      <BaseDatePicker v-model="filterModel.startDate" />
-    </div>
-    <div class="flex items-center gap-4 mb-4">
-      <label for="endDate" class="font-semibold w-24">End Date</label>
-      <BaseDatePicker v-model="filterModel.endDate" />
-    </div>
-    <RadioButtonGroup v-model="filterModel.xAxis" name="xaxis" class="flex flex-wrap gap-4 mb-4">
-      <label for="xaxis" class="font-semibold w-24">X-axis</label>
-      <div v-for="(choice, index) in xAxisChoices" :key="index" class="flex items-center gap-2">
-        <RadioButton :input-id="'xaxis_' + index" :value="choice.value" />
-        <label :for="'axis_' + index" class="text-xs">{{ choice.label }}</label>
+    <Form
+      v-slot="$form"
+      v-model="filterModel"
+      :validateOnBlur="true"
+      :resolver="yupResolver(filterSchema)"
+      class="p-4"
+    >
+      <div class="flex items-center gap-4 mb-4">
+        <label for="startDate" class="font-semibold w-24">Start Date</label>
+        <BaseDatePicker
+          v-model="filterModel.startDate"
+          name="startDate"
+          :error-message="$form.startDate?.error?.message"
+        />
       </div>
-    </RadioButtonGroup>
-    <RadioButtonGroup v-model="filterModel.yAxis" name="yaxis" class="flex flex-wrap gap-4">
-      <label for="yaxis" class="font-semibold w-24">Y-axis</label>
-      <div v-for="(choice, index) in yAxisChoices" :key="index" class="flex items-center gap-2">
-        <RadioButton :input-id="'yaxis_' + index" :value="choice.value" />
-        <label :for="'yaxis_' + index" class="text-xs">{{ choice.label }}</label>
+      <div v-if="$form.startDate?.invalid" class="flex items-center gap-4 mb-4">
+        <div class="w-24"></div>
+        <Message severity="error" class="border w-100" size="small">
+          {{ $form.startDate.error.message }}
+        </Message>
       </div>
-    </RadioButtonGroup>
-    <div class="flex justify-end gap-2 mt-10">
-      <BaseButton label="Cancel" severity="secondary" @click="graphFilterVisible = false" />
-      <BaseButton label="Reset" severity="secondary" @click="filterGraph(true)" />
-      <BaseButton label="Filter" severity="primary" @click="filterGraph(false)" />
-    </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="endDate" class="font-semibold w-24">End Date</label>
+        <BaseDatePicker v-model="filterModel.endDate" name="endDate" />
+        <span v-if="$form.endDate?.invalid" size="small">
+          {{ $form.endDate.error.message }}
+        </span>
+      </div>
+      <RadioButtonGroup v-model="filterModel.xAxis" name="xaxis" class="flex flex-wrap gap-4 mb-4">
+        <label for="xaxis" class="font-semibold w-24">X-axis</label>
+        <div v-for="(choice, index) in xAxisChoices" :key="index" class="flex items-center gap-2">
+          <RadioButton :input-id="'xaxis_' + index" :value="choice.value" />
+          <label :for="'axis_' + index" class="text-xs">{{ choice.label }}</label>
+        </div>
+      </RadioButtonGroup>
+      <RadioButtonGroup v-model="filterModel.yAxis" name="yaxis" class="flex flex-wrap gap-4">
+        <label for="yaxis" class="font-semibold w-24">Y-axis</label>
+        <div v-for="(choice, index) in yAxisChoices" :key="index" class="flex items-center gap-2">
+          <RadioButton :input-id="'yaxis_' + index" :value="choice.value" />
+          <label :for="'yaxis_' + index" class="text-xs">{{ choice.label }}</label>
+        </div>
+      </RadioButtonGroup>
+      <div class="flex justify-end gap-2 mt-10">
+        <BaseButton label="Cancel" severity="secondary" @click="graphFilterVisible = false" />
+        <BaseButton label="Reset" severity="secondary" @click="filterGraph(true)" />
+        <BaseButton label="Filter" severity="primary" @click="filterGraph(false)" />
+      </div>
+    </Form>
   </Dialog>
 </template>
