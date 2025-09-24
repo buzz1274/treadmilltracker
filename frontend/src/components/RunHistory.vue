@@ -5,7 +5,7 @@ import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
 import { ref, Ref } from 'vue'
-import { Run } from '@/types/types'
+import { Run } from '@/types/types.d.ts'
 
 const runs = [
   { date: '2025-08-01', distance: '5km', time: '1:30', calories: '120', vo2: '39' },

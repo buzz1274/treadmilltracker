@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import { Run, PersonalBests } from '@/types/types'
+import { Run, PersonalBests } from '@/types/types.d.ts'
 
 const props = withDefaults(
   defineProps<{

@@ -8,7 +8,7 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { object, string, date, ObjectSchema, InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import { Run } from '@/types/types'
+import { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 
 const props = withDefaults(

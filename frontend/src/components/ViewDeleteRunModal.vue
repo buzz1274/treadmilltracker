@@ -2,7 +2,7 @@
 import moment from 'moment/moment'
 import Dialog from 'primevue/dialog'
 import { ref, Ref, watch } from 'vue'
-import { Run } from '@/types/types'
+import { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
 

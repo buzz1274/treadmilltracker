@@ -3,7 +3,7 @@ import Column from 'primevue/column'
 import BaseDataTable from './base/BaseDataTable.vue'
 import { ref, Ref } from 'vue'
 import Dialog from 'primevue/dialog'
-import { PersonalBests } from '@/types/types'
+import { PersonalBests } from '@/types/types.d.ts'
 
 const personalBests = [
   { title: 'Fastest 5km', date: '2025-08-01', time: '21:13' },
