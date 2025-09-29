@@ -5,3 +5,4 @@ treadmilltracker.iws
 
 __pycache__/
 .env
+*.csv

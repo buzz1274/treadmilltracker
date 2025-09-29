@@ -8,7 +8,7 @@ async def main_route():
     return {"message": "Hello World"}
 
 
-app.get("/runs")
+# app.get("/runs")
 
 
 async def runs():

@@ -1,4 +1,4 @@
-exclude: ".git|k8s|helmfile|.conf|Dockerfile|migrations|docker-compose-PRODUCTION.yaml|.md|.ico"
+exclude: ".git|k8s|helmfile|.conf|Dockerfile|migrations|docker-compose-PRODUCTION.yaml|.md|.ico|alembic"
 default_stages: [pre-commit, pre-push]
 fail_fast: false
 
@@ -23,7 +23,6 @@ repos:
     hooks:
       - id: flake8
         additional_dependencies:
-          - flake8-isort
           - flake8-bugbear
           - flake8-simplify
   - repo: https://github.com/pre-commit/mirrors-prettier
