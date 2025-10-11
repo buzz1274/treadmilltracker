@@ -58,7 +58,7 @@ const formatSecondsAsHHMMSS = (seconds: number) => {
       :table-data="runs"
       table-title="History"
       :paginate="true"
-      :rows-per-page="10"
+      :rows-per-page="15"
       new-record-title="Add run"
       @row-select="
         (event) => {
