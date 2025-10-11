@@ -91,27 +91,49 @@ const formatSecondsAsHHMMSS = (seconds: number) => {
       </template>
 
       <template #data>
-        <Column field="run_date" header="Date">
+        <Column field="run_date" header="Date" :sortable="true" class="cursor-pointer">
           <template #body="{ data }: { data: Run }">
             {{ moment(data.run_date).format('MMM Do, YYYY') }}
           </template>
         </Column>
-        <Column v-if="historyDisplay === 'distance'" field="distance_m" header="Distance(km)">
+        <Column
+          v-if="historyDisplay === 'distance'"
+          :sortable="true"
+          field="distance_m"
+          header="Distance(km)"
+          class="cursor-pointer"
+        >
           <template #body="{ data }: { data: Run }">
             {{ (data.distance_m / 1000).toFixed(2) }}
           </template>
         </Column>
-        <Column v-if="historyDisplay === 'calories'" field="calories" header="Calories"></Column>
+        <Column
+          v-if="historyDisplay === 'calories'"
+          :sortable="true"
+          field="calories"
+          header="Calories"
+          class="cursor-pointer"
+        >
+        </Column>
         <Column
           v-if="historyDisplay === 'distance' || historyDisplay === 'calories'"
+          :sortable="true"
           field="duration_s"
           header="Time(hh:mm:ss)"
+          class="cursor-pointer"
         >
           <template #body="{ data }: { data: Run }">
             {{ formatSecondsAsHHMMSS(data.duration_s) }}
           </template>
         </Column>
-        <Column v-if="historyDisplay === 'vo2'" field="vo2max" header="VO₂ Max"></Column>
+        <Column
+          v-if="historyDisplay === 'vo2'"
+          :sortable="true"
+          class="cursor-pointer"
+          field="vo2max"
+          header="VO₂ Max"
+        >
+        </Column>
         <Column class="w-4 !text-end">
           <template #header>
             <div class="text-center">-</div>
