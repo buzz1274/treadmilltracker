@@ -19,14 +19,18 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from app.core.models import SQLModel
+from app.api.runs.models import SQLModel as RunSQLModel
+from app.api.user.models import SQLModel as UserSQLModel
 from app.core.config import Settings
 
-target_metadata = SQLModel.metadata
+target_metadata = RunSQLModel.metadata
+target_metadata.tables.update(
+    UserSQLModel.metadata.tables
+)
+
 
 
 def get_url():
-    print(str(Settings().SQLALCHEMY_DATABASE_URI))
     return str(Settings().SQLALCHEMY_DATABASE_URI)
 
 

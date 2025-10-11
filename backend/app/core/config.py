@@ -4,7 +4,7 @@ import os
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "TreadmillTracker"
-    API_V1_STR: str = "/api/v1"
+    API_V1_STR: str = "/api"
 
     POSTGRES_SERVER: str = os.environ.get("DB_HOST")
     POSTGRES_PORT: int = int(os.environ.get("POSTGRES_PORT", 5432))
@@ -23,3 +23,5 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
+
+settings = Settings()

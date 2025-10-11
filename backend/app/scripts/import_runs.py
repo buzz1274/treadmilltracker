@@ -1,4 +1,5 @@
-from app.core.models import Run, User
+from app.api.runs.models import Run
+from app.api.user.models import User
 from sqlmodel import Session, select
 from app.core.database import db_connection
 import csv
