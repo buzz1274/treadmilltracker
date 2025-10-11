@@ -34,6 +34,8 @@ defineEmits(['rowSelect'])
       header: 'bg-black text-white',
       bodyRow: 'leading-loose text-xs hover:bg-gray-100 hover:cursor-zoom-in even:bg-gray-50',
       column: {
+        sort: 'pl-1 text-xs',
+        sortIcon: 'text-xs w-3 h-3',
         headerCell: 'text-left border-b border-black pb-2',
         bodyCell: 'border-b border-gray-400 pt-1 pb-1',
       },
