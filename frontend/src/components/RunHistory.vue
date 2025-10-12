@@ -122,6 +122,9 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
           header="Pace(k/h)"
           class="cursor-pointer"
         >
+          <template #body="{ data }: { data: Run }">
+            {{ data.pace.toFixed(2) }}
+          </template>
         </Column>
         <Column
           v-if="historyDisplay === 'distance' || historyDisplay === 'calories'"

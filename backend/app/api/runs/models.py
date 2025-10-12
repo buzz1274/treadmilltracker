@@ -28,7 +28,10 @@ class RunPublic(RunBase):
     @property
     def pace(self) -> float:
         if self.distance_m > 0:
-            return round((self.distance_m * 3600) / (self.duration_s * 1000), 1)
+            pace: float = round(
+                (self.distance_m * 3600) / (self.duration_s * 1000), 2
+            )
+            return float(f"{pace:.2f}")
         return 0.0
 
 
