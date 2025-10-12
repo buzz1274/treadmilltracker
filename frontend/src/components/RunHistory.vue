@@ -18,7 +18,7 @@ const deleteRun: Ref<boolean> = ref(false)
 const addEditRunModalTitle: Ref<string> = ref('')
 const runModalData: Ref<Run | undefined> = ref(undefined)
 
-const formatSecondsAsHHMMSS = (seconds: number) => {
+const formatSecondsAsHHMMSS = (seconds: number): string => {
   const formattedHours = String(Math.floor(seconds / 3600)).padStart(2, '0')
   const formattedMinutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
   const formattedSeconds = String(seconds % 60).padStart(2, '0')
@@ -116,10 +116,18 @@ const formatSecondsAsHHMMSS = (seconds: number) => {
         >
         </Column>
         <Column
+          v-if="historyDisplay === 'distance'"
+          :sortable="true"
+          field="pace"
+          header="Pace(k/h)"
+          class="cursor-pointer"
+        >
+        </Column>
+        <Column
           v-if="historyDisplay === 'distance' || historyDisplay === 'calories'"
           :sortable="true"
           field="duration_s"
-          header="Time(hh:mm:ss)"
+          header="Time"
           class="cursor-pointer"
         >
           <template #body="{ data }: { data: Run }">

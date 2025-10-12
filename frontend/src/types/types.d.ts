@@ -4,6 +4,7 @@ export type Run = {
   duration_s: number
   calories: number
   vo2max: number
+  pace: number
 }
 
 export type PersonalBests = Record<'title' | 'date' | 'time', string>
