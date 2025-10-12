@@ -34,7 +34,7 @@ defineEmits(['rowSelect'])
       header: 'bg-black text-white',
       bodyRow: 'leading-loose text-xs hover:bg-gray-100 hover:cursor-zoom-in even:bg-gray-50',
       column: {
-        sort: 'pl-1 text-xs',
+        sort: 'pl-1 text-xs small-icon',
         sortIcon: 'text-xs w-3 h-3',
         headerCell: 'text-left border-b border-black pb-2',
         bodyCell: 'border-b border-gray-400 pt-1 pb-1',
@@ -102,3 +102,10 @@ defineEmits(['rowSelect'])
     <slot name="data"> </slot>
   </DataTable>
 </template>
+
+<style>
+.small-icon svg {
+  height: 10px;
+  width: 10px;
+}
+</style>
