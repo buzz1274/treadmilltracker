@@ -1,10 +1,11 @@
+import decimal
 from datetime import date
 
 from sqlmodel import Field, Relationship, SQLModel
 from pydantic import computed_field
 
 from app.api.user.models import User
-from typing import List
+from typing import List, Optional
 
 
 class RunBase(SQLModel):
@@ -22,7 +23,9 @@ class Run(RunBase, table=True):
 
 
 class RunPublic(RunBase):
-    id: int
+    id: Optional[int] = None
+    run_date: str
+    vo2max: decimal.Decimal
 
     @computed_field
     @property

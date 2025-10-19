@@ -8,3 +8,8 @@ export type Run = {
 }
 
 export type PersonalBests = Record<'title' | 'date' | 'time', string>
+
+export type filterHistoryModelType = {
+  viewChoices: string
+  groupByChoices: string
+}
