@@ -10,8 +10,8 @@ export class RunsModel extends Model {
     this.getRuns()
   }
 
-  public getRuns(): void {
-    this.fetch('api/runs', { method: 'GET' })
+  public getRuns(group_by: string = 'daily'): void {
+    this.fetch('api/runs/?group_by=' + group_by, { method: 'GET' })
       .then((response) => {
         return response ? response.json() : null
       })

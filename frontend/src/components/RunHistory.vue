@@ -1,34 +1,56 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
+import FilterHistoryModal from '@/components/FilterHistoryModal.vue'
 import BaseDataTable from './base/BaseDataTable.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
-import { ref, Ref } from 'vue'
-import { Run } from '@/types/types.d.ts'
+import { computed, type ComputedRef, reactive, ref, type Ref, watch } from 'vue'
+import { type filterHistoryModelType, Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
-import moment from 'moment/moment'
+import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
 
 const runsModel: RunsModel = new RunsModel()
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
-const historyDisplay: Ref<string> = ref('distance')
 const displayViewRunModal: Ref<boolean> = ref(false)
 const displayAddEditRunModal: Ref<boolean> = ref(false)
 const deleteRun: Ref<boolean> = ref(false)
 const addEditRunModalTitle: Ref<string> = ref('')
 const runModalData: Ref<Run | undefined> = ref(undefined)
-
-const formatSecondsAsHHMMSS = (seconds: number): string => {
-  const formattedHours = String(Math.floor(seconds / 3600)).padStart(2, '0')
-  const formattedMinutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
-  const formattedSeconds = String(seconds % 60).padStart(2, '0')
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
-}
+const displayFilterHistoryModal: Ref<boolean> = ref(false)
+const filterHistoryModel = reactive<filterHistoryModelType>({
+  viewChoices: 'distance',
+  groupByChoices: 'daily',
+})
+const isDailyView: ComputedRef<boolean> = computed(
+  () => filterHistoryModel.groupByChoices === 'daily',
+)
+const isDistanceView: ComputedRef<boolean> = computed(
+  () => filterHistoryModel.viewChoices === 'distance',
+)
+const isCaloriesView: ComputedRef<boolean> = computed(
+  () => filterHistoryModel.viewChoices === 'calories',
+)
+const isVo2View: ComputedRef<boolean> = computed(() => filterHistoryModel.viewChoices === 'vo2max')
+watch(
+  () => filterHistoryModel.groupByChoices,
+  (group_by: string): void => {
+    runsModel.getRuns(group_by)
+  },
+)
 </script>
 
 <template>
   <div>
+    <FilterHistoryModal
+      v-model:visible="displayFilterHistoryModal"
+      :model-value="filterHistoryModel"
+      @close="
+        () => {
+          displayFilterHistoryModal = false
+        }
+      "
+    />
     <ViewDeleteRunModal
       v-model:visible="displayViewRunModal"
       :run-data="runModalData"
@@ -69,14 +91,11 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
     >
       <template #header_action>
         <div>
-          <select
-            class="bg-white text-black text-xs mr-4"
-            @change="historyDisplay = $event.target.value"
-          >
-            <option value="distance">Distance/Time</option>
-            <option value="calories">Calories/Time</option>
-            <option value="vo2">VO₂ Max</option>
-          </select>
+          <BaseIcon
+            icon-css="pi pi-filter pr-4"
+            icon-title="Filter History"
+            @click="displayFilterHistoryModal = true"
+          />
           <BaseIcon
             icon-css="pi pi-plus pr-2"
             icon-title="Add Run"
@@ -91,13 +110,18 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
       </template>
 
       <template #data>
-        <Column field="run_date" header="Date" :sortable="true" class="cursor-pointer">
+        <Column
+          field="run_date"
+          :header="filterHistoryModel.groupByChoices === 'weekly' ? 'Date(w/c)' : 'Date'"
+          :sortable="true"
+          class="cursor-pointer"
+        >
           <template #body="{ data }: { data: Run }">
-            {{ moment(data.run_date).format('MMM Do, YYYY') }}
+            {{ formatDate(data.run_date, filterHistoryModel.groupByChoices) }}
           </template>
         </Column>
         <Column
-          v-if="historyDisplay === 'distance'"
+          v-if="isDistanceView"
           :sortable="true"
           field="distance_m"
           header="Distance(km)"
@@ -108,7 +132,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
           </template>
         </Column>
         <Column
-          v-if="historyDisplay === 'calories'"
+          v-if="isCaloriesView"
           :sortable="true"
           field="calories"
           header="Calories"
@@ -116,7 +140,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
         >
         </Column>
         <Column
-          v-if="historyDisplay === 'distance'"
+          v-if="isDistanceView"
           :sortable="true"
           field="pace"
           header="Pace(k/h)"
@@ -127,7 +151,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
           </template>
         </Column>
         <Column
-          v-if="historyDisplay === 'distance' || historyDisplay === 'calories'"
+          v-if="isDistanceView || isCaloriesView"
           :sortable="true"
           field="duration_s"
           header="Time"
@@ -138,7 +162,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
           </template>
         </Column>
         <Column
-          v-if="historyDisplay === 'vo2'"
+          v-if="isVo2View"
           :sortable="true"
           class="cursor-pointer"
           field="vo2max"
@@ -150,7 +174,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
             <div class="text-center">-</div>
           </template>
           <template #body="{ data }: { data: Run }">
-            <div class="flex items-center">
+            <div v-if="isDailyView" class="flex items-center">
               <BaseIcon
                 icon-css="pi pi-pencil pr-1"
                 icon-title="Edit Run"
@@ -174,6 +198,7 @@ const formatSecondsAsHHMMSS = (seconds: number): string => {
                 "
               />
             </div>
+            <div v-else class="flex items-center">-</div>
           </template>
         </Column>
       </template>

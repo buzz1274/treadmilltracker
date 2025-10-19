@@ -26,7 +26,7 @@ defineEmits(['rowSelect'])
     :rows="props.rowsPerPage"
     paginator
     unstyled
-    stripedRows
+    striped-rows
     selection-mode="single"
     :pt="{
       tableContainer: 'w-full pt-1 pl-2',
