@@ -13,7 +13,7 @@ const { user, loading } = storeToRefs(store)
 </script>
 
 <template>
-  <BaseLoader :loading="loading" />
+  <BaseLoader :loading="loading.isLoading" />
   <SiteHeader :user="user" />
   <div class="min-h-[800px] p-2 bg-white flex">
     <Toast />

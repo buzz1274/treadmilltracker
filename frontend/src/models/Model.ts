@@ -1,22 +1,25 @@
 import type { Ref } from 'vue'
+import { type loadingState } from '@/types/types.d.ts'
 
 export class Model {
   protected _host: string = 'https://' + window.location.hostname + '/'
   protected _data_fetched: boolean = false
-  protected _loading: Ref<boolean>
+  protected _loading: Ref<loadingState>
+  protected _call_id: number
 
-  public constructor(loading: Ref<boolean>) {
+  public constructor(loading: Ref<loadingState>) {
     this._loading = loading
   }
 
   protected fetch(url: string, request: RequestInit): Promise<Response | void> {
     const HTTP_FORBIDDEN: number = 403
 
-    this._loading.value = true
+    this._call_id = this._loading.value.addCall()
 
     return fetch(this.apiUrl(url), request)
       .then((response) => {
-        this._loading.value = false
+        this._loading.value.completeCall(this._call_id)
+
         if (response.status === HTTP_FORBIDDEN) {
           throw new Error(String(HTTP_FORBIDDEN))
         } else {
@@ -24,7 +27,7 @@ export class Model {
         }
       })
       .catch((error) => {
-        this._loading.value = false
+        this._loading.value.completeCall(this._call_id)
         throw new Error(error)
       })
   }

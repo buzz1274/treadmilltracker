@@ -13,3 +13,10 @@ export type filterHistoryModelType = {
   viewChoices: string
   groupByChoices: string
 }
+
+export interface loadingState {
+  apiCalls: boolean[]
+  addCall(): number
+  completeCall(index: number): void
+  isLoading: boolean
+}
