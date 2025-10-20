@@ -1,14 +1,4 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const props = defineProps<{
-  user: ref<any>
-}>()
-
-const login = (): void => {
-  //props.user.isAuthenticated = true;
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="flex justify-center mx-auto pt-10">

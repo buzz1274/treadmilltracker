@@ -5,12 +5,16 @@ import BaseDataTable from './base/BaseDataTable.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
-import { computed, type ComputedRef, reactive, ref, type Ref, watch } from 'vue'
+import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
 import { type filterHistoryModelType, Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
+import { storeToRefs } from 'pinia'
+import { store as useStore } from '@/stores/store'
 
-const runsModel: RunsModel = new RunsModel()
+const store = useStore()
+const { loading } = storeToRefs(store)
+const runsModel: RunsModel = new RunsModel(loading)
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
 const displayAddEditRunModal: Ref<boolean> = ref(false)
@@ -32,6 +36,10 @@ const isCaloriesView: ComputedRef<boolean> = computed(
   () => filterHistoryModel.viewChoices === 'calories',
 )
 const isVo2View: ComputedRef<boolean> = computed(() => filterHistoryModel.viewChoices === 'vo2max')
+
+onMounted((): void => {
+  runsModel.getRuns(filterHistoryModel.groupByChoices)
+})
 watch(
   () => filterHistoryModel.groupByChoices,
   (group_by: string): void => {
@@ -84,8 +92,10 @@ watch(
       new-record-title="Add run"
       @row-select="
         (event) => {
-          displayViewRunModal = true
-          runModalData = event.data
+          if (isDailyView) {
+            displayViewRunModal = true
+            runModalData = event.data
+          }
         }
       "
     >
