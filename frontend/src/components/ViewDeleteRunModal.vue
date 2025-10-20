@@ -36,12 +36,18 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const deleteRun = (): void => {
-  toast.add({
-    severity: 'success',
-    summary: 'Run deleted',
-    detail: 'Run deleted successfully',
-    life: 3000,
-  })
+  if (!props.runData) return
+
+  if (props.runData.delete()) {
+    toast.add({
+      severity: 'success',
+      summary: 'Run deleted',
+      detail: 'Run deleted successfully',
+      life: 3000,
+    })
+  } else {
+    //show error message//
+  }
   emit('close')
 }
 </script>
@@ -50,19 +56,23 @@ const deleteRun = (): void => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="'Treadmill run on ' + moment(runData?.date).format('MMMM Do YYYY')"
+    :header="'Treadmill run on ' + moment(runData?.run_date).format('MMMM Do YYYY')"
     class="text-sm"
     position="top"
     :draggable="false"
     :style="{ width: '40rem' }"
   >
     <div class="flex items-center gap-4 mb-4">
-      <div class="font-semibold w-24">Distance</div>
-      <div>{{ runData?.distance }}</div>
+      <div class="font-semibold w-24">Distance(km)</div>
+      <div>{{ runData?.distanceKm() }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
-      <div class="font-semibold w-24">Time</div>
-      <div>{{ runData?.time }}</div>
+      <div class="font-semibold w-24">Time(h:m:s)</div>
+      <div>{{ runData?.secondsToHHMMSS() }}</div>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="font-semibold w-24">Pace(Km/h)</div>
+      <div>{{ runData?.pace }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Calories</div>
@@ -70,7 +80,7 @@ const deleteRun = (): void => {
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">VO₂ Max</div>
-      <div>{{ runData?.vo2 }}</div>
+      <div>{{ runData?.vo2max }}</div>
     </div>
     <div v-if="props.delete" class="flex justify-end gap-2 mt-10">
       <BaseButton label="Cancel" severity="secondary" @click="emit('close')" />

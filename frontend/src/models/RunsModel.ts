@@ -1,5 +1,6 @@
 import { Model } from '@/models/Model'
 import type { Run } from '@/types/types.d.ts'
+import { RunModel } from '@/models/RunModel'
 import { ref, type Ref } from 'vue'
 
 export class RunsModel extends Model {
@@ -11,7 +12,9 @@ export class RunsModel extends Model {
         return response ? response.json() : null
       })
       .then((data) => {
-        this.hydrate({ runs: data['data'] })
+        for (const run of data['data']) {
+          this.runs.value.push(new RunModel(this._loading).hydrate(run))
+        }
       })
       .catch((error) => {
         //

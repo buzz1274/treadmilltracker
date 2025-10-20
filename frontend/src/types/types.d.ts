@@ -1,10 +1,15 @@
-export type Run = {
+export interface Run {
+  id: number | null
   run_date: string
   distance_m: number
   duration_s: number
   calories: number
   vo2max: number
   pace: number
+  save(): void
+  delete(): boolean
+  distanceKm(): string
+  secondsToHHMMSS(): string
 }
 
 export type PersonalBests = Record<'title' | 'date' | 'time', string>

@@ -8,7 +8,7 @@ import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
 import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
 import { type filterHistoryModelType, Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
-import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
+import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 
@@ -130,15 +130,9 @@ watch(
             {{ formatDate(data.run_date, filterHistoryModel.groupByChoices) }}
           </template>
         </Column>
-        <Column
-          v-if="isDistanceView"
-          :sortable="true"
-          field="distance_m"
-          header="Distance(km)"
-          class="cursor-pointer"
-        >
+        <Column v-if="isDistanceView" :sortable="true" header="Distance(km)" class="cursor-pointer">
           <template #body="{ data }: { data: Run }">
-            {{ (data.distance_m / 1000).toFixed(2) }}
+            {{ data.distanceKm() }}
           </template>
         </Column>
         <Column
@@ -168,7 +162,7 @@ watch(
           class="cursor-pointer"
         >
           <template #body="{ data }: { data: Run }">
-            {{ formatSecondsAsHHMMSS(data.duration_s) }}
+            {{ data.secondsToHHMMSS() }}
           </template>
         </Column>
         <Column

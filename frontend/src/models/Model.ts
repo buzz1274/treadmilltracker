@@ -3,12 +3,20 @@ import { type loadingState } from '@/types/types.d.ts'
 
 export class Model {
   protected _host: string = 'https://' + window.location.hostname + '/'
-  protected _data_fetched: boolean = false
   protected _loading: Ref<loadingState>
   protected _call_id: number
 
   public constructor(loading: Ref<loadingState>) {
     this._loading = loading
+  }
+
+  public hydrate(data: object): this {
+    for (const property in data) {
+      if (this.isPropertyOf(property)) {
+        this[property] = data[property]
+      }
+    }
+    return this
   }
 
   protected fetch(url: string, request: RequestInit): Promise<Response | void> {
@@ -30,15 +38,6 @@ export class Model {
         this._loading.value.completeCall(this._call_id)
         throw new Error(error)
       })
-  }
-
-  protected hydrate(data: object): void {
-    for (const property in data) {
-      if (this.isPropertyOf(property)) {
-        this[property].value = data[property]
-      }
-    }
-    this._data_fetched = true
   }
 
   protected isPropertyOf(property): boolean {
