@@ -1,8 +1,9 @@
-import { computed, ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const store = defineStore('store', () => {
-  const isAuthenticated = ref(false)
+  const loading: Ref<boolean> = ref(false)
+
   const user = ref({
     isAuthenticated: computed(() => {
       return true
@@ -10,5 +11,5 @@ export const store = defineStore('store', () => {
     name: 'David',
   })
 
-  return { user }
+  return { user, loading }
 })
