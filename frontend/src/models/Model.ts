@@ -1,4 +1,5 @@
 import { type LoadingState, type ResponsePayload } from '@/types/types.d.ts'
+import { StatusCodes } from 'http-status-codes'
 
 export class Model {
   protected _host: string = 'https://' + window.location.hostname + '/'
@@ -13,7 +14,7 @@ export class Model {
     }
   }
 
-  public hydrate(data: object): this {
+  protected hydrate(data: object): this {
     for (const property in data) {
       if (this.isPropertyOf(property)) {
         this[property] = data[property]
@@ -23,8 +24,6 @@ export class Model {
   }
 
   protected fetch(url: string, request: RequestInit): Promise<ResponsePayload | void> {
-    const HTTP_FORBIDDEN: number = 403
-
     this._callId = this._loading.addCall()
 
     return fetch(this.apiUrl(url), request)
@@ -42,16 +41,27 @@ export class Model {
             }
           })
       })
-      .then((response) => {
+      .then((response: ResponsePayload) => {
         this._loading.completeCall(this._callId)
-        if (response.status === 500) {
+        if (response.status === StatusCodes.INTERNAL_SERVER_ERROR) {
           throw new Error(response.data['detail'])
-        } else if (response.status === HTTP_FORBIDDEN) {
+        } else if (response.status === StatusCodes.FORBIDDEN) {
           console.log('forbidden')
         }
 
         return response
       })
+  }
+
+  protected delete(endpointURL: string): Promise<ResponsePayload | void> {
+    return this.fetch(endpointURL, {
+      method: 'DELETE',
+    }).then((response: ResponsePayload) => {
+      if (response.status !== StatusCodes.NO_CONTENT) {
+        throw new Error(response.data.detail)
+      }
+      return response
+    })
   }
 
   protected isPropertyOf(property): boolean {

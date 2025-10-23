@@ -1,5 +1,5 @@
 import { Model } from '@/models/Model.ts'
-import type { Run } from '@/types/types'
+import type { LoadingState, ResponsePayload, Run } from '@/types/types'
 import { formatSecondsAsHHMMSS } from '@/helper/helper.ts'
 
 export class RunModel extends Model implements Run {
@@ -10,6 +10,14 @@ export class RunModel extends Model implements Run {
   public calories: number
   public vo2max: number
   public pace: number
+
+  public constructor(loading: LoadingState, run: Run) {
+    super(loading)
+
+    if (run) {
+      this.hydrate(run)
+    }
+  }
 
   public distanceKm(): string {
     return (this.distance_m / 1000).toFixed(2)
@@ -23,31 +31,7 @@ export class RunModel extends Model implements Run {
     console.log('save')
   }
 
-  public delete(): Promise<Response | void> {
-    return this.fetch('api/runs/' + this.id, {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        if (!response || response.status === 500) {
-          throw new Error()
-        }
-        return response
-          .json()
-          .then((data) => ({
-            status: response.status,
-            data: data,
-          }))
-          .catch((error) => {
-            return {
-              status: response.status,
-              data: error,
-            }
-          })
-      })
-      .then((response) => {
-        if (response.status !== 204) {
-          throw new Error(response.data.detail)
-        }
-      })
+  public override delete(): Promise<ResponsePayload | void> {
+    return super.delete('api/runs/' + this.id)
   }
 }

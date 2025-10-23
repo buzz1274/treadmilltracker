@@ -1,7 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status, Response
-from app.core.models import Message
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from sqlalchemy.orm.exc import NoResultFound
 from app.core.authentication import get_current_user
@@ -37,7 +36,7 @@ class RunRouter:
     def delete(self, run_id: int) -> None:
         """delete a run"""
         try:
-            # self.runs_repository.delete_run(self.user_id, run_id)
+            self.runs_repository.delete_run(self.user_id, run_id)
 
             return
         except (ValueError, NoResultFound):

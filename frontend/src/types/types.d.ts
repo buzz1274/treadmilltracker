@@ -1,4 +1,5 @@
 import type { ComputedRef, Ref, UnwrapRef } from 'vue'
+import { StatusCodes } from 'http-status-codes'
 
 export interface Run {
   id: number | null
@@ -9,7 +10,7 @@ export interface Run {
   vo2max: number
   pace: number
   save(): void
-  delete(): Promise<Response | void>
+  delete(): Promise<ResponsePayload | void>
   distanceKm(): string
   secondsToHHMMSS(): string
 }
@@ -22,27 +23,27 @@ export type filterHistoryModelType = {
 }
 
 export type ResponsePayload = {
-  status: number
-  data: any
+  status: StatusCodes
+  data: object | string
 }
 
 export type LoadingState = Ref<
   UnwrapRef<{
     completeCall: (index: number) => void
     isLoading: ComputedRef<boolean>
-    apiCalls: any[]
+    apiCalls: boolean[]
     addCall: () => number
   }>,
   | UnwrapRef<{
       completeCall: (index: number) => void
       isLoading: ComputedRef<boolean>
-      apiCalls: any[]
+      apiCalls: boolean[]
       addCall: () => number
     }>
   | {
       completeCall: (index: number) => void
       isLoading: ComputedRef<boolean>
-      apiCalls: any[]
+      apiCalls: boolean[]
       addCall: () => number
     }
 >
