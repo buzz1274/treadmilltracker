@@ -1,13 +1,16 @@
-import type { Ref } from 'vue'
-import { type loadingState } from '@/types/types.d.ts'
+import { type LoadingState, type Response } from '@/types/types.d.ts'
 
 export class Model {
   protected _host: string = 'https://' + window.location.hostname + '/'
-  protected _loading: Ref<loadingState>
-  protected _call_id: number
+  protected _loading: LoadingState
+  protected _callId: number
 
-  public constructor(loading: Ref<loadingState>) {
+  public constructor(loading: LoadingState) {
     this._loading = loading
+
+    if (this._loading.value) {
+      this._loading = this._loading.value
+    }
   }
 
   public hydrate(data: object): this {
@@ -22,23 +25,42 @@ export class Model {
   protected fetch(url: string, request: RequestInit): Promise<Response | void> {
     const HTTP_FORBIDDEN: number = 403
 
-    this._call_id = this._loading.value.addCall()
+    this._callId = this._loading.addCall()
 
     return fetch(this.apiUrl(url), request)
       .then((response) => {
-        this._loading.value.completeCall(this._call_id)
+        this._loading.completeCall(this._callId)
 
-        if (response.status === HTTP_FORBIDDEN) {
-          throw new Error(String(HTTP_FORBIDDEN))
-        } else {
-          return response
+        if (!response || response.status === 500) {
+          throw new Error()
         }
+        return response
+          .json()
+          .then((data) => ({
+            status: response.status,
+            data: data,
+          }))
+          .catch((error) => {
+            return {
+              status: response.status,
+              data: null,
+            }
+          })
       })
       .catch((error) => {
-        this._loading.value.completeCall(this._call_id)
+        this._loading.completeCall(this._callId)
         throw new Error(error)
       })
   }
+
+  /**
+   *   if (response.status === HTTP_FORBIDDEN) {
+   *           throw new Error(String(HTTP_FORBIDDEN))
+   *         } else {
+   *           return response
+   *         }
+   *       })
+   */
 
   protected isPropertyOf(property): boolean {
     return (

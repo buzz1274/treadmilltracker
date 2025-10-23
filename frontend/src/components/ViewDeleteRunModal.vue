@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import moment from 'moment/moment'
 import Dialog from 'primevue/dialog'
-import { ref, Ref, watch } from 'vue'
+import { computed, type ComputedRef, ref, Ref, watch } from 'vue'
 import { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
@@ -16,6 +16,10 @@ const props = withDefaults(
     delete: false,
   },
 )
+const runData: ComputedRef<Run | undefined> = computed((): Run | undefined => {
+  return props.runData
+})
+
 const toast = useToast()
 const visible: Ref<boolean> = ref(props.visible)
 const emit = defineEmits<{
@@ -36,18 +40,26 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const deleteRun = (): void => {
-  if (!props.runData) return
+  if (!runData.value) return
 
-  if (props.runData.delete()) {
-    toast.add({
-      severity: 'success',
-      summary: 'Run deleted',
-      detail: 'Run deleted successfully',
-      life: 3000,
+  runData.value
+    .delete()
+    .then(() => {
+      toast.add({
+        severity: 'success',
+        summary: 'Run deleted',
+        detail: 'Run deleted successfully',
+        life: 3000,
+      })
     })
-  } else {
-    //show error message//
-  }
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: 'An error occurred',
+        detail: error,
+        life: 3000,
+      })
+    })
   emit('close')
 }
 </script>

@@ -23,8 +23,8 @@ class Run(RunBase, table=True):
 
 
 class RunPublic(RunBase):
-    id: Optional[int] = None
-    run_date: str
+    id: int | None = None
+    run_date: str | date
     vo2max: decimal.Decimal
 
     @computed_field

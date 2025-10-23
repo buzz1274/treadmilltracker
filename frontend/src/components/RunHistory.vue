@@ -6,7 +6,7 @@ import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
 import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
-import { type filterHistoryModelType, Run } from '@/types/types.d.ts'
+import { type filterHistoryModelType, type Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
@@ -59,6 +59,7 @@ watch(
         }
       "
     />
+
     <ViewDeleteRunModal
       v-model:visible="displayViewRunModal"
       :run-data="runModalData"
