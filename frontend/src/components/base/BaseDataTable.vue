@@ -100,6 +100,11 @@ defineEmits(['rowSelect'])
     </template>
 
     <slot name="data"> </slot>
+    <template #empty>
+      <div class="text-center font-bold">
+        <slot name="empty"> No records found </slot>
+      </div>
+    </template>
   </DataTable>
 </template>
 

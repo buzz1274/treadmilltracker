@@ -11,7 +11,9 @@ import { RunsModel } from '@/models/RunsModel.ts'
 import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 const store = useStore()
 const { loading } = storeToRefs(store)
 const runsModel: RunsModel = new RunsModel(loading)
@@ -37,13 +39,19 @@ const isCaloriesView: ComputedRef<boolean> = computed(
 )
 const isVo2View: ComputedRef<boolean> = computed(() => filterHistoryModel.viewChoices === 'vo2max')
 
+const getRuns = (group_by: string): void => {
+  runsModel.getRuns(group_by).catch((error) => {
+    toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+  })
+}
+
 onMounted((): void => {
-  runsModel.getRuns(filterHistoryModel.groupByChoices)
+  getRuns(filterHistoryModel.groupByChoices)
 })
 watch(
   () => filterHistoryModel.groupByChoices,
   (group_by: string): void => {
-    runsModel.getRuns(group_by)
+    getRuns(group_by)
   },
 )
 </script>
@@ -103,6 +111,7 @@ watch(
       <template #header_action>
         <div>
           <BaseIcon
+            v-if="runs.length > 0"
             icon-css="pi pi-filter pr-4"
             icon-title="Filter History"
             @click="displayFilterHistoryModal = true"
@@ -119,6 +128,8 @@ watch(
           />
         </div>
       </template>
+
+      <template #empty> No runs found </template>
 
       <template #data>
         <Column

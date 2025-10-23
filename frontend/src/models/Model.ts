@@ -1,4 +1,4 @@
-import { type LoadingState, type Response } from '@/types/types.d.ts'
+import { type LoadingState, type ResponsePayload } from '@/types/types.d.ts'
 
 export class Model {
   protected _host: string = 'https://' + window.location.hostname + '/'
@@ -22,18 +22,13 @@ export class Model {
     return this
   }
 
-  protected fetch(url: string, request: RequestInit): Promise<Response | void> {
+  protected fetch(url: string, request: RequestInit): Promise<ResponsePayload | void> {
     const HTTP_FORBIDDEN: number = 403
 
     this._callId = this._loading.addCall()
 
     return fetch(this.apiUrl(url), request)
       .then((response) => {
-        this._loading.completeCall(this._callId)
-
-        if (!response || response.status === 500) {
-          throw new Error()
-        }
         return response
           .json()
           .then((data) => ({
@@ -43,24 +38,21 @@ export class Model {
           .catch((error) => {
             return {
               status: response.status,
-              data: null,
+              data: error,
             }
           })
       })
-      .catch((error) => {
+      .then((response) => {
         this._loading.completeCall(this._callId)
-        throw new Error(error)
+        if (response.status === 500) {
+          throw new Error(response.data['detail'])
+        } else if (response.status === HTTP_FORBIDDEN) {
+          console.log('forbidden')
+        }
+
+        return response
       })
   }
-
-  /**
-   *   if (response.status === HTTP_FORBIDDEN) {
-   *           throw new Error(String(HTTP_FORBIDDEN))
-   *         } else {
-   *           return response
-   *         }
-   *       })
-   */
 
   protected isPropertyOf(property): boolean {
     return (

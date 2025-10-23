@@ -21,7 +21,7 @@ export type filterHistoryModelType = {
   groupByChoices: string
 }
 
-export type Response = {
+export type ResponsePayload = {
   status: number
   data: any
 }
