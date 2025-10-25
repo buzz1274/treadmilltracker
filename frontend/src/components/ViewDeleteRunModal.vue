@@ -13,7 +13,7 @@ const { resync_runs } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
-    runData: Run | undefined
+    run: Run | undefined
     visible: boolean
     delete?: boolean
   }>(),
@@ -21,8 +21,8 @@ const props = withDefaults(
     delete: false,
   },
 )
-const runData: ComputedRef<Run | undefined> = computed((): Run | undefined => {
-  return props.runData
+const run: ComputedRef<Run | undefined> = computed((): Run | undefined => {
+  return props.run
 })
 
 const toast = useToast()
@@ -45,9 +45,9 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const deleteRun = (): void => {
-  if (!runData.value) return
+  if (!run.value) return
 
-  runData.value
+  run.value
     .delete()
     .then(() => {
       resync_runs.value++
@@ -75,7 +75,7 @@ const deleteRun = (): void => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="'Treadmill run on ' + moment(runData?.run_date).format('MMMM Do YYYY')"
+    :header="'Treadmill run on ' + moment(run?.run_date).format('MMMM Do YYYY')"
     class="text-sm"
     position="top"
     :draggable="false"
@@ -83,23 +83,23 @@ const deleteRun = (): void => {
   >
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Distance(km)</div>
-      <div>{{ runData?.distanceKm() }}</div>
+      <div>{{ run?.distanceKm() }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Time(h:m:s)</div>
-      <div>{{ runData?.secondsToHHMMSS() }}</div>
+      <div>{{ run?.secondsToHHMMSS() }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Pace(Km/h)</div>
-      <div>{{ runData?.pace }}</div>
+      <div>{{ run?.pace }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Calories</div>
-      <div>{{ runData?.calories }}</div>
+      <div>{{ run?.calories }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">VO₂ Max</div>
-      <div>{{ runData?.vo2max }}</div>
+      <div>{{ run?.vo2max }}</div>
     </div>
     <div v-if="props.delete" class="flex justify-end gap-2 mt-10">
       <BaseButton label="Cancel" severity="secondary" @click="emit('close')" />

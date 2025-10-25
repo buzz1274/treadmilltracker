@@ -76,7 +76,7 @@ watch(
 
     <ViewDeleteRunModal
       v-model:visible="displayViewRunModal"
-      :run-data="runModalData"
+      :run="runModalData"
       :delete="deleteRun"
       @close="
         () => {

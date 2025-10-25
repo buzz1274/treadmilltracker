@@ -18,6 +18,14 @@ export interface Run extends RunData {
   secondsToHHMMSS(): string
 }
 
+export interface IModel {
+  new (loading: LoadingState): IModel
+  hydrate(data: object): this
+  fetch(endpointURL: string, request: RequestInit): Promise<ResponsePayload | void>
+  delete(endpointURL: string): Promise<ResponsePayload | void>
+  isPropertyOf(property: string): boolean
+}
+
 export type PersonalBests = Record<'title' | 'date' | 'time', string>
 
 export type filterHistoryModelType = {
@@ -30,7 +38,7 @@ export type ResponsePayload = {
   data: object | string | Array<object>
 }
 
-export type LoadingState = Ref<
+export type TLoadingState = Ref<
   UnwrapRef<{
     completeCall: (index: number) => void
     isLoading: ComputedRef<boolean>

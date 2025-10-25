@@ -1,17 +1,14 @@
 import { type LoadingState, type ResponsePayload } from '@/types/types.d.ts'
 import { StatusCodes } from 'http-status-codes'
+import { ref } from 'vue'
 
 export class Model {
-  protected _host: string = 'https://' + window.location.hostname + '/'
+  private _host: string = 'https://' + window.location.hostname + '/'
+  private _callId: number
   protected _loading: LoadingState
-  protected _callId: number
 
   public constructor(loading: LoadingState) {
     this._loading = loading
-
-    if (this._loading.value) {
-      this._loading = this._loading.value
-    }
   }
 
   protected hydrate(data: object): this {
@@ -23,10 +20,14 @@ export class Model {
     return this
   }
 
-  protected fetch(url: string, request: RequestInit): Promise<ResponsePayload | void> {
-    this._callId = this._loading.addCall()
+  protected fetch(endpointURL: string, request: RequestInit): Promise<ResponsePayload | void> {
+    if (!this._loading.value) {
+      this._loading.value = ref(this._loading)
+    }
 
-    return fetch(this.apiUrl(url), request)
+    this._callId = this._loading.value.addCall()
+
+    return fetch(this.apiUrl(endpointURL), request)
       .then((response) => {
         return response
           .json()
@@ -42,10 +43,11 @@ export class Model {
           })
       })
       .then((response: ResponsePayload) => {
-        this._loading.completeCall(this._callId)
+        this._loading.value.completeCall(this._callId)
         if (response.status === StatusCodes.INTERNAL_SERVER_ERROR) {
           throw new Error(response.data['detail'])
         } else if (response.status === StatusCodes.FORBIDDEN) {
+          //redirect to homepage//
           console.log('forbidden')
         }
         return response

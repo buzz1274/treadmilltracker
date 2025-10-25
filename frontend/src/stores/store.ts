@@ -1,6 +1,5 @@
 import { computed, type Ref, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { type LoadingState } from '@/types/types.d.ts'
 import { LoadingState } from '@/stores/LoadingState.ts'
 
 export const store = defineStore('store', () => {
