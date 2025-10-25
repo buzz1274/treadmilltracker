@@ -48,7 +48,6 @@ export class Model {
         } else if (response.status === StatusCodes.FORBIDDEN) {
           console.log('forbidden')
         }
-
         return response
       })
   }
@@ -58,7 +57,7 @@ export class Model {
       method: 'DELETE',
     }).then((response: ResponsePayload) => {
       if (response.status !== StatusCodes.NO_CONTENT) {
-        throw new Error(response.data.detail)
+        throw new Error(response.data['detail'])
       }
       return response
     })

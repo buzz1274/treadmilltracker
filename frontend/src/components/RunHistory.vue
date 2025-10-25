@@ -15,7 +15,7 @@ import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 const store = useStore()
-const { loading } = storeToRefs(store)
+const { loading, resync_runs } = storeToRefs(store)
 const runsModel: RunsModel = new RunsModel(loading)
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
@@ -52,6 +52,12 @@ watch(
   () => filterHistoryModel.groupByChoices,
   (group_by: string): void => {
     getRuns(group_by)
+  },
+)
+watch(
+  () => resync_runs.value,
+  (): void => {
+    getRuns(filterHistoryModel.groupByChoices)
   },
 )
 </script>

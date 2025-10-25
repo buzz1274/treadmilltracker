@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref, UnwrapRef } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
-export interface Run {
+export interface RunData {
   id: number | null
   run_date: string
   distance_m: number
@@ -9,6 +9,9 @@ export interface Run {
   calories: number
   vo2max: number
   pace: number
+}
+
+export interface Run extends RunData {
   save(): void
   delete(): Promise<ResponsePayload | void>
   distanceKm(): string
@@ -24,7 +27,7 @@ export type filterHistoryModelType = {
 
 export type ResponsePayload = {
   status: StatusCodes
-  data: object | string
+  data: object | string | Array<object>
 }
 
 export type LoadingState = Ref<

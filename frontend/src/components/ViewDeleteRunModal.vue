@@ -5,6 +5,11 @@ import { computed, type ComputedRef, ref, Ref, watch } from 'vue'
 import { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
+import { storeToRefs } from 'pinia'
+import { store as useStore } from '@/stores/store'
+
+const store = useStore()
+const { resync_runs } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
@@ -45,6 +50,8 @@ const deleteRun = (): void => {
   runData.value
     .delete()
     .then(() => {
+      resync_runs.value++
+
       toast.add({
         severity: 'success',
         summary: 'Run deleted',

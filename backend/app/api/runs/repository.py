@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Type, Optional
+from typing import Type
 
 from sqlalchemy import Sequence, Row, func, cast, String, DECIMAL
 from sqlalchemy.orm import Mapped
@@ -28,11 +28,12 @@ class RunsRepository(Repository):
     def get_runs(self, user_id: int, group_by: str = "daily") -> Sequence[Row]:
         """get all runs for a user, grouped by daily week, month or year"""
         if group_by == "daily":
-            return self._get_runs_by_date(user_id)
+            return self._get_runs(user_id)
         else:
             return self._get_grouped_runs(user_id, group_by)
 
-    def _get_runs_by_date(self, user_id: int) -> Sequence[Row]:
+    def _get_runs(self, user_id: int) -> Sequence[Row]:
+        """get all runs for a user, ordered by date"""
         return self.execute_query(
             select(Run)
             .where(Run.user_id == user_id)
@@ -40,6 +41,8 @@ class RunsRepository(Repository):
         ).all()
 
     def _get_grouped_runs(self, user_id: int, group_by: str) -> Sequence[Row]:
+        """get all runs for a user, grouped by daily week,
+        month or year, ordered by date"""
         date_filter: Mapped[date] = self._get_date_filter(group_by)
 
         # noinspection PyArgumentList

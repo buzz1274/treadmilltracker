@@ -1,10 +1,11 @@
-import { computed, ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { type LoadingState } from '@/types/types.d.ts'
 import { LoadingState } from '@/stores/LoadingState.ts'
 
 export const store = defineStore('store', () => {
-  const loading: LoadingState = ref(LoadingState)
+  const loading: Ref<LoadingState> = ref(LoadingState)
+  const resync_runs: Ref<number> = ref(0)
 
   const user = ref({
     isAuthenticated: computed(() => {
@@ -13,5 +14,5 @@ export const store = defineStore('store', () => {
     name: 'David',
   })
 
-  return { user, loading }
+  return { user, loading, resync_runs }
 })

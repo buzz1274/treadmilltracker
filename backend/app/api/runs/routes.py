@@ -23,7 +23,7 @@ class RunRouter:
 
     @router.get("/")
     def get_runs(self, group_by: str = "daily") -> RunsPublic:
-        """Retrieve Runs"""
+        """retrieve Runs"""
         return RunsPublic(
             data=self.runs_repository.get_runs(self.user_id, group_by)
         )
