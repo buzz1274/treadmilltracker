@@ -1,34 +1,10 @@
-import { computed, ref, type Ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { type loadingState } from '@/types/types.d.ts'
+import { LoadingState } from '@/stores/LoadingState.ts'
 
 export const store = defineStore('store', () => {
-  const loading: Ref<loadingState> = ref({
-    apiCalls: [],
-
-    addCall: (): number => {
-      loading.value.apiCalls.push(true)
-
-      return loading.value.apiCalls.length - 1
-    },
-
-    completeCall: (index: number): void => {
-      loading.value.apiCalls[index] = false
-    },
-
-    isLoading: computed((): boolean => {
-      if (loading.value.apiCalls.length === 0) {
-        return false
-      }
-
-      if (loading.value.apiCalls.every((value) => !value)) {
-        loading.value.apiCalls = []
-        return false
-      }
-
-      return true
-    }),
-  })
+  const loading: Ref<LoadingState> = ref(LoadingState)
+  const resync_runs: Ref<number> = ref(0)
 
   const user = ref({
     isAuthenticated: computed(() => {
@@ -37,5 +13,5 @@ export const store = defineStore('store', () => {
     name: 'David',
   })
 
-  return { user, loading }
+  return { user, loading, resync_runs }
 })

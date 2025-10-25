@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import moment from 'moment/moment'
 import Dialog from 'primevue/dialog'
-import { ref, Ref, watch } from 'vue'
+import { computed, type ComputedRef, ref, Ref, watch } from 'vue'
 import { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
+import { storeToRefs } from 'pinia'
+import { store as useStore } from '@/stores/store'
+
+const store = useStore()
+const { resync_runs } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
-    runData: Run | undefined
+    run: Run | undefined
     visible: boolean
     delete?: boolean
   }>(),
@@ -16,6 +21,10 @@ const props = withDefaults(
     delete: false,
   },
 )
+const run: ComputedRef<Run | undefined> = computed((): Run | undefined => {
+  return props.run
+})
+
 const toast = useToast()
 const visible: Ref<boolean> = ref(props.visible)
 const emit = defineEmits<{
@@ -36,12 +45,28 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const deleteRun = (): void => {
-  toast.add({
-    severity: 'success',
-    summary: 'Run deleted',
-    detail: 'Run deleted successfully',
-    life: 3000,
-  })
+  if (!run.value) return
+
+  run.value
+    .delete()
+    .then(() => {
+      resync_runs.value++
+
+      toast.add({
+        severity: 'success',
+        summary: 'Run deleted',
+        detail: 'Run deleted successfully',
+        life: 3000,
+      })
+    })
+    .catch((error) => {
+      toast.add({
+        severity: 'error',
+        summary: 'An error occurred',
+        detail: error,
+        life: 3000,
+      })
+    })
   emit('close')
 }
 </script>
@@ -50,27 +75,31 @@ const deleteRun = (): void => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="'Treadmill run on ' + moment(runData?.date).format('MMMM Do YYYY')"
+    :header="'Treadmill run on ' + moment(run?.run_date).format('MMMM Do YYYY')"
     class="text-sm"
     position="top"
     :draggable="false"
     :style="{ width: '40rem' }"
   >
     <div class="flex items-center gap-4 mb-4">
-      <div class="font-semibold w-24">Distance</div>
-      <div>{{ runData?.distance }}</div>
+      <div class="font-semibold w-24">Distance(km)</div>
+      <div>{{ run?.distanceKm() }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
-      <div class="font-semibold w-24">Time</div>
-      <div>{{ runData?.time }}</div>
+      <div class="font-semibold w-24">Time(h:m:s)</div>
+      <div>{{ run?.secondsToHHMMSS() }}</div>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="font-semibold w-24">Pace(Km/h)</div>
+      <div>{{ run?.pace }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">Calories</div>
-      <div>{{ runData?.calories }}</div>
+      <div>{{ run?.calories }}</div>
     </div>
     <div class="flex items-center gap-4 mb-4">
       <div class="font-semibold w-24">VO₂ Max</div>
-      <div>{{ runData?.vo2 }}</div>
+      <div>{{ run?.vo2max }}</div>
     </div>
     <div v-if="props.delete" class="flex justify-end gap-2 mt-10">
       <BaseButton label="Cancel" severity="secondary" @click="emit('close')" />

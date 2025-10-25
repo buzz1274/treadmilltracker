@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ProgressSpinner from 'primevue/progressspinner'
-import BlockUI from 'primevue/blockui'
 
 const props = defineProps<{
   loading: boolean
@@ -8,33 +7,32 @@ const props = defineProps<{
 </script>
 
 <template>
-  <BlockUI
-    :blocked="props.loading"
-    :full-screen="true"
-    :class="props.loading ? 'block-ui-blocked' : 'block-ui-hidden'"
-  >
+  <div v-if="props.loading" class="loader-overlay">
     <ProgressSpinner
-      v-if="props.loading"
       class="progress-spinner"
       stroke-width="8"
       fill="transparent"
       animation-duration=".5s"
     />
-  </BlockUI>
+  </div>
 </template>
 
 <style scoped>
-.block-ui-hidden {
-  display: none;
-}
-.block-ui-blocked {
+.loader-overlay {
   position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 .progress-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
 }

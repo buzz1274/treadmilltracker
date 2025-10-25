@@ -6,14 +6,16 @@ import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
 import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
-import { type filterHistoryModelType, Run } from '@/types/types.d.ts'
+import { type filterHistoryModelType, type Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
-import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
+import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
+import { useToast } from 'primevue/usetoast'
 
+const toast = useToast()
 const store = useStore()
-const { loading } = storeToRefs(store)
+const { loading, resync_runs } = storeToRefs(store)
 const runsModel: RunsModel = new RunsModel(loading)
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
@@ -37,13 +39,25 @@ const isCaloriesView: ComputedRef<boolean> = computed(
 )
 const isVo2View: ComputedRef<boolean> = computed(() => filterHistoryModel.viewChoices === 'vo2max')
 
+const getRuns = (group_by: string): void => {
+  runsModel.getRuns(group_by).catch((error) => {
+    toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+  })
+}
+
 onMounted((): void => {
-  runsModel.getRuns(filterHistoryModel.groupByChoices)
+  getRuns(filterHistoryModel.groupByChoices)
 })
 watch(
   () => filterHistoryModel.groupByChoices,
   (group_by: string): void => {
-    runsModel.getRuns(group_by)
+    getRuns(group_by)
+  },
+)
+watch(
+  () => resync_runs.value,
+  (): void => {
+    getRuns(filterHistoryModel.groupByChoices)
   },
 )
 </script>
@@ -59,9 +73,10 @@ watch(
         }
       "
     />
+
     <ViewDeleteRunModal
       v-model:visible="displayViewRunModal"
-      :run-data="runModalData"
+      :run="runModalData"
       :delete="deleteRun"
       @close="
         () => {
@@ -102,6 +117,7 @@ watch(
       <template #header_action>
         <div>
           <BaseIcon
+            v-if="runs.length > 0"
             icon-css="pi pi-filter pr-4"
             icon-title="Filter History"
             @click="displayFilterHistoryModal = true"
@@ -119,6 +135,8 @@ watch(
         </div>
       </template>
 
+      <template #empty> No runs found </template>
+
       <template #data>
         <Column
           field="run_date"
@@ -130,15 +148,9 @@ watch(
             {{ formatDate(data.run_date, filterHistoryModel.groupByChoices) }}
           </template>
         </Column>
-        <Column
-          v-if="isDistanceView"
-          :sortable="true"
-          field="distance_m"
-          header="Distance(km)"
-          class="cursor-pointer"
-        >
+        <Column v-if="isDistanceView" :sortable="true" header="Distance(km)" class="cursor-pointer">
           <template #body="{ data }: { data: Run }">
-            {{ (data.distance_m / 1000).toFixed(2) }}
+            {{ data.distanceKm() }}
           </template>
         </Column>
         <Column
@@ -168,7 +180,7 @@ watch(
           class="cursor-pointer"
         >
           <template #body="{ data }: { data: Run }">
-            {{ formatSecondsAsHHMMSS(data.duration_s) }}
+            {{ data.secondsToHHMMSS() }}
           </template>
         </Column>
         <Column
