@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import{ computed, ref } from 'vue'
 import { type LoadingState } from '@/types/types.d.ts'
 
 export const LoadingState: LoadingState = ref({
