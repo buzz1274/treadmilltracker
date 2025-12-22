@@ -9,12 +9,22 @@ export class RunsModel extends Model {
   public getRuns(group_by: string = 'daily'): Promise<ResponsePayload | void> {
     this.runs.value = []
 
-    return this.fetch('api/runs/?group_by=' + group_by, { method: 'GET' }).then((response) => {
-      if (response && response.data && 'data' in response.data) {
-        for (const run of response.data['data']) {
-          this.runs.value.push(new RunModel(this._loading, run))
+    return this.fetch('api/runs/?group_by=' + group_by, { method: 'GET' }).then(
+      (response: ResponsePayload | void) => {
+        if (
+          response &&
+          typeof response === 'object' &&
+          response.data &&
+          typeof response.data === 'object' &&
+          !Array.isArray(response.data) &&
+          'data' in response.data &&
+          Array.isArray(response.data.data)
+        ) {
+          for (const run of response.data.data) {
+            this.runs.value.push(new RunModel(this._loadingState, run))
+          }
         }
-      }
-    })
+      },
+    )
   }
 }

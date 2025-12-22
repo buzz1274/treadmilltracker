@@ -1,18 +1,18 @@
 import { Model } from '@/models/Model.ts'
-import type { LoadingState, ResponsePayload, Run, RunData } from '@/types/types'
+import type { tLoadingState, ResponsePayload, Run, RunData } from '@/types/types'
 import { formatSecondsAsHHMMSS } from '@/helper/helper.ts'
 
 export class RunModel extends Model implements Run {
-  public id: number | null
-  public run_date: string
-  public distance_m: number
-  public duration_s: number
-  public calories: number
-  public vo2max: number
-  public pace: number
+  public id!: number | null
+  public run_date!: string
+  public distance_m!: number
+  public duration_s!: number
+  public calories!: number
+  public vo2max!: number
+  public pace!: number
 
-  public constructor(loading: LoadingState, run: RunData | null = null) {
-    super(loading)
+  public constructor(loadingState: tLoadingState, run: RunData | null = null) {
+    super(loadingState)
 
     if (run) {
       this.hydrate(run)
@@ -28,10 +28,10 @@ export class RunModel extends Model implements Run {
   }
 
   public save(): void {
-    console.log('save')
+    //save
   }
 
-  public override delete(): Promise<ResponsePayload | void> {
+  public override delete(): Promise<ResponsePayload> {
     return super.delete('api/runs/' + this.id)
   }
 }

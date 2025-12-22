@@ -9,11 +9,11 @@ import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 
 const store = useStore()
-const { user, loading } = storeToRefs(store)
+const { user, loadingState } = storeToRefs(store)
 </script>
 
 <template>
-  <BaseLoader :loading="loading.isLoading" />
+  <BaseLoader :loading="loadingState.isLoading" />
   <SiteHeader :user="user" />
   <div class="min-h-[800px] p-2 bg-white flex">
     <Toast />

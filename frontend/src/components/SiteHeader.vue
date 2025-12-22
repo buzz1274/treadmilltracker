@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Ref } from 'vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
+import type { tUser } from '@/types/types'
 
 const props = defineProps<{
-  user: Ref<any>
+  user: tUser
 }>()
 
 const logout = (): void => {}

@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-npx eslint
+npx -c 'npm run lint'

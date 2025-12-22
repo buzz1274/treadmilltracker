@@ -10,7 +10,7 @@ import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { object, string, date, ObjectSchema, InferType } from 'yup'
+import { object, string, date, ObjectSchema, type InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import moment from 'moment'
 
@@ -56,7 +56,7 @@ const yAxisChoices: { label: string; value: string }[] = [
 
 const filterModel = defineModel<{
   startDate: Date
-  endData: Date
+  endDate: Date
   xAxis: string
   yAxis: string
 }>({
@@ -125,7 +125,6 @@ const filterGraph = (reset: boolean = false): void => {
   if (!validationError && data) {
     //send request to backend and regenerate graph
     graphFilterVisible.value = false
-    console.log(data)
   }
 }
 </script>
@@ -171,7 +170,7 @@ const filterGraph = (reset: boolean = false): void => {
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label for="endDate" class="font-semibold w-24">End Date</label>
-        <BaseDatePicker v-model="filterModel.endDate" name="endDate" />
+        <BaseDatePicker v-model="filterModel.endDate" name="endDate" class="text-xs" />
       </div>
       <div v-if="$form.endDate?.invalid" class="flex items-center gap-4 mb-4">
         <div class="w-24"></div>

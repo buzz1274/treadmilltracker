@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import { Run, PersonalBests } from '@/types/types.d.ts'
+import type { Run, PersonalBests } from '@/types/types.d.ts'
 
 const props = withDefaults(
   defineProps<{
@@ -16,7 +16,6 @@ const props = withDefaults(
     rowsPerPage: 10,
   },
 )
-
 defineEmits(['rowSelect'])
 </script>
 
@@ -63,7 +62,7 @@ defineEmits(['rowSelect'])
         nextPageCallback,
       }"
     >
-      <div v-if="props.paginate && pageCount > 1" class="flex w-full justify-center">
+      <div v-if="props.paginate && (pageCount ?? 0) > 1" class="flex w-full justify-center">
         <div class="flex items-middle justify-center border-b border-black w-95 py-3">
           <button
             class="size-4 pi pi-angle-double-left disabled:text-gray-200 enabled:cursor-pointer"
@@ -81,18 +80,18 @@ defineEmits(['rowSelect'])
             <span class="hidden sm:block"
               >Showing {{ first }} to {{ last }} of {{ totalRecords }}</span
             >
-            <span class="block sm:hidden">Page {{ page + 1 }} of {{ pageCount }}</span>
+            <span class="block sm:hidden">Page {{ page + 1 }} of {{ pageCount ?? 1 }}</span>
           </div>
           <button
             class="size-4 pi pi-angle-right disabled:text-gray-200 enabled:cursor-pointer"
             text
-            :disabled="page === pageCount - 1"
+            :disabled="page === (pageCount ?? 1) - 1"
             @click="nextPageCallback"
           />
           <button
             class="size-4 pi pi-angle-double-right disabled:text-gray-200 enabled:cursor-pointer"
             text
-            :disabled="page === pageCount - 1"
+            :disabled="page === (pageCount ?? 1) - 1"
             @click="lastPageCallback"
           />
         </div>

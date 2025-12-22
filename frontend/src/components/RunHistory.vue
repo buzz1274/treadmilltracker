@@ -6,7 +6,7 @@ import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
 import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
-import { type filterHistoryModelType, type Run } from '@/types/types.d.ts'
+import type { filterHistoryModelType, Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
@@ -15,8 +15,8 @@ import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 const store = useStore()
-const { loading, resync_runs } = storeToRefs(store)
-const runsModel: RunsModel = new RunsModel(loading)
+const { loadingState, resync_runs } = storeToRefs(store)
+const runsModel: RunsModel = new RunsModel(loadingState)
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
 const displayAddEditRunModal: Ref<boolean> = ref(false)

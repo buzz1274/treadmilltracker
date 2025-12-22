@@ -22,9 +22,25 @@ export default defineConfigWithVueTs(
     }},
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/volt/**']),
+  globalIgnores(
+    [
+      '**/dist/**',
+      '**/dist-ssr/**',
+      '**/coverage/**',
+      '**/volt/**',
+      'node_modules/',
+      '**/public/**'
+    ]
+  ),
 
   pluginVue.configs['flat/recommended'],
   vueTsConfigs.recommendedTypeChecked,
   skipFormatting,
+
+  {
+    rules: {
+      // Restrict all console methods
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
+  },
 )

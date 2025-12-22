@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import moment from 'moment/moment'
 import Dialog from 'primevue/dialog'
-import { computed, type ComputedRef, ref, Ref, watch } from 'vue'
-import { Run } from '@/types/types.d.ts'
+import { computed, type ComputedRef, ref, type Ref, watch } from 'vue'
+import type { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'

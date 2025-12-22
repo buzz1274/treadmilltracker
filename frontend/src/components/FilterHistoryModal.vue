@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
-import { ref, Ref, watch } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { Form } from '@primevue/forms'
 import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import { object, ObjectSchema, string } from 'yup'
-import { filterHistoryModelType } from '@/types/types.d.ts'
+import type { filterHistoryModelType } from '@/types/types.d.ts'
 
 const filterHistoryModel = defineModel<filterHistoryModelType>({ required: true })
 const props = withDefaults(

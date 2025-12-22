@@ -13,7 +13,7 @@ export interface RunData {
 
 export interface Run extends RunData {
   save(): void
-  delete(): Promise<ResponsePayload | void>
+  delete(): Promise<ResponsePayload>
   distanceKm(): string
   secondsToHHMMSS(): string
 }
@@ -30,21 +30,36 @@ export type ResponsePayload = {
   data: object | string | Array<object>
 }
 
-export type LoadingState = Ref<
+export type tUser = Ref<
   UnwrapRef<{
-    completeCall: (index: number) => void
+    name: string
+    isAuthenticated: ComputedRef<boolean>
+  }>,
+  UnwrapRef<{
+    name: string
+    isAuthenticated: ComputedRef<boolean>
+  }>,
+  {
+    name: string
+    isAuthenticated: ComputedRef<boolean>
+  }
+>
+
+export type tLoadingState = Ref<
+  UnwrapRef<{
+    completeCall: (index: number | undefined) => void
     isLoading: ComputedRef<boolean>
     apiCalls: boolean[]
     addCall: () => number
   }>,
   | UnwrapRef<{
-      completeCall: (index: number) => void
+      completeCall: (index: number | undefined) => void
       isLoading: ComputedRef<boolean>
       apiCalls: boolean[]
       addCall: () => number
     }>
   | {
-      completeCall: (index: number) => void
+      completeCall: (index: number | undefined) => void
       isLoading: ComputedRef<boolean>
       apiCalls: boolean[]
       addCall: () => number

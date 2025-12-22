@@ -3,13 +3,13 @@ import Dialog from 'primevue/dialog'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { computed, ref, Ref, watch } from 'vue'
+import { computed, ref, type Ref, watch } from 'vue'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import { object, string, date, ObjectSchema, InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import { Run } from '@/types/types.d.ts'
+import type { Run } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
+import { date, object, ObjectSchema } from 'yup'
 
 const props = withDefaults(
   defineProps<{
@@ -22,6 +22,12 @@ const props = withDefaults(
 
 const runData = computed((): Run | undefined => {
   return props.runData
+})
+
+const runModelValidationSchema: ObjectSchema<{
+  date: Date
+}> = object({
+  date: date().default(new Date()).required('Please enter a valid date'),
 })
 
 const visible: Ref<boolean> = ref(props.visible)
@@ -43,7 +49,6 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const save = () => {
-  console.log('SAVE FORM')
   emit('close')
 }
 </script>
@@ -60,10 +65,10 @@ const save = () => {
   >
     <Form
       v-slot="$form"
+      v-model="runData"
       class="p-4"
       :initial-values="runData"
       :resolver="yupResolver(runModelValidationSchema)"
-      v-model="runData"
       @submit="save()"
     >
       <div class="flex items-center gap-4 mb-4">

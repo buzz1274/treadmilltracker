@@ -1,7 +1,7 @@
-import{ computed, ref } from 'vue'
-import { type LoadingState } from '@/types/types.d.ts'
+import { computed, ref } from 'vue'
+import type { tLoadingState } from '@/types/types.d.ts'
 
-export const LoadingState: LoadingState = ref({
+export const LoadingState: tLoadingState = ref({
   apiCalls: [],
 
   addCall: (): number => {
@@ -10,8 +10,10 @@ export const LoadingState: LoadingState = ref({
     return LoadingState.value.apiCalls.length - 1
   },
 
-  completeCall: (index: number): void => {
-    LoadingState.value.apiCalls[index] = false
+  completeCall: (index: number | undefined): void => {
+    if (index !== undefined) {
+      LoadingState.value.apiCalls[index] = false
+    }
   },
 
   isLoading: computed((): boolean => {

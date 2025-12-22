@@ -33,7 +33,10 @@ const changeYear = (year: string) => {
 <template>
   <BaseComponentHeader table-title="Heatmap" class="mb-2">
     <template #header_action>
-      <select class="bg-white text-black text-xs mr-1" @change="changeYear($event.target.value)">
+      <select
+        class="bg-white text-black text-xs mr-1"
+        @change="changeYear(($event.target as HTMLSelectElement)?.value)"
+      >
         <option value="">Last 12 months</option>
         <option
           v-for="(availableYear, index) in availableYears"

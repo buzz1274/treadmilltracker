@@ -5,9 +5,7 @@ const props = defineProps<{
   name: string
 }>()
 
-const model = defineModel<{
-  date: Date
-}>()
+const model = defineModel<Date>()
 </script>
 
 <template>
