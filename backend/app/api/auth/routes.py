@@ -11,10 +11,12 @@ class AuthRouter:
     def get_csrf_token(self, request: Request) -> str:
         """retrieve csrf token"""
 
-        print(request)
+        print("AUTH ROUTER")
         print(request.session)
 
-        if "csrf_token" not in request.session:
-            request.session["csrf_token"] = secrets.token_urlsafe(32)
+        if "X-CSRF-Token" not in request.session:
+            request.session["X-CSRF-Token"] = secrets.token_urlsafe(32)
 
-        return request.session["csrf_token"]
+        print("POST CSRF", request.session["X-CSRF-Token"])
+
+        return request.session["X-CSRF-Token"]

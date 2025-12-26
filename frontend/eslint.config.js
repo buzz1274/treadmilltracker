@@ -3,10 +3,8 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import pluginVue from 'eslint-plugin-vue'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 import { configureVueProject } from '@vue/eslint-config-typescript'
 configureVueProject({ scriptLangs: ['ts', 'tsx', 'js', 'jsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
 export default defineConfigWithVueTs(
   {
@@ -39,8 +37,20 @@ export default defineConfigWithVueTs(
 
   {
     rules: {
-      // Restrict all console methods
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      '@typescript-eslint/no-inferrable-types': 'off',
+      '@typescript-eslint/typedef': [
+        'error',
+        {
+          arrayDestructuring: true,
+          arrowParameter: true,
+          variableDeclaration: true,
+          variableDeclarationIgnoreFunction: false,
+        },
+      ],
+      '@typescript-eslint/explicit-function-return-type': ['error'],
+      '@typescript-eslint/explicit-module-boundary-types': ['error'],
+      '@typescript-eslint/no-explicit-any': ['error'],
     },
   },
 )

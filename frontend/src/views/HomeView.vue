@@ -1,4 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { tUser } from '@/types/types'
+import BaseButton from '@/components/base/BaseButton.vue'
+
+const props: {
+  user: tUser
+} = defineProps<{
+  user: tUser
+}>()
+</script>
 
 <template>
   <div class="flex justify-center mx-auto pt-10">
@@ -19,6 +28,9 @@
         leo ultrices, a rutrum eros cursus. Morbi nec finibus risus. Cras lacus sapien, pretium at
         nisi quis, consequat dignissim ante. Phasellus molestie suscipit suscipit. Integer tristique
         tincidunt
+      </p>
+      <p class="pt-6">
+        <BaseButton label="Login" severity="primary" @click="props.user.login()" />
       </p>
     </div>
   </div>

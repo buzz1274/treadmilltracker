@@ -1,11 +1,18 @@
 from app.api.runs.models import Run
 from app.api.user.models import User
-from sqlmodel import Session, select
-from app.core.database import db_connection
+from app.api.runs.repository import RunsRepository
 import csv
 
+with open("runs.csv", mode="r", newline="", encoding="utf-8") as file:
+    csv_reader = csv.reader(file)
+    next(csv_reader)
 
-def get_user(session: Session, email: str, full_name: str):
+    for row in csv_reader:
+        print(row)
+
+
+"""
+def get_user(session: Repository, email: str, full_name: str):
     user = session.exec(select(User).where(User.email == email)).first()
 
     if not user:
@@ -15,9 +22,10 @@ def get_user(session: Session, email: str, full_name: str):
         session.refresh(user)
 
     return user
+"""
 
-
-def import_runs(session: Session, user: User):
+"""
+def import_runs(session: Repository, user: User):
     def convert_time_to_seconds(time):
         hours, minutes, seconds = time.split(":")
         return int(hours) * 3600 + int(minutes) * 60 + int(seconds)
@@ -39,9 +47,5 @@ def import_runs(session: Session, user: User):
             session.add(run)
 
         session.commit()
+"""
 
-
-with db_connection() as session:
-    user = get_user(session, "david@sulaco.co.uk", full_name="David Exelby")
-
-    import_runs(session, user)

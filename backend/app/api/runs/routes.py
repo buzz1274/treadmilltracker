@@ -8,6 +8,7 @@ from fastapi_utils.cbv import cbv
 from app.api.runs.models import RunsPublic
 from app.api.runs.repository import RunsRepository
 
+
 router = APIRouter(prefix="/runs", tags=["runs"])
 
 
@@ -44,7 +45,6 @@ class RunRouter:
                 status_code=status.HTTP_404_NOT_FOUND, detail="Run not found"
             )
         except Exception as e:
-            print(type(e))
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
             )

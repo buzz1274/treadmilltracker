@@ -13,7 +13,7 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         if request.method in ["GET", "HEAD", "OPTIONS"]:
             return await call_next(request)
 
-        header_token = request.headers.get("X-CSRF-Token")
+        header_token = request.headers.get("x-csrf-token")
         session_token = request.session.get("X-CSRF-Token")
 
         if (

@@ -1,15 +1,13 @@
-import type { tLoadingState, ResponsePayload, RunData } from '@/types/types.d.ts'
+import type { ResponsePayload, RunData } from '@/types/types.d.ts'
 import { StatusCodes } from 'http-status-codes'
 import Cookies from 'js-cookie'
+import { store as useStore } from '@/stores/store'
 
 export class Model {
   private _host: string = 'https://' + window.location.hostname + '/'
-  private _callId?: number
-  protected _loadingState: tLoadingState
+  protected _store: ReturnType<typeof useStore> = useStore()
 
-  public constructor(loadingState: tLoadingState) {
-    this._loadingState = loadingState
-  }
+  public constructor() {}
 
   protected hydrate<T extends Partial<RunData>>(data: T): this {
     for (const property in data) {
@@ -20,20 +18,14 @@ export class Model {
     return this
   }
 
-  protected async fetch(endpointURL: string, request: RequestInit): Promise<ResponsePayload> {
-    /*
-    if (!this._loadingState.value) {
-      this._loadingState.value = ref(this._loadingState)
-    }
-    */
-
-    this._callId = this._loadingState.value.addCall()
-
+  protected fetch = async (endpointURL: string, request: RequestInit): Promise<ResponsePayload> => {
     if (request['method'] !== 'GET') {
       request['headers'] = await this.setHeaders(request['headers'] ?? {})
     }
 
-    return fetch(this.apiUrl(endpointURL), request)
+    const callId: number = this._store.addAPICall()
+
+    return fetch(this.apiUrl(endpointURL), { ...request, credentials: 'include' })
       .then((response) => {
         return response
           .json()
@@ -49,17 +41,18 @@ export class Model {
           })
       })
       .then((response: ResponsePayload) => {
-        this._loadingState.value.completeCall(this._callId)
+        this._store.completeAPICall(callId)
+
         if (response.status === StatusCodes.INTERNAL_SERVER_ERROR) {
           throw new Error(this.errorMessage(response))
         } else if (response.status === StatusCodes.FORBIDDEN) {
-          this._loadingState.value.completeCall(this._callId)
-          //redirect to homepage//
+          //this._store.user.logout()
+          throw new Error('403: Forbidden')
         }
         return response
       })
       .catch((error) => {
-        this._loadingState.value.completeCall(this._callId)
+        this._store.completeAPICall(callId)
         throw error
       })
   }
@@ -70,8 +63,9 @@ export class Model {
     }).then((response: ResponsePayload) => {
       if (response.status !== StatusCodes.NO_CONTENT) {
         throw new Error(this.errorMessage(response))
+      } else {
+        return response
       }
-      return response
     })
   }
 
@@ -83,10 +77,11 @@ export class Model {
     )
   }
 
-  private async setHeaders(headers: HeadersInit): Promise<HeadersInit> {
+  private setHeaders = async (headers: HeadersInit): Promise<HeadersInit> => {
     headers = {
       ...headers,
-      'X-CSRFToken': await this.getCSRFToken(),
+      'X-CSRF-Token': await this.getCSRFToken(),
+      'Access-Control-Allow-Origin': '',
       Accept: 'application/json',
       'Content-Type': 'application/json',
     }
@@ -101,8 +96,8 @@ export class Model {
     }
   }
 
-  private async getCSRFToken(): Promise<string> {
-    let csrf_token: string | undefined = Cookies.get('csrftoken')
+  protected async getCSRFToken(): Promise<string> {
+    let csrf_token: string | undefined = Cookies.get('session')
 
     if (!csrf_token) {
       csrf_token = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(

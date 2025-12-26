@@ -15,8 +15,8 @@ import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 const store = useStore()
-const { loadingState, resync_runs } = storeToRefs(store)
-const runsModel: RunsModel = new RunsModel(loadingState)
+const { resync_runs } = storeToRefs(store)
+const runsModel: RunsModel = new RunsModel()
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
 const displayAddEditRunModal: Ref<boolean> = ref(false)
@@ -148,7 +148,13 @@ watch(
             {{ formatDate(data.run_date, filterHistoryModel.groupByChoices) }}
           </template>
         </Column>
-        <Column v-if="isDistanceView" :sortable="true" header="Distance(km)" class="cursor-pointer">
+        <Column
+          v-if="isDistanceView"
+          :sortable="true"
+          field="distance_m"
+          header="Distance(km)"
+          class="cursor-pointer"
+        >
           <template #body="{ data }: { data: Run }">
             {{ data.distanceKm() }}
           </template>

@@ -21,7 +21,7 @@ const tooltipFormatter = (run: CalendarItem): string => {
   )
 }
 
-const changeYear = (year: string) => {
+const changeYear = (year: string): void => {
   endDate.value = new Date(parseInt(year), 11, 31)
 
   if (isNaN(endDate.value.getTime())) {

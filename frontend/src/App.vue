@@ -8,12 +8,12 @@ import Toast from 'primevue/toast'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 
-const store = useStore()
-const { user, loadingState } = storeToRefs(store)
+const store: ReturnType<typeof useStore> = useStore()
+const { user, isLoading } = storeToRefs(store)
 </script>
 
 <template>
-  <BaseLoader :loading="loadingState.isLoading" />
+  <BaseLoader :loading="isLoading" />
   <SiteHeader :user="user" />
   <div class="min-h-[800px] p-2 bg-white flex">
     <Toast />

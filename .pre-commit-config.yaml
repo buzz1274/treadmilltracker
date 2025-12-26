@@ -38,6 +38,17 @@ repos:
       - id: prettier
   - repo: local
     hooks:
+      - id: ty
+        name: python type checking
+        language: python
+        entry: docker
+        args:
+          [
+            "exec",
+            "treadmilltracker-backend", "bash", "-c", '"./bin/ty.sh"'
+          ]
+  - repo: local
+    hooks:
       - id: eslint
         name: run eslint
         language: python

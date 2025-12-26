@@ -1,5 +1,5 @@
 import { Model } from '@/models/Model.ts'
-import type { tLoadingState, ResponsePayload, Run, RunData } from '@/types/types'
+import type { ResponsePayload, Run, RunData } from '@/types/types'
 import { formatSecondsAsHHMMSS } from '@/helper/helper.ts'
 
 export class RunModel extends Model implements Run {
@@ -11,8 +11,8 @@ export class RunModel extends Model implements Run {
   public vo2max!: number
   public pace!: number
 
-  public constructor(loadingState: tLoadingState, run: RunData | null = null) {
-    super(loadingState)
+  public constructor(run: RunData | null = null) {
+    super()
 
     if (run) {
       this.hydrate(run)

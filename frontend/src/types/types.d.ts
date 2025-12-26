@@ -1,4 +1,5 @@
-import type { ComputedRef, Ref, UnwrapRef } from 'vue'
+
+import type { ComputedRef, Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
 export interface RunData {
@@ -30,38 +31,17 @@ export type ResponsePayload = {
   data: object | string | Array<object>
 }
 
-export type tUser = Ref<
-  UnwrapRef<{
-    name: string
-    isAuthenticated: ComputedRef<boolean>
-  }>,
-  UnwrapRef<{
-    name: string
-    isAuthenticated: ComputedRef<boolean>
-  }>,
-  {
-    name: string
-    isAuthenticated: ComputedRef<boolean>
-  }
->
+export type tUser = {
+  name: string
+  authenticated: boolean
+  login(): void
+  logout(): void
+  isAuthenticated: boolean
+}
 
-export type tLoadingState = Ref<
-  UnwrapRef<{
-    completeCall: (index: number | undefined) => void
-    isLoading: ComputedRef<boolean>
-    apiCalls: boolean[]
-    addCall: () => number
-  }>,
-  | UnwrapRef<{
-      completeCall: (index: number | undefined) => void
-      isLoading: ComputedRef<boolean>
-      apiCalls: boolean[]
-      addCall: () => number
-    }>
-  | {
-      completeCall: (index: number | undefined) => void
-      isLoading: ComputedRef<boolean>
-      apiCalls: boolean[]
-      addCall: () => number
-    }
->
+export type tLoadingState = {
+  apiCalls: Ref<boolean[]>
+  addAPICall: () => number
+  completeAPICall: (index: number | undefined) => void
+  isLoading: ComputedRef<boolean>
+}

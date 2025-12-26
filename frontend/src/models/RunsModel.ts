@@ -21,7 +21,7 @@ export class RunsModel extends Model {
           Array.isArray(response.data.data)
         ) {
           for (const run of response.data.data) {
-            this.runs.value.push(new RunModel(this._loadingState, run))
+            this.runs.value.push(new RunModel(run))
           }
         }
       },

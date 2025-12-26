@@ -48,7 +48,7 @@ watch(visible, (newValue: boolean): void => {
   }
 })
 
-const save = () => {
+const save = (): void => {
   emit('close')
 }
 </script>

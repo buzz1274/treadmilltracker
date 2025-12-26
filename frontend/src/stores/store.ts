@@ -1,18 +1,25 @@
-import { computed, type Ref, ref } from 'vue'
+import { reactive, type Ref, ref, type UnwrapRef } from 'vue'
 import { defineStore } from 'pinia'
-import type { tLoadingState, tUser } from '@/types/types.d.ts'
-import { LoadingState } from '@/stores/LoadingState.ts'
+import { useLoadingState } from '@/composables/LoadingState.ts'
+import type { tUser } from '@/types/types.d.ts'
 
 export const store = defineStore('store', () => {
-  const loadingState: tLoadingState = ref(LoadingState)
   const resync_runs: Ref<number> = ref(0)
+  const { apiCalls, addAPICall, completeAPICall, isLoading } = useLoadingState()
 
-  const user: tUser = ref({
-    isAuthenticated: computed(() => {
-      return true
-    }),
+  const user: Ref<UnwrapRef<tUser>> = reactive<tUser>({
+    authenticated: false,
     name: 'David',
+    get isAuthenticated(): boolean {
+      return this.authenticated
+    },
+    login(): void {
+      this.authenticated = true
+    },
+    logout(): void {
+      this.authenticated = false
+    },
   })
 
-  return { user, loadingState, resync_runs }
+  return { user, resync_runs, apiCalls, addAPICall, completeAPICall, isLoading }
 })
