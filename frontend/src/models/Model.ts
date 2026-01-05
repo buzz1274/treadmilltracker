@@ -46,7 +46,7 @@ export class Model {
         if (response.status === StatusCodes.INTERNAL_SERVER_ERROR) {
           throw new Error(this.errorMessage(response))
         } else if (response.status === StatusCodes.FORBIDDEN) {
-          //this._store.user.logout()
+          this._store.user.logout()
           throw new Error('403: Forbidden')
         }
         return response
@@ -55,6 +55,23 @@ export class Model {
         this._store.completeAPICall(callId)
         throw error
       })
+  }
+
+  protected save(
+    endpointURL: string,
+    data: object,
+    is_update: boolean = false,
+  ): Promise<ResponsePayload> {
+    return this.fetch(endpointURL, {
+      method: is_update ? 'PATCH' : 'POST',
+      body: JSON.stringify(data),
+    }).then((response: ResponsePayload) => {
+      if (response.status !== StatusCodes.OK) {
+        throw new Error(this.errorMessage(response))
+      } else {
+        return response
+      }
+    })
   }
 
   protected delete(endpointURL: string): Promise<ResponsePayload> {

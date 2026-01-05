@@ -104,7 +104,7 @@ const filterModelValidationSchema: ObjectSchema<{
     .default(filterModel.value.yAxis)
     .required('Y-axis is required'),
 })
-
+//
 const graphFilterVisible = ref<boolean>(false)
 const defaultFilterModel: typeof filterModel.value = structuredClone(filterModel.value)
 

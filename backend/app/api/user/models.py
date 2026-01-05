@@ -1,6 +1,6 @@
-from pydantic import EmailStr
+from pydantic import EmailStr, field_validator
 from sqlmodel import Field, Relationship, SQLModel
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from app.api.runs.models import Run
@@ -8,6 +8,10 @@ if TYPE_CHECKING:
 
 class User(SQLModel, table=True):
     id: int = Field(primary_key=True, index=True)
-    email: EmailStr = Field(unique=True, index=True)
-    full_name: str | None = Field(default=None, max_length=255)
+    email: str = Field(unique=True, index=True)
+    full_name: Optional[str] = Field(default=None, max_length=255)
     runs: List["Run"] = Relationship(back_populates="user")
+
+    @field_validator("email")
+    def validate_email(cls, value: str) -> str:
+        return EmailStr.validate(value)

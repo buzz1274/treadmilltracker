@@ -27,6 +27,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 package-mode = false
 
+[tool.ty.src]
+exclude = ["app/alembic/"]
+
+
 [dependency-groups]
 dev = [
     "ty (>=0.0.7,<0.0.8)"

@@ -12,6 +12,7 @@ import { formatDate } from '@/helper/helper.ts'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 import { useToast } from 'primevue/usetoast'
+import { RunModel } from '@/models/RunModel.ts'
 
 const toast = useToast()
 const store = useStore()
@@ -88,6 +89,7 @@ watch(
     />
 
     <AddEditRunModal
+      v-if="runModalData"
       v-model:visible="displayAddEditRunModal"
       :title="addEditRunModalTitle"
       :run-data="runModalData"
@@ -129,6 +131,7 @@ watch(
               () => {
                 addEditRunModalTitle = 'Add Run'
                 displayAddEditRunModal = true
+                runModalData = new RunModel()
               }
             "
           />

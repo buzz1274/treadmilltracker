@@ -1,6 +1,6 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
+from sqlalchemy import engine_from_config, MetaData
 from sqlalchemy import pool
 
 from alembic import context
@@ -23,10 +23,13 @@ from app.api.runs.models import SQLModel as RunSQLModel
 from app.api.user.models import SQLModel as UserSQLModel
 from app.core.config import Settings
 
-target_metadata = RunSQLModel.metadata
-target_metadata.tables.update(
-    UserSQLModel.metadata.tables
-)
+merged_metadata = MetaData()
+
+for model in [RunSQLModel, UserSQLModel]:
+    for table in model.metadata.tables.values():
+        table.to_metadata(merged_metadata)
+
+target_metadata = merged_metadata
 
 
 

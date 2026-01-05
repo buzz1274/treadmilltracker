@@ -1,6 +1,6 @@
 import { Model } from '@/models/Model.ts'
 import type { ResponsePayload, Run, RunData } from '@/types/types'
-import { formatSecondsAsHHMMSS } from '@/helper/helper.ts'
+import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
 
 export class RunModel extends Model implements Run {
   public id!: number | null
@@ -24,11 +24,22 @@ export class RunModel extends Model implements Run {
   }
 
   public secondsToHHMMSS(): string {
-    return formatSecondsAsHHMMSS(this.duration_s)
+    return this.duration_s ? formatSecondsAsHHMMSS(this.duration_s) : ''
   }
 
-  public save(): void {
-    //save
+  public save(): Promise<ResponsePayload> {
+    return super.save(
+      'api/runs/',
+      {
+        id: this.id,
+        run_date: formatDate(this.run_date, 'ISO-8601'),
+        distance_m: this.distance_m,
+        duration_s: this.duration_s,
+        calories: this.calories,
+        vo2max: this.vo2max,
+      },
+      !!this.id,
+    )
   }
 
   public override delete(): Promise<ResponsePayload> {
