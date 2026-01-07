@@ -1,9 +1,9 @@
 import moment, { Moment } from 'moment/moment'
 
 const formatSecondsAsHHMMSS = (seconds: number): string => {
-  const formattedHours = String(Math.floor(seconds / 3600)).padStart(2, '0')
-  const formattedMinutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
-  const formattedSeconds = String(seconds % 60).padStart(2, '0')
+  const formattedHours: string = String(Math.floor(seconds / 3600)).padStart(2, '0')
+  const formattedMinutes: string = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
+  const formattedSeconds: string = String(seconds % 60).padStart(2, '0')
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }

@@ -21,7 +21,7 @@ const props: {
     <div class="col-span-7">
       <RunChart :user="user" />
       <div class="mb-6" />
-      <RunHeatmap />
+      <RunHeatmap :user="user" />
     </div>
   </div>
 </template>
