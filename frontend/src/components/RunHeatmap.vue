@@ -5,7 +5,7 @@ import moment from 'moment'
 import { ref, type Ref } from 'vue'
 
 //dummy data
-const runs = [{ date: '2025-8-1', count: 7600 }]
+const runs = [{ date: '2025-08-01', count: 7.6 }]
 const availableYears = [2025, 2024]
 //end dummy data
 

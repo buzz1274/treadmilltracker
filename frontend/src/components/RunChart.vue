@@ -3,7 +3,7 @@ import Chart from 'primevue/chart'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
-import {computed, type ComputedRef, onMounted, reactive, type Ref, ref, watch} from 'vue'
+import { computed, type ComputedRef, onMounted, ref, watch } from 'vue'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
@@ -15,9 +15,9 @@ import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 import moment from 'moment'
-import { formatDate } from '@/helper/helper.ts'
+import { formatDate, generateDateSequence } from '@/helper/helper.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
-import type { Run, tUser } from '@/types/types'
+import type { tUser } from '@/types/types'
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
@@ -31,8 +31,8 @@ const props = defineProps<{
   user: tUser
 }>()
 
-const registrationDate: ComputedRef<string> = computed(
-  () => moment(props.user.registrationDate, 'YYYY-MM-DD').toDate(),
+const registrationDate: ComputedRef<string> = computed(() =>
+  moment(props.user.registrationDate, 'YYYY-MM-DD').toDate(),
 )
 
 const formatData = (data: number, xAxis: string): number => {
@@ -117,10 +117,19 @@ const getRuns = (): void => {
       formatDate(filterModel.value.endDate, 'ISO-8601'),
     )
     .then(() => {
-      runs.value = (runsModel.value.runs.value.reverse() || []).map((run: Run) => ({
-        date: run.run_date,
-        data: formatData(run[filterModel.value.xAxis], filterModel.value.xAxis),
-      }))
+      runs.value = generateDateSequence(
+        filterModel.value.startDate,
+        filterModel.value.endDate,
+        filterModel.value.yAxis,
+      )
+
+      runs.value.forEach((run) => {
+        const match = runsModel.value.runs.value.find((choice) => choice.run_date === run.date)
+
+        if (match) {
+          run.data = formatData(match[filterModel.value.xAxis], filterModel.value.xAxis)
+        }
+      })
     })
     .catch((error) => {
       toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
@@ -194,7 +203,7 @@ const updateDate = (type): void => {
   </BaseComponentHeader>
   <Chart v-if="filterModel.xAxis == 'vo2max'" type="line" :data="chartData" />
   <Chart v-else type="bar" :data="chartData" />
-  
+
   <Dialog
     v-model:visible="graphFilterVisible"
     modal
@@ -216,10 +225,10 @@ const updateDate = (type): void => {
         <label for="startDate" class="font-semibold w-24">Start Date</label>
         <BaseDatePicker
           :key="pickerKey"
-          :minDate="registrationDate"
-          :maxDate="new Date()"
           v-model="filterModel.startDate"
-          :manualInput="false"
+          :min-date="registrationDate"
+          :max-date="new Date()"
+          :manual-input="false"
           name="startDate"
           class="text-xs"
         />
@@ -236,8 +245,8 @@ const updateDate = (type): void => {
         <BaseDatePicker
           :key="pickerKey"
           v-model="filterModel.endDate"
-          :maxDate="new Date()"
-          :manualInput="false"
+          :max-date="new Date()"
+          :manual-input="false"
           name="endDate"
           class="text-xs"
         />

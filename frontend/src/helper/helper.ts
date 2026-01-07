@@ -1,4 +1,4 @@
-import moment from 'moment/moment'
+import moment, { Moment } from 'moment/moment'
 
 const formatSecondsAsHHMMSS = (seconds: number): string => {
   const formattedHours = String(Math.floor(seconds / 3600)).padStart(2, '0')
@@ -23,9 +23,41 @@ const formatDate = (date: string, format: string = 'daily'): string => {
     return moment(date).format('MMM, YYYY')
   } else if (format === 'ISO-8601') {
     return moment(date).format('YYYY-MM-DD')
+  } else if (format === 'ISO-MONTHLY') {
+    return moment(date).format('YYYY-MM')
+  } else if (format === 'ISO-YEARLY') {
+    return moment(date).format('YYYY')
   } else {
     return date
   }
 }
 
-export { formatSecondsAsHHMMSS, convertToSeconds, formatDate }
+const generateDateSequence = (startDate: Date, endDate: Date, interval: string): Date[] => {
+  const dateArray = []
+  let dateFormat: string = 'ISO-8601'
+  let dateIncrement: string = 'days'
+  let currentDate: Moment = moment(startDate)
+
+  endDate = moment(endDate)
+
+  if (interval === 'monthly') {
+    dateFormat = 'ISO-MONTHLY'
+    dateIncrement = 'months'
+  } else if (interval === 'weekly') {
+    if (currentDate.isoWeekday() >= 1) {
+      currentDate = currentDate.isoWeekday(1)
+    }
+    dateIncrement = 'weeks'
+  } else if (interval === 'yearly') {
+    dateFormat = 'ISO-YEARLY'
+    dateIncrement = 'years'
+  }
+
+  while (currentDate <= endDate) {
+    dateArray.push({ date: formatDate(currentDate, dateFormat), data: 0 })
+    currentDate = currentDate.clone().add(1, dateIncrement)
+  }
+  return dateArray
+}
+
+export { formatSecondsAsHHMMSS, convertToSeconds, formatDate, generateDateSequence }
