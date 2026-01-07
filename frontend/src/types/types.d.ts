@@ -1,4 +1,3 @@
-
 import type { ComputedRef, Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
@@ -34,9 +33,10 @@ export type ResponsePayload = {
 export type tUser = {
   name: string
   authenticated: boolean
+  registrationDate: string
+  isAuthenticated: boolean
   login(): void
   logout(): void
-  isAuthenticated: boolean
 }
 
 export type tLoadingState = {

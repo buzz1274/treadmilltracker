@@ -24,14 +24,27 @@ class RunRouter:
         self.runs_repository = runs_repository
         self.user_id = user_id
 
-    @router.get("/")
-    def get_runs(self, group_by: str = "daily") -> RunsPublic:
+    @router.get("/", status_code=status.HTTP_200_OK)
+    def get_runs(
+        self,
+        start_date: str | None = None,
+        end_date: str | None = None,
+        group_by: str = "daily",
+    ) -> RunsPublic:
         """retrieve Runs"""
-        return RunsPublic(
-            data=self.runs_repository.get_runs(self.user_id, group_by)
-        )
+        try:
+            return RunsPublic(
+                data=self.runs_repository.get_runs(
+                    self.user_id, start_date, end_date, group_by
+                )
+            )
+        except Exception as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+            )
 
-    @router.post("/")
+    @router.post("/", status_code=status.HTTP_201_CREATED)
     def post(self, run: RunPublic) -> None:
         try:
             self.runs_repository.add_run(self.user_id, run)

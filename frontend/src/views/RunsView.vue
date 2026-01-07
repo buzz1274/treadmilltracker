@@ -3,6 +3,13 @@ import RunHistory from '../components/RunHistory.vue'
 import PersonalBests from '../components/PersonalBests.vue'
 import RunChart from '../components/RunChart.vue'
 import RunHeatmap from '../components/RunHeatmap.vue'
+import type { tUser } from '@/types/types'
+
+const props: {
+  user: tUser
+} = defineProps<{
+  user: tUser
+}>()
 </script>
 
 <template>
@@ -12,7 +19,7 @@ import RunHeatmap from '../components/RunHeatmap.vue'
       <RunHistory class="mb-6" />
     </div>
     <div class="col-span-7">
-      <RunChart />
+      <RunChart :user="user" />
       <div class="mb-6" />
       <RunHeatmap />
     </div>

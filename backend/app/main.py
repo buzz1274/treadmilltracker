@@ -12,6 +12,7 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
+# noinspection PyTypeChecker
 app.add_middleware(CSRFMiddleware)  # ty: ignore[invalid-argument-type]
 app.add_middleware(
     CORSMiddleware,  # ty: ignore[invalid-argument-type]
@@ -20,6 +21,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# noinspection PyTypeChecker
 app.add_middleware(
     SessionMiddleware,  # ty: ignore[invalid-argument-type]
     secret_key=settings.SESSION_SECRET,

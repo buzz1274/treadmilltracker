@@ -3,7 +3,7 @@ import Chart from 'primevue/chart'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
-import { ref } from 'vue'
+import {computed, type ComputedRef, onMounted, reactive, type Ref, ref, watch} from 'vue'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
@@ -12,38 +12,39 @@ import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
 import { object, string, date, ObjectSchema, type InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
+import { storeToRefs } from 'pinia'
+import { store as useStore } from '@/stores/store'
 import moment from 'moment'
+import { formatDate } from '@/helper/helper.ts'
+import { RunsModel } from '@/models/RunsModel.ts'
+import type { Run, tUser } from '@/types/types'
+import { useToast } from 'primevue/usetoast'
 
-//dummy data
-const runs = [
-  { date: '2025-08-01', distance: '7600' },
-  { date: '2025-08-02', distance: '8900' },
-  { date: '2025-08-03', distance: '12000' },
-  { date: '2025-08-04', distance: '1234' },
-  { date: '2025-08-05', distance: '4598' },
-  { date: '2025-08-06', distance: '7891' },
-  { date: '2025-08-07', distance: '7867' },
-  { date: '2025-08-08', distance: '5432' },
-  { date: '2025-08-09', distance: '5456' },
-  { date: '2025-08-10', distance: '5123' },
-]
+const toast = useToast()
+const runsModel: RunsModel = ref(new RunsModel())
+const runs = ref([])
+const store = useStore()
+const { resync_runs } = storeToRefs(store)
+const pickerKey = ref(0)
 
-const chartData = {
-  labels: runs.map((run) => run.date),
-  datasets: [
-    {
-      label: 'Distance(m)',
-      data: runs.map((run) => run.distance),
-      borderColor: '#e8e8e8',
-      fill: true,
-    },
-  ],
+const props = defineProps<{
+  user: tUser
+}>()
+
+const registrationDate: ComputedRef<string> = computed(
+  () => moment(props.user.registrationDate, 'YYYY-MM-DD').toDate(),
+)
+
+const formatData = (data: number, xAxis: string): number => {
+  if (xAxis === 'distance_m') return (data / 1000).toFixed(2)
+  if (xAxis === 'duration_s') return (data / 3600).toFixed(2)
+
+  return data
 }
-//end dummy data
 
 const xAxisChoices: { label: string; value: string }[] = [
-  { label: 'Distance(km)', value: 'distance' },
-  { label: 'Time(hrs)', value: 'time' },
+  { label: 'Distance(km)', value: 'distance_m' },
+  { label: 'Time(hrs)', value: 'duration_s' },
   { label: 'Calories', value: 'calories' },
   { label: 'VO₂ Max', value: 'vo2max' },
 ]
@@ -67,9 +68,9 @@ const filterModel = defineModel<{
     xAxis: string
     yAxis: string
   } => ({
-    startDate: moment().subtract(1, 'year').toDate(),
+    startDate: moment().subtract(1, 'year').startOf('month').toDate(),
     endDate: new Date(),
-    xAxis: 'distance',
+    xAxis: 'distance_m',
     yAxis: 'monthly',
   }),
 })
@@ -104,9 +105,52 @@ const filterModelValidationSchema: ObjectSchema<{
     .default(filterModel.value.yAxis)
     .required('Y-axis is required'),
 })
-//
+
 const graphFilterVisible = ref<boolean>(false)
 const defaultFilterModel: typeof filterModel.value = structuredClone(filterModel.value)
+
+const getRuns = (): void => {
+  runsModel.value
+    .getRuns(
+      filterModel.value.yAxis,
+      formatDate(filterModel.value.startDate, 'ISO-8601'),
+      formatDate(filterModel.value.endDate, 'ISO-8601'),
+    )
+    .then(() => {
+      runs.value = (runsModel.value.runs.value.reverse() || []).map((run: Run) => ({
+        date: run.run_date,
+        data: formatData(run[filterModel.value.xAxis], filterModel.value.xAxis),
+      }))
+    })
+    .catch((error) => {
+      toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+    })
+}
+
+onMounted((): void => {
+  getRuns()
+})
+
+watch(
+  () => resync_runs.value,
+  (): void => {
+    getRuns()
+  },
+)
+
+const chartData = computed(() => {
+  return {
+    labels: runs.value.map((run) => run.date),
+    datasets: [
+      {
+        label: xAxisChoices.find((choice) => choice.value === filterModel.value.xAxis)?.label,
+        data: runs.value.map((run) => run.data),
+        borderColor: '#000',
+        fill: false,
+      },
+    ],
+  }
+})
 
 const filterGraph = (reset: boolean = false): void => {
   let validationError: boolean = false
@@ -114,18 +158,27 @@ const filterGraph = (reset: boolean = false): void => {
 
   if (reset) {
     filterModel.value = structuredClone(defaultFilterModel)
-  }
-
-  try {
-    data = filterModelValidationSchema.validateSync(filterModel.value)
-  } catch {
-    validationError = true
-  }
-
-  if (!validationError && data) {
-    //send request to backend and regenerate graph
+    getRuns()
     graphFilterVisible.value = false
+  } else {
+    try {
+      data = filterModelValidationSchema.validateSync(filterModel.value)
+    } catch {
+      validationError = true
+    }
+
+    if (!validationError && data) {
+      getRuns()
+      graphFilterVisible.value = false
+    }
   }
+}
+
+const updateDate = (type): void => {
+  if (type === 'start') filterModel.value.startDate = new Date(props.user.registrationDate)
+  if (type === 'end') filterModel.value.endDate = new Date()
+
+  pickerKey.value++
 }
 </script>
 
@@ -139,8 +192,9 @@ const filterGraph = (reset: boolean = false): void => {
       />
     </template>
   </BaseComponentHeader>
-  <Chart type="bar" :data="chartData" />
-
+  <Chart v-if="filterModel.xAxis == 'vo2max'" type="line" :data="chartData" />
+  <Chart v-else type="bar" :data="chartData" />
+  
   <Dialog
     v-model:visible="graphFilterVisible"
     modal
@@ -160,7 +214,16 @@ const filterGraph = (reset: boolean = false): void => {
     >
       <div class="flex items-center gap-4 mb-4">
         <label for="startDate" class="font-semibold w-24">Start Date</label>
-        <BaseDatePicker v-model="filterModel.startDate" name="startDate" class="text-xs" />
+        <BaseDatePicker
+          :key="pickerKey"
+          :minDate="registrationDate"
+          :maxDate="new Date()"
+          v-model="filterModel.startDate"
+          :manualInput="false"
+          name="startDate"
+          class="text-xs"
+        />
+        <span class="text-xs cursor-pointer" @click="updateDate('start')"> Earliest Date </span>
       </div>
       <div v-if="$form.startDate?.invalid" class="flex items-center gap-4 mb-4">
         <div class="w-24"></div>
@@ -170,7 +233,15 @@ const filterGraph = (reset: boolean = false): void => {
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label for="endDate" class="font-semibold w-24">End Date</label>
-        <BaseDatePicker v-model="filterModel.endDate" name="endDate" class="text-xs" />
+        <BaseDatePicker
+          :key="pickerKey"
+          v-model="filterModel.endDate"
+          :maxDate="new Date()"
+          :manualInput="false"
+          name="endDate"
+          class="text-xs"
+        />
+        <span class="text-xs cursor-pointer" @click="updateDate('end')"> Latest Date </span>
       </div>
       <div v-if="$form.endDate?.invalid" class="flex items-center gap-4 mb-4">
         <div class="w-24"></div>

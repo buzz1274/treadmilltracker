@@ -10,6 +10,7 @@ export const store = defineStore('store', () => {
   const user: Ref<UnwrapRef<tUser>> = reactive<tUser>({
     authenticated: false,
     name: 'David',
+    registrationDate: '2025-01-01',
     get isAuthenticated(): boolean {
       return this.authenticated
     },

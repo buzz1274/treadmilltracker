@@ -66,7 +66,7 @@ export class Model {
       method: is_update ? 'PATCH' : 'POST',
       body: JSON.stringify(data),
     }).then((response: ResponsePayload) => {
-      if (response.status !== StatusCodes.OK) {
+      if (response.status !== StatusCodes.OK && response.status !== StatusCodes.CREATED) {
         throw new Error(this.errorMessage(response))
       } else {
         return response
