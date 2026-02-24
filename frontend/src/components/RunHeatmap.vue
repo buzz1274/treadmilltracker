@@ -2,12 +2,16 @@
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import { CalendarHeatmap, type CalendarItem } from 'vue3-calendar-heatmap'
 import moment from 'moment'
-import { computed, onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import type { Moment } from 'moment/moment'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { useToast } from 'primevue/usetoast'
 import type { tUser } from '@/types/types'
+import { store as useStore } from '@/stores/store'
+import { storeToRefs } from 'pinia'
 
+const store = useStore()
+const { resync_runs } = storeToRefs(store)
 const props = defineProps<{
   user: tUser
 }>()
@@ -23,6 +27,7 @@ const getRuns = (): void => {
   runsModel.value
     .getRuns('daily', startDate.value.format('YYYY-MM-DD'), endDate.value.format('YYYY-MM-DD'))
     .then(() => {
+      runs.value = []
       runsModel.value.runs.value.forEach((run) => {
         runs.value.push({ date: run.run_date, count: (run.distance_m / 1000).toFixed(2) })
       })
@@ -37,6 +42,14 @@ const getRuns = (): void => {
 onMounted((): void => {
   getRuns()
 })
+
+watch(
+  () => resync_runs.value,
+  (): void => {
+    console.log('resync runs')
+    getRuns()
+  },
+)
 
 const availableYears = computed(() => {
   const availableYears = []
@@ -69,7 +82,6 @@ const changeYear = (year: string): void => {
     endDate.value = moment()
     startDate.value = moment(endDate.value).subtract(1, 'years')
   }
-
   getRuns()
 }
 </script>

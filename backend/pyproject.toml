@@ -18,6 +18,9 @@ dependencies = [
     "fastapi-utils (>=0.8.0,<0.9.0)",
     "typing-inspect (>=0.9.0,<0.10.0)",
     "itsdangerous (>=2.2.0,<3.0.0)",
+    "typer[all] (>=0.24.1,<0.25.0)",
+    "boto3 (>=1.42.54,<2.0.0)",
+    "boto3-stubs[boto3,s3] (>=1.42.55,<2.0.0)",
 ]
 
 [build-system]

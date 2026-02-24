@@ -40,6 +40,7 @@ const viewPersonalBests = (event: InputEvent): void => {
       <template #data>
         <Column field="title" header="Title"></Column>
         <Column field="date" header="Date"></Column>
+        <Column field="distance" header="Distance"></Column>
         <Column class="!text-end" field="time" header="Time"></Column>
       </template>
     </BaseDataTable>

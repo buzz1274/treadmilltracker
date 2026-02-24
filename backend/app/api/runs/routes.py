@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm.exc import NoResultFound
 from app.core.authentication import get_current_user
 from fastapi_utils.cbv import cbv
-from app.api.runs.models import RunsPublic, RunPublic
+from app.api.runs.models import RunsPublic, RunPublic, PersonalBestsPublic
 from app.api.runs.repository import RunsRepository
 
 
@@ -38,6 +38,28 @@ class RunRouter:
                     self.user_id, start_date, end_date, group_by
                 )
             )
+        except NoResultFound:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=self.ERROR_MESSAGE_404,
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+            )
+
+    @router.get("/personal_bests", status_code=status.HTTP_200_OK)
+    def get_personal_bests(self) -> PersonalBestsPublic:
+        """retrieve personal bests"""
+        try:
+            return PersonalBestsPublic(
+                data=self.runs_repository.personal_bests(self.user_id)
+            )
+        except NoResultFound:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=self.ERROR_MESSAGE_404,
+            )
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -45,6 +67,7 @@ class RunRouter:
 
     @router.post("/", status_code=status.HTTP_201_CREATED)
     def post(self, run: RunPublic) -> None:
+        """create a run"""
         try:
             self.runs_repository.add_run(self.user_id, run)
         except Exception as e:
@@ -54,6 +77,7 @@ class RunRouter:
 
     @router.patch("/", status_code=status.HTTP_200_OK)
     def patch(self, run: RunPublic) -> None:
+        """update a run"""
         try:
             self.runs_repository.update_run(self.user_id, run)
         except NoResultFound:
@@ -71,8 +95,6 @@ class RunRouter:
         """delete a run"""
         try:
             self.runs_repository.delete_run(self.user_id, run_id)
-
-            return
         except (ValueError, NoResultFound):
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

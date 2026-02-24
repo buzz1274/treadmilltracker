@@ -3,7 +3,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from app.api.runs.models import Run
+    from app.api.runs.models import Run, PersonalBests
 
 
 class User(SQLModel, table=True):
@@ -11,6 +11,7 @@ class User(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     full_name: Optional[str] = Field(default=None, max_length=255)
     runs: List["Run"] = Relationship(back_populates="user")
+    personal_bests: List["PersonalBests"] = Relationship(back_populates="user")
 
     @field_validator("email")
     def validate_email(cls, value: str) -> str:

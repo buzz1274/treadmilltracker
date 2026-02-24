@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment/moment'
+import moment, { type Moment } from 'moment/moment'
 
 const formatSecondsAsHHMMSS = (seconds: number): string => {
   const formattedHours: string = String(Math.floor(seconds / 3600)).padStart(2, '0')
@@ -32,7 +32,11 @@ const formatDate = (date: string, format: string = 'daily'): string => {
   }
 }
 
-const generateDateSequence = (startDate: Date, endDate: Date, interval: string): Date[] => {
+const generateDateSequence = (
+  startDate: Date,
+  endDate: Date,
+  interval: string,
+): { date: string; data: number }[] => {
   const dateArray = []
   let dateFormat: string = 'ISO-8601'
   let dateIncrement: string = 'days'
