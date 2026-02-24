@@ -12,6 +12,8 @@ app = typer.Typer()
 
 
 class BackupDB:
+    ENV_VARS = {"PGPASSWORD": settings.POSTGRES_PASSWORD}
+
     BACKUP_COMMAND = (
         "pg_dump --clean --inserts "
         "-U{database_username} "
@@ -51,8 +53,6 @@ class BackupDB:
 
     def _dump_database(self, full_backup_path: str) -> None:
         """dump database to file"""
-        env_vars = {"PGPASSWORD": settings.POSTGRES_PASSWORD}
-
         backup_command = self.BACKUP_COMMAND.format(
             database_username=settings.POSTGRES_USER,
             database_host=settings.POSTGRES_SERVER,
@@ -61,7 +61,7 @@ class BackupDB:
 
         with open(full_backup_path, "w") as backup_file:
             subprocess.run(  # nosec
-                backup_command, env=env_vars, stdout=backup_file
+                backup_command, env=self.ENV_VARS, stdout=backup_file
             )
 
         if (
