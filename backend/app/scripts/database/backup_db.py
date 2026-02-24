@@ -86,7 +86,7 @@ class BackupDB:
                     files[file["LastModified"].strftime("%s")] = file
 
             for i, file in enumerate(dict(sorted(files.items(), reverse=True))):
-                if i > settings.DAYS_BACKUPS_TO_KEEP:
+                if i > (settings.DAYS_BACKUPS_TO_KEEP - 1):
                     self.s3_client.delete_object(
                         Bucket=settings.AWS_S3_BUCKET_NAME,
                         Key=files[file]["Key"],
