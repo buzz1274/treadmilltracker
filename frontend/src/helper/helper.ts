@@ -58,7 +58,7 @@ const generateDateSequence = (
   }
 
   while (currentDate <= endDate) {
-    dateArray.push({ date: formatDate(currentDate, dateFormat), data: 0 })
+    dateArray.push({ date: formatDate(currentDate, dateFormat), data: null })
     currentDate = currentDate.clone().add(1, dateIncrement)
   }
   return dateArray
