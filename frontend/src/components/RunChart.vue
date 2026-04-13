@@ -156,6 +156,7 @@ const chartData = computed(() => {
         data: runs.value.map((run) => run.data),
         borderColor: '#000',
         fill: false,
+        spanGaps: filterModel.value.xAxis === 'vo2max',
       },
     ],
   }
