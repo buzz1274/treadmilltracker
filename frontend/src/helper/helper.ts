@@ -1,6 +1,7 @@
 import moment, { type Moment } from 'moment/moment'
+import type { tDateArray } from '@/types/types'
 
-const formatSecondsAsHHMMSS = (seconds: number): string => {
+const formatSecondsAsHHMMSS: (seconds: number) => string = (seconds: number): string => {
   const formattedHours: string = String(Math.floor(seconds / 3600)).padStart(2, '0')
   const formattedMinutes: string = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
   const formattedSeconds: string = String(seconds % 60).padStart(2, '0')
@@ -16,7 +17,7 @@ const convertToSeconds = (time: string): number => {
   return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
 }
 
-const formatDate = (date: string, format: string = 'daily'): string => {
+const formatDate = (date: string | Moment, format: string = 'daily'): string | Moment => {
   if (format === 'daily' || format === 'weekly') {
     return moment(date).format('MMM Do, YYYY')
   } else if (format === 'monthly') {
@@ -33,23 +34,28 @@ const formatDate = (date: string, format: string = 'daily'): string => {
 }
 
 const generateDateSequence = (
-  startDate: Date,
-  endDate: Date,
+  startDate: Date | Moment,
+  endDate: Date | Moment,
   interval: string,
-): { date: string; data: number }[] => {
-  const dateArray = []
+): tDateArray[] => {
+  const dateArray: tDateArray[] = []
   let dateFormat: string = 'ISO-8601'
-  let dateIncrement: string = 'days'
-  let currentDate: Moment = moment(startDate)
+  let dateIncrement: 'days' | 'weeks' | 'months' | 'years' = 'days'
 
-  endDate = moment(endDate)
+  if (!moment.isMoment(startDate)) {
+    startDate = moment(startDate)
+  }
+
+  if (!moment.isMoment(endDate)) {
+    endDate = moment(endDate)
+  }
 
   if (interval === 'monthly') {
     dateFormat = 'ISO-MONTHLY'
     dateIncrement = 'months'
   } else if (interval === 'weekly') {
-    if (currentDate.isoWeekday() >= 1) {
-      currentDate = currentDate.isoWeekday(1)
+    if (startDate.isoWeekday() >= 1) {
+      startDate = startDate.isoWeekday(1)
     }
     dateIncrement = 'weeks'
   } else if (interval === 'yearly') {
@@ -57,9 +63,9 @@ const generateDateSequence = (
     dateIncrement = 'years'
   }
 
-  while (currentDate <= endDate) {
-    dateArray.push({ date: formatDate(currentDate, dateFormat), data: null })
-    currentDate = currentDate.clone().add(1, dateIncrement)
+  while (startDate <= endDate) {
+    dateArray.push({ date: formatDate(startDate, dateFormat), data: null })
+    startDate = startDate.clone().add(1, dateIncrement)
   }
   return dateArray
 }

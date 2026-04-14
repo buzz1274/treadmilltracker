@@ -19,9 +19,9 @@ const props: {
       <RunHistory class="mb-6" />
     </div>
     <div class="col-span-7">
-      <RunChart :user="user" />
+      <RunChart :user="props.user" />
       <div class="mb-6" />
-      <RunHeatmap :user="user" />
+      <RunHeatmap :user="props.user" />
     </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
 import type { ComputedRef, Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
+import type { Moment } from 'moment'
 
 export interface RunData {
   id: number | null
@@ -45,3 +46,5 @@ export type tLoadingState = {
   completeAPICall: (index: number | undefined) => void
   isLoading: ComputedRef<boolean>
 }
+
+export type tDateArray = { date: string | Moment; data: number | null }
