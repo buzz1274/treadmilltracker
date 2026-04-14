@@ -3,7 +3,7 @@ import Chart from 'primevue/chart'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
-import { computed, type ComputedRef, onMounted, ref, watch } from 'vue'
+import { computed, type ComputedRef, type Ref, onMounted, ref, watch } from 'vue'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
@@ -21,7 +21,7 @@ import type { tUser } from '@/types/types'
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
-const runsModel: RunsModel = ref(new RunsModel())
+const runsModel: Ref<RunsModel> = ref(new RunsModel())
 const runs = ref([])
 const store = useStore()
 const { resync_runs } = storeToRefs(store)

@@ -4,7 +4,7 @@ import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import { convertToSeconds } from '@/helper/helper.ts'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { computed, ref, type Ref, watch } from 'vue'
+import { computed, ref, type Ref, type ComputedRef, watch } from 'vue'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
@@ -29,7 +29,7 @@ const props = withDefaults(
   {},
 )
 
-const runData: Run = computed(() => props.runData)
+const runData: ComputedRef<Run | undefined> = computed(() => props.runData)
 const run = ref(new RunModel(runData.value))
 
 const runModelValidationSchema: ObjectSchema<{
@@ -40,10 +40,12 @@ const runModelValidationSchema: ObjectSchema<{
   vo2max: number
 }> = object({
   run_date: string().required('Please enter a valid date'),
-  formattedSeconds: string().matches(
-    /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
-    'Please enter time in the format HH:MM:SS',
-  ),
+  formattedSeconds: string()
+    .matches(
+      /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
+      'Please enter time in the format HH:MM:SS',
+    )
+    .required('Please enter a valid time'),
   distance_m: number().required('Please enter a valid distance'),
   calories: number().required('Please enter valid value for calories'),
   vo2max: number().required('Please enter valid value for VO2 max'),
