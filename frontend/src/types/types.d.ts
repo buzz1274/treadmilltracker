@@ -1,5 +1,5 @@
 import type { ComputedRef, Ref } from 'vue'
-import { StatusCodes } from 'http-status-codes'
+import type { StatusCodes } from 'http-status-codes'
 import type { Moment } from 'moment'
 
 export interface RunData {
@@ -21,17 +21,17 @@ export interface Run extends RunData {
 
 export type PersonalBests = Record<'title' | 'date' | 'time', string>
 
-export type filterHistoryModelType = {
+export interface filterHistoryModelType {
   viewChoices: string
   groupByChoices: string
 }
 
-export type ResponsePayload = {
+export interface ResponsePayload {
   status: StatusCodes
   data: object | string | Array<object>
 }
 
-export type tUser = {
+export interface tUser {
   name: string
   authenticated: boolean
   registrationDate: string
@@ -40,11 +40,14 @@ export type tUser = {
   logout(): void
 }
 
-export type tLoadingState = {
+export interface tLoadingState {
   apiCalls: Ref<boolean[]>
   addAPICall: () => number
   completeAPICall: (index: number | undefined) => void
   isLoading: ComputedRef<boolean>
 }
 
-export type tDateArray = { date: string | Moment; data: number | null }
+export interface tDateArray {
+  date: string | Moment
+  data: number | null
+}

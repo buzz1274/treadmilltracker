@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
-import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
-import { convertToSeconds } from '@/helper/helper.ts'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
 import { computed, ref, type Ref, type ComputedRef, watch } from 'vue'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import type { Run } from '@/types/types.d.ts'
-import BaseButton from '@/components/base/BaseButton.vue'
-import { object, string, number, ObjectSchema } from 'yup'
-import { RunModel } from '@/models/RunModel'
-import { store as useStore } from '@/stores/store'
+import type { ObjectSchema } from 'yup'
+import { object, string, number } from 'yup'
 import { storeToRefs } from 'pinia'
 import { useToast } from 'primevue/usetoast'
+
+import type { Run } from '@/types/types.d.ts'
+import BaseButton from '@/components/base/BaseButton.vue'
+import { RunModel } from '@/models/RunModel'
+import { store as useStore } from '@/stores/store'
+import { convertToSeconds } from '@/helper/helper.ts'
+import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 
 const toast = useToast()
 const store = useStore()
@@ -40,12 +42,11 @@ const runModelValidationSchema: ObjectSchema<{
   vo2max: number
 }> = object({
   run_date: string().required('Please enter a valid date'),
-  formattedSeconds: string()
-    .matches(
-      /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
-      'Please enter time in the format HH:MM:SS',
-    )
-    .required('Please enter a valid time'),
+  formattedSeconds: string().matches(
+    /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
+    'Please enter time in the format HH:MM:SS',
+  ),
+  //.required('Please enter a valid time'),
   distance_m: number().required('Please enter a valid distance'),
   calories: number().required('Please enter valid value for calories'),
   vo2max: number().required('Please enter valid value for VO2 max'),
@@ -70,7 +71,7 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const save = (): void => {
-  let validationError: boolean = false
+  let validationError = false
 
   try {
     runModelValidationSchema.validateSync(run.value)
@@ -88,8 +89,8 @@ const save = (): void => {
 
         toast.add({
           severity: 'success',
-          summary: 'Run ' + action,
-          detail: 'Run ' + action + ' successfully',
+          summary: `Run ${action}`,
+          detail: `Run ${action} successfully`,
           life: 3000,
         })
       })

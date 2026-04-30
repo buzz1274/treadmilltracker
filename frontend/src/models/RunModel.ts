@@ -11,7 +11,7 @@ export class RunModel extends Model implements Run {
   public vo2max!: number
   public pace!: number
 
-  public constructor(run: RunData | null = null) {
+  constructor(run: RunData | null = null) {
     super()
 
     if (run) {
@@ -43,6 +43,6 @@ export class RunModel extends Model implements Run {
   }
 
   public override delete(): Promise<ResponsePayload> {
-    return super.delete('api/runs/' + this.id)
+    return super.delete(`api/runs/${this.id}`)
   }
 }

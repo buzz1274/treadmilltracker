@@ -42,14 +42,17 @@
     "@tsconfig/node22": "^22.0.2",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.16.5",
-    "@typescript-eslint/parser": "^8.39.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
-    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.7.0",
-    "eslint": "^9.32.0",
+    "eslint": "^9",
     "eslint-plugin": "^1.0.1",
-    "eslint-plugin-vue": "~10.3.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "eslint-plugin-vue": "^10.9.0",
     "jiti": "^2.5.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
@@ -60,7 +63,7 @@
     "vite": "^7.0.6",
     "vite-plugin-mkcert": "^1.17.9",
     "vite-plugin-vue-devtools": "^8.0.0",
-    "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.0.4"
+    "vue-eslint-parser": "^10.4.0",
+    "vue-tsc": "^3.2.7"
   }
 }

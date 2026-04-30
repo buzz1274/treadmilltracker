@@ -1,13 +1,14 @@
-import type { ResponsePayload, RunData } from '@/types/types.d.ts'
 import { StatusCodes } from 'http-status-codes'
 import Cookies from 'js-cookie'
+
+import type { ResponsePayload, RunData } from '@/types/types.d.ts'
 import { store as useStore } from '@/stores/store'
 
 export class Model {
-  private _host: string = 'https://' + window.location.hostname + '/'
+  private _host = `https://${window.location.hostname}/`
   protected _store: ReturnType<typeof useStore> = useStore()
 
-  public constructor() {}
+  constructor() {}
 
   protected hydrate<T extends Partial<RunData>>(data: T): this {
     for (const property in data) {
@@ -26,20 +27,18 @@ export class Model {
     const callId: number = this._store.addAPICall()
 
     return fetch(this.apiUrl(endpointURL), { ...request, credentials: 'include' })
-      .then((response) => {
-        return response
+      .then((response) =>
+        response
           .json()
           .then((data) => ({
             status: response.status,
-            data: data,
+            data,
           }))
-          .catch((error) => {
-            return {
-              status: response.status,
-              data: error,
-            }
-          })
-      })
+          .catch((error) => ({
+            status: response.status,
+            data: error,
+          })),
+      )
       .then((response: ResponsePayload) => {
         this._store.completeAPICall(callId)
 
@@ -57,11 +56,7 @@ export class Model {
       })
   }
 
-  protected save(
-    endpointURL: string,
-    data: object,
-    is_update: boolean = false,
-  ): Promise<ResponsePayload> {
+  protected save(endpointURL: string, data: object, is_update = false): Promise<ResponsePayload> {
     return this.fetch(endpointURL, {
       method: is_update ? 'PATCH' : 'POST',
       body: JSON.stringify(data),
@@ -88,7 +83,7 @@ export class Model {
 
   protected isPropertyOf(property: string): boolean {
     return (
-      Object.hasOwn(this, property as keyof this) &&
+      Object.hasOwn(this, property) &&
       typeof this[property as keyof this] !== 'function' &&
       property[0] !== '_'
     )
@@ -118,11 +113,10 @@ export class Model {
 
     if (!csrf_token) {
       csrf_token = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(
-        (response: ResponsePayload) => {
-          return typeof response.data === 'object' && response.data !== null
+        (response: ResponsePayload) =>
+          typeof response.data === 'object' && response.data !== null
             ? JSON.stringify(response.data)
-            : response.data?.toString() || ''
-        },
+            : response.data?.toString() || '',
       )
     }
     return csrf_token ?? ''

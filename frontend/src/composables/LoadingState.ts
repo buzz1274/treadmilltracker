@@ -1,4 +1,5 @@
 import { computed, ref } from 'vue'
+
 import type { tLoadingState } from '@/types/types.d.ts'
 
 export function useLoadingState(): tLoadingState {
@@ -15,9 +16,7 @@ export function useLoadingState(): tLoadingState {
     }
   }
 
-  const isLoading = computed((): boolean => {
-    return apiCalls.value.some((value) => value === true)
-  })
+  const isLoading = computed((): boolean => apiCalls.value.some((value) => value === true))
 
   return { apiCalls, addAPICall, completeAPICall, isLoading }
 }

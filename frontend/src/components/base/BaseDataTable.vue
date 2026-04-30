@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
+
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import type { Run, PersonalBests } from '@/types/types.d.ts'
 

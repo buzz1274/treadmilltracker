@@ -6,7 +6,9 @@ import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import { object, ObjectSchema, string } from 'yup'
+import type { ObjectSchema } from 'yup'
+import { object, string } from 'yup'
+
 import type { filterHistoryModelType } from '@/types/types.d.ts'
 
 const filterHistoryModel = defineModel<filterHistoryModelType>({ required: true })

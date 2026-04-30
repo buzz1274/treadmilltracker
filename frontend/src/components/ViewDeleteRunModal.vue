@@ -2,10 +2,11 @@
 import moment from 'moment/moment'
 import Dialog from 'primevue/dialog'
 import { computed, type ComputedRef, ref, type Ref, watch } from 'vue'
-import type { Run } from '@/types/types.d.ts'
-import BaseButton from '@/components/base/BaseButton.vue'
 import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'
+
+import type { Run } from '@/types/types.d.ts'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { store as useStore } from '@/stores/store'
 
 const store = useStore()
@@ -21,9 +22,7 @@ const props = withDefaults(
     delete: false,
   },
 )
-const run: ComputedRef<Run | undefined> = computed((): Run | undefined => {
-  return props.run
-})
+const run: ComputedRef<Run | undefined> = computed((): Run | undefined => props.run)
 
 const toast = useToast()
 const visible: Ref<boolean> = ref(props.visible)

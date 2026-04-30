@@ -1,7 +1,8 @@
+import { ref, type Ref } from 'vue'
+
 import { Model } from '@/models/Model'
 import type { ResponsePayload, Run } from '@/types/types.d.ts'
 import { RunModel } from '@/models/RunModel'
-import { ref, type Ref } from 'vue'
 
 export class PersonalBestsModel extends Model {
   public runs: Ref<Array<Run>> = ref([])
@@ -9,7 +10,7 @@ export class PersonalBestsModel extends Model {
   public getPersonalBests(): Promise<ResponsePayload | void> {
     this.runs.value = []
 
-    const url: string = 'api/personal-bests/'
+    const url = 'api/personal-bests/'
 
     return this.fetch(url, { method: 'GET' }).then((response: ResponsePayload | void) => {
       if (

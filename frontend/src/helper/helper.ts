@@ -1,4 +1,5 @@
 import moment, { type Moment } from 'moment/moment'
+
 import type { tDateArray } from '@/types/types'
 
 const formatSecondsAsHHMMSS: (seconds: number) => string = (seconds: number): string => {
@@ -9,15 +10,15 @@ const formatSecondsAsHHMMSS: (seconds: number) => string = (seconds: number): st
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
-const convertToSeconds = (time: string): number => {
+const convertToSeconds: (time: string) => number = (time: string): number => {
   if (!time) return 0
 
-  const [hours, minutes, seconds] = time.split(':')
+  const [hours, minutes, seconds]: [string, string, string] = time.split(':')
 
   return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
 }
 
-const formatDate = (date: string | Moment, format: string = 'daily'): string | Moment => {
+const formatDate = (date: string | Moment, format = 'daily'): string | Moment => {
   if (format === 'daily' || format === 'weekly') {
     return moment(date).format('MMM Do, YYYY')
   } else if (format === 'monthly') {
@@ -39,7 +40,7 @@ const generateDateSequence = (
   interval: string,
 ): tDateArray[] => {
   const dateArray: tDateArray[] = []
-  let dateFormat: string = 'ISO-8601'
+  let dateFormat = 'ISO-8601'
   let dateIncrement: 'days' | 'weeks' | 'months' | 'years' = 'days'
 
   if (!moment.isMoment(startDate)) {

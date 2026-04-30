@@ -1,24 +1,26 @@
 <script setup lang="ts">
 import Chart from 'primevue/chart'
-import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
 import { computed, type ComputedRef, type Ref, onMounted, ref, watch } from 'vue'
-import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
 import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { object, string, date, ObjectSchema, type InferType } from 'yup'
+import type { ObjectSchema } from 'yup'
+import { object, string, date, type InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
-import { store as useStore } from '@/stores/store'
 import moment from 'moment'
+import { useToast } from 'primevue/usetoast'
+
+import { store as useStore } from '@/stores/store'
 import { formatDate, generateDateSequence } from '@/helper/helper.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import type { tUser } from '@/types/types'
-import { useToast } from 'primevue/usetoast'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
+import BaseIcon from '@/components/base/BaseIcon.vue'
+import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 
 const toast = useToast()
 const runsModel: Ref<RunsModel> = ref(new RunsModel())
@@ -147,23 +149,21 @@ watch(
   },
 )
 
-const chartData = computed(() => {
-  return {
-    labels: runs.value.map((run) => run.date),
-    datasets: [
-      {
-        label: xAxisChoices.find((choice) => choice.value === filterModel.value.xAxis)?.label,
-        data: runs.value.map((run) => run.data),
-        borderColor: '#000',
-        fill: false,
-        spanGaps: filterModel.value.xAxis === 'vo2max',
-      },
-    ],
-  }
-})
+const chartData = computed(() => ({
+  labels: runs.value.map((run) => run.date),
+  datasets: [
+    {
+      label: xAxisChoices.find((choice) => choice.value === filterModel.value.xAxis)?.label,
+      data: runs.value.map((run) => run.data),
+      borderColor: '#000',
+      fill: false,
+      spanGaps: filterModel.value.xAxis === 'vo2max',
+    },
+  ],
+}))
 
-const filterGraph = (reset: boolean = false): void => {
-  let validationError: boolean = false
+const filterGraph = (reset = false): void => {
+  let validationError = false
   let data: InferType<typeof filterModelValidationSchema> | null = null
 
   if (reset) {

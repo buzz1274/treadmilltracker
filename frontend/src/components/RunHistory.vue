@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
+import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useToast } from 'primevue/usetoast'
+
 import FilterHistoryModal from '@/components/FilterHistoryModal.vue'
 import BaseDataTable from './base/BaseDataTable.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
-import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
 import type { filterHistoryModelType, Run } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { formatDate } from '@/helper/helper.ts'
-import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
-import { useToast } from 'primevue/usetoast'
 import { RunModel } from '@/models/RunModel.ts'
 
 const toast = useToast()

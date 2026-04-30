@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 import { CalendarHeatmap, type CalendarItem } from 'vue3-calendar-heatmap'
 import moment from 'moment'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import type { Moment } from 'moment/moment'
-import { RunsModel } from '@/models/RunsModel.ts'
 import { useToast } from 'primevue/usetoast'
+import { storeToRefs } from 'pinia'
+
+import { RunsModel } from '@/models/RunsModel.ts'
 import type { tUser } from '@/types/types'
 import { store as useStore } from '@/stores/store'
-import { storeToRefs } from 'pinia'
+import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 
 const store = useStore()
 const { resync_runs } = storeToRefs(store)
@@ -46,7 +47,6 @@ onMounted((): void => {
 watch(
   () => resync_runs.value,
   (): void => {
-    console.log('resync runs')
     getRuns()
   },
 )
@@ -64,15 +64,8 @@ const availableYears = computed(() => {
   return availableYears.reverse()
 })
 
-const tooltipFormatter = (run: CalendarItem): string => {
-  return (
-    '<p class="text-xs">' +
-    run.count +
-    ' Km ran on ' +
-    moment(run.date).format('Do MMM YYYY') +
-    '</p>'
-  )
-}
+const tooltipFormatter = (run: CalendarItem): string =>
+  `<p class="text-xs">${run.count} Km ran on ${moment(run.date).format('Do MMM YYYY')}</p>`
 
 const changeYear = (year: string): void => {
   if (!isNaN(year) && Number.isInteger(parseInt(year))) {

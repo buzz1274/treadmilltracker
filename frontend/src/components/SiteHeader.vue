@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import BaseIcon from '@/components/base/BaseIcon.vue'
-import type { tUser } from '@/types/types'
 import { useToast } from 'primevue/usetoast'
 import type { ToastServiceMethods } from 'primevue'
+
+import BaseIcon from '@/components/base/BaseIcon.vue'
+import type { tUser } from '@/types/types'
 
 const toast: ToastServiceMethods = useToast()
 

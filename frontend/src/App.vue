@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import Toast from 'primevue/toast'
+import { storeToRefs } from 'pinia'
+
 import SiteHeader from '@/components/SiteHeader.vue'
 import HomeView from '@/views/HomeView.vue'
 import RunsView from '@/views/RunsView.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import Toast from 'primevue/toast'
-import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
 
 const store: ReturnType<typeof useStore> = useStore()

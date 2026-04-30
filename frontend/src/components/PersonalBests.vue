@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
-import BaseDataTable from './base/BaseDataTable.vue'
 import { ref, type Ref } from 'vue'
 import Dialog from 'primevue/dialog'
+
+import BaseDataTable from './base/BaseDataTable.vue'
 import type { PersonalBests } from '@/types/types.d.ts'
 
 const personalBests = [
