@@ -12,7 +12,7 @@ import { store as useStore } from '@/stores/store'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
 
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const props = defineProps<{
   user: tUser
 }>()
@@ -45,7 +45,7 @@ onMounted((): void => {
 })
 
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
     getRuns()
   },

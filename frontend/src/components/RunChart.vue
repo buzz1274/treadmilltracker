@@ -26,7 +26,7 @@ const toast = useToast()
 const runsModel: Ref<RunsModel> = ref(new RunsModel())
 const runs = ref([])
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const pickerKey = ref(0)
 
 const props = defineProps<{
@@ -143,7 +143,7 @@ onMounted((): void => {
 })
 
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
     getRuns()
   },

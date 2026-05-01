@@ -5,7 +5,7 @@ import { useLoadingState } from '@/composables/LoadingState.ts'
 import type { tUser } from '@/types/types.d.ts'
 
 export const store = defineStore('store', () => {
-  const resync_runs: Ref<number> = ref(0)
+  const resyncRuns: Ref<number> = ref(0)
   const { apiCalls, addAPICall, completeAPICall, isLoading } = useLoadingState()
 
   const user: Reactive<UnwrapRef<tUser>> = reactive<tUser>({
@@ -23,5 +23,5 @@ export const store = defineStore('store', () => {
     },
   })
 
-  return { user, resync_runs, apiCalls, addAPICall, completeAPICall, isLoading }
+  return { user, resyncRuns, apiCalls, addAPICall, completeAPICall, isLoading }
 })

@@ -8,8 +8,6 @@ export class Model {
   private _host = `https://${window.location.hostname}/`
   protected _store: ReturnType<typeof useStore> = useStore()
 
-  constructor() {}
-
   protected hydrate<T extends Partial<RunData>>(data: T): this {
     for (const property in data) {
       if (this.isPropertyOf(property)) {
@@ -109,17 +107,17 @@ export class Model {
   }
 
   protected async getCSRFToken(): Promise<string> {
-    let csrf_token: string | undefined = Cookies.get('session')
+    let csrfToken: string | undefined = Cookies.get('session')
 
     if (!csrf_token) {
-      csrf_token = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(
+      csrfToken = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(
         (response: ResponsePayload) =>
           typeof response.data === 'object' && response.data !== null
             ? JSON.stringify(response.data)
             : response.data?.toString() || '',
       )
     }
-    return csrf_token ?? ''
+    return csrfToken ?? ''
   }
 
   private apiUrl(endpoint: string): string {

@@ -20,7 +20,7 @@ import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 
 const toast = useToast()
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
@@ -75,7 +75,7 @@ const save = (): void => {
 
   try {
     runModelValidationSchema.validateSync(run.value)
-  } catch (error) {
+  } catch {
     validationError = true
   }
 
@@ -85,7 +85,7 @@ const save = (): void => {
       .then(() => {
         const action = props.title.includes('Edit') ? 'updated' : 'created'
 
-        resync_runs.value++
+        resyncRuns.value++
 
         toast.add({
           severity: 'success',
@@ -94,7 +94,7 @@ const save = (): void => {
           life: 3000,
         })
       })
-      .catch((error) => {
+      .catch(() => {
         toast.add({
           severity: 'error',
           summary: 'An error occurred',

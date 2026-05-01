@@ -10,7 +10,7 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { store as useStore } from '@/stores/store'
 
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
@@ -49,7 +49,7 @@ const deleteRun = (): void => {
   run.value
     .delete()
     .then(() => {
-      resync_runs.value++
+      resyncRuns.value++
 
       toast.add({
         severity: 'success',

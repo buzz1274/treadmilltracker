@@ -17,7 +17,7 @@ import { RunModel } from '@/models/RunModel.ts'
 
 const toast = useToast()
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const runsModel: RunsModel = new RunsModel()
 const runs: Ref<Array<Run>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
@@ -57,7 +57,7 @@ watch(
   },
 )
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
     getRuns(filterHistoryModel.groupByChoices)
   },
