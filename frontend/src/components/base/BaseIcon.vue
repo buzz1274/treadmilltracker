@@ -6,9 +6,7 @@ const props = defineProps<{
   iconCss: string
 }>()
 
-const css = computed((): string => {
-  return props.iconCss + ' cursor-pointer'
-})
+const css = computed((): string => `${props.iconCss} cursor-pointer`)
 </script>
 
 <template>

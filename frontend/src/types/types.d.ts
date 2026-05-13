@@ -1,7 +1,10 @@
 import type { ComputedRef, Ref } from 'vue'
-import { StatusCodes } from 'http-status-codes'
+import type { StatusCodes } from 'http-status-codes'
+import type { Moment } from 'moment'
 
-export interface RunData {
+import type { TInterval } from '@/types/date.constants.ts'
+
+export interface IRunData {
   id: number | null
   run_date: string
   distance_m: number
@@ -11,26 +14,26 @@ export interface RunData {
   pace: number
 }
 
-export interface Run extends RunData {
-  save(): void
+export interface IRun extends IRunData {
+  save(): Promise<ResponsePayload>
   delete(): Promise<ResponsePayload>
   distanceKm(): string
   secondsToHHMMSS(): string
 }
 
-export type PersonalBests = Record<'title' | 'date' | 'time', string>
+export type TPersonalBests = Record<'title' | 'date' | 'time', string>
 
-export type filterHistoryModelType = {
+export interface IFilterHistoryModelType {
   viewChoices: string
-  groupByChoices: string
+  groupByChoices: TInterval
 }
 
-export type ResponsePayload = {
+export interface IResponsePayload {
   status: StatusCodes
   data: object | string | Array<object>
 }
 
-export type tUser = {
+export interface IUser {
   name: string
   authenticated: boolean
   registrationDate: string
@@ -39,9 +42,14 @@ export type tUser = {
   logout(): void
 }
 
-export type tLoadingState = {
+export interface ILoadingState {
   apiCalls: Ref<boolean[]>
   addAPICall: () => number
   completeAPICall: (index: number | undefined) => void
   isLoading: ComputedRef<boolean>
+}
+
+export interface IDateArray {
+  date: string | Moment
+  data: number | null
 }

@@ -13,6 +13,7 @@ from app.api.runs.models import (
 )
 from app.api.runs.models import Run, RunPublic
 from app.core.repository import Repository
+from app.api.runs.enums import Interval
 
 
 class RunsRepository(Repository):
@@ -91,10 +92,10 @@ class RunsRepository(Repository):
         user_id: int,
         start_date: str | None,
         end_date: str | None,
-        group_by: str = "daily",
+        group_by: Interval = Interval.days,
     ) -> Sequence[Row]:
         """get all runs for a user, grouped by daily week, month or year"""
-        if group_by == "daily":
+        if group_by == "days":
             runs: Sequence[Row] = self._get_runs(user_id, start_date, end_date)
         else:
             runs: Sequence[Row] = self._get_grouped_runs(
@@ -204,9 +205,9 @@ class RunsRepository(Repository):
 
     def _get_group_filter(self, group_by: str) -> Function:
         """get group filter so runs are grouped by daily week, month or year"""
-        if group_by == "weekly":
+        if group_by == "weeks":
             return func.date(func.date_trunc("week", Run.run_date))
-        elif group_by == "monthly":
+        elif group_by == "months":
             return func.concat(
                 cast(func.date_part("year", Run.run_date), String),
                 "-",

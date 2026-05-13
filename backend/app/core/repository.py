@@ -15,9 +15,7 @@ class Repository:
         self.session: Session = session
 
     def execute_query(self, query: Select | Delete | Update):
-        return self.session.exec(
-            query
-        )  # ty: ignore[no-matching-overload]
+        return self.session.exec(query)  # ty: ignore[no-matching-overload]
 
     def delete(self, model: object, commit: bool = True) -> None:
         """delete a model instance"""
@@ -28,8 +26,6 @@ class Repository:
 
     def add(self, model: object, commit: bool = True) -> None:
         """insert/update a model instance"""
-        print(type(model))
-
         self.session.add(model)
 
         if commit:

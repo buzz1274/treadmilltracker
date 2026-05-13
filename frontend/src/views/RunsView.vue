@@ -3,12 +3,12 @@ import RunHistory from '../components/RunHistory.vue'
 import PersonalBests from '../components/PersonalBests.vue'
 import RunChart from '../components/RunChart.vue'
 import RunHeatmap from '../components/RunHeatmap.vue'
-import type { tUser } from '@/types/types'
+import type { IUser } from '@/types/types'
 
 const props: {
-  user: tUser
+  user: IUser
 } = defineProps<{
-  user: tUser
+  user: IUser
 }>()
 </script>
 
@@ -19,9 +19,9 @@ const props: {
       <RunHistory class="mb-6" />
     </div>
     <div class="col-span-7">
-      <RunChart :user="user" />
+      <RunChart :user="props.user" />
       <div class="mb-6" />
-      <RunHeatmap :user="user" />
+      <RunHeatmap :user="props.user" />
     </div>
   </div>
 </template>

@@ -12,4 +12,6 @@ elif [ "$ACTION" == "eslint" ]; then
   docker exec -it treadmilltracker-frontend sh -c "./bin/eslint.sh"
 elif [ "$ACTION" == "ty" ]; then
   docker exec -it treadmilltracker-backend sh -c "./bin/ty.sh"
+elif [ "$ACTION" == "connect-frontend" ]; then
+  docker exec -it treadmilltracker-frontend sh
 fi

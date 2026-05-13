@@ -1,41 +1,53 @@
 <script setup lang="ts">
-import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import { CalendarHeatmap, type CalendarItem } from 'vue3-calendar-heatmap'
+import {
+  CalendarHeatmap,
+  type CalendarItem,
+  type Value as HeatmapValue,
+} from 'vue3-calendar-heatmap'
 import moment from 'moment'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import type { Moment } from 'moment/moment'
-import { RunsModel } from '@/models/RunsModel.ts'
 import { useToast } from 'primevue/usetoast'
-import type { tUser } from '@/types/types'
-import { store as useStore } from '@/stores/store'
 import { storeToRefs } from 'pinia'
 
+import { RunsModel } from '@/models/RunsModel.ts'
+import type { IUser, IRun } from '@/types/types'
+import { store as useStore } from '@/stores/store'
+import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
+
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const props = defineProps<{
-  user: tUser
+  user: IUser
 }>()
 
 const toast = useToast()
-const runsModel: RunsModel = ref(new RunsModel())
-const runs = ref([])
+const runsModel = new RunsModel()
+const runs = ref<HeatmapValue[]>([])
 
 const endDate: Ref<Moment> = ref(moment())
 const startDate: Ref<Moment> = ref(moment().subtract(1, 'years'))
 
 const getRuns = (): void => {
-  runsModel.value
-    .getRuns('daily', startDate.value.format('YYYY-MM-DD'), endDate.value.format('YYYY-MM-DD'))
+  runsModel
+    .getRuns(
+      'days',
+      startDate.value.format('YYYY-MM-DD'),
+      endDate.value.format('YYYY-MM-DD'),
+    )
     .then(() => {
-      runs.value = []
-      runsModel.value.runs.value.forEach((run) => {
-        runs.value.push({ date: run.run_date, count: (run.distance_m / 1000).toFixed(2) })
-      })
-
-      runs.value = [...runs.value]
+      runs.value = runsModel.runs.value.map((run: IRun) => ({
+        date: new Date(run.run_date),
+        count: Number((run.distance_m / 1000).toFixed(2)),
+      }))
     })
-    .catch((error) => {
-      toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+    .catch((error: unknown) => {
+      toast.add({
+        severity: 'error',
+        summary: 'An error occurred',
+        detail: error,
+        life: 3000,
+      })
     })
 }
 
@@ -44,9 +56,8 @@ onMounted((): void => {
 })
 
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
-    console.log('resync runs')
     getRuns()
   },
 )
@@ -64,20 +75,17 @@ const availableYears = computed(() => {
   return availableYears.reverse()
 })
 
-const tooltipFormatter = (run: CalendarItem): string => {
-  return (
-    '<p class="text-xs">' +
-    run.count +
-    ' Km ran on ' +
-    moment(run.date).format('Do MMM YYYY') +
-    '</p>'
-  )
-}
+const tooltipFormatter = (run: CalendarItem): string =>
+  `<p class="text-xs">${run.count} Km ran on ${moment(run.date).format(
+    'Do MMM YYYY',
+  )}</p>`
 
 const changeYear = (year: string): void => {
-  if (!isNaN(year) && Number.isInteger(parseInt(year))) {
-    startDate.value = moment().year(year).startOf('year')
-    endDate.value = moment().year(year).endOf('year')
+  const parsedYear = parseInt(year, 10)
+
+  if (!isNaN(parsedYear)) {
+    startDate.value = moment().year(parsedYear).startOf('year')
+    endDate.value = moment().year(parsedYear).endOf('year')
   } else {
     endDate.value = moment()
     startDate.value = moment(endDate.value).subtract(1, 'years')

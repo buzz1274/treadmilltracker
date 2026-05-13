@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
-import BaseDataTable from './base/BaseDataTable.vue'
 import { ref, type Ref } from 'vue'
 import Dialog from 'primevue/dialog'
-import type { PersonalBests } from '@/types/types.d.ts'
+
+import BaseDataTable from './base/BaseDataTable.vue'
+import type { TPersonalBests } from '@/types/types.d.ts'
 
 const personalBests = [
   { title: 'Fastest 5km', date: '2025-08-01', time: '21:13' },
   { title: 'Fastest 10km', date: '2025-08-02', time: '45:17' },
 ]
 const displayPersonalBestsModal: Ref<boolean> = ref(false)
-const personalModalData: Ref<PersonalBests | null> = ref(null)
-
-const viewPersonalBests = (event: InputEvent): void => {
-  personalModalData.value = event.data as unknown as PersonalBests
-  displayPersonalBestsModal.value = true
+const personalModalData: Ref<TPersonalBests | null> = ref(null)
+const viewPersonalBests = (_event: InputEvent): void => {
+  //personalModalData.value = event.data
+  //displayPersonalBestsModal.value = true
   //retrieve top 10 from backend//
 }
 </script>

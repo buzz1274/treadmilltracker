@@ -1,36 +1,46 @@
 <script setup lang="ts">
 import Column from 'primevue/column'
+import {
+  computed,
+  type ComputedRef,
+  onMounted,
+  reactive,
+  ref,
+  type Ref,
+  watch,
+} from 'vue'
+import { storeToRefs } from 'pinia'
+import { useToast } from 'primevue/usetoast'
+
 import FilterHistoryModal from '@/components/FilterHistoryModal.vue'
 import BaseDataTable from './base/BaseDataTable.vue'
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import AddEditRunModal from '@/components/AddEditRunModal.vue'
 import ViewDeleteRunModal from '@/components/ViewDeleteRunModal.vue'
-import { computed, type ComputedRef, onMounted, reactive, ref, type Ref, watch } from 'vue'
-import type { filterHistoryModelType, Run } from '@/types/types.d.ts'
+import type { IFilterHistoryModelType, IRun } from '@/types/types.d.ts'
 import { RunsModel } from '@/models/RunsModel.ts'
 import { formatDate } from '@/helper/helper.ts'
-import { storeToRefs } from 'pinia'
 import { store as useStore } from '@/stores/store'
-import { useToast } from 'primevue/usetoast'
 import { RunModel } from '@/models/RunModel.ts'
+import type { TInterval } from '@/types/date.constants.ts'
 
 const toast = useToast()
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const runsModel: RunsModel = new RunsModel()
-const runs: Ref<Array<Run>> = ref(runsModel.runs)
+const runs: Ref<Array<IRun>> = ref(runsModel.runs)
 const displayViewRunModal: Ref<boolean> = ref(false)
 const displayAddEditRunModal: Ref<boolean> = ref(false)
 const deleteRun: Ref<boolean> = ref(false)
 const addEditRunModalTitle: Ref<string> = ref('')
-const runModalData: Ref<Run | undefined> = ref(undefined)
+const runModalData: Ref<IRun | undefined> = ref(undefined)
 const displayFilterHistoryModal: Ref<boolean> = ref(false)
-const filterHistoryModel = reactive<filterHistoryModelType>({
+const filterHistoryModel = reactive<IFilterHistoryModelType>({
   viewChoices: 'distance',
-  groupByChoices: 'daily',
+  groupByChoices: 'days',
 })
 const isDailyView: ComputedRef<boolean> = computed(
-  () => filterHistoryModel.groupByChoices === 'daily',
+  () => filterHistoryModel.groupByChoices === 'days',
 )
 const isDistanceView: ComputedRef<boolean> = computed(
   () => filterHistoryModel.viewChoices === 'distance',
@@ -38,11 +48,18 @@ const isDistanceView: ComputedRef<boolean> = computed(
 const isCaloriesView: ComputedRef<boolean> = computed(
   () => filterHistoryModel.viewChoices === 'calories',
 )
-const isVo2View: ComputedRef<boolean> = computed(() => filterHistoryModel.viewChoices === 'vo2max')
+const isVo2View: ComputedRef<boolean> = computed(
+  () => filterHistoryModel.viewChoices === 'vo2max',
+)
 
-const getRuns = (group_by: string): void => {
+const getRuns = (group_by: TInterval): void => {
   runsModel.getRuns(group_by).catch((error) => {
-    toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+    toast.add({
+      severity: 'error',
+      summary: 'An error occurred',
+      detail: error,
+      life: 3000,
+    })
   })
 }
 
@@ -51,12 +68,12 @@ onMounted((): void => {
 })
 watch(
   () => filterHistoryModel.groupByChoices,
-  (group_by: string): void => {
+  (group_by: TInterval): void => {
     getRuns(group_by)
   },
 )
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
     getRuns(filterHistoryModel.groupByChoices)
   },
@@ -143,11 +160,13 @@ watch(
       <template #data>
         <Column
           field="run_date"
-          :header="filterHistoryModel.groupByChoices === 'weekly' ? 'Date(w/c)' : 'Date'"
+          :header="
+            filterHistoryModel.groupByChoices === 'weeks' ? 'Date(w/c)' : 'Date'
+          "
           :sortable="true"
           class="cursor-pointer"
         >
-          <template #body="{ data }: { data: Run }">
+          <template #body="{ data }: { data: IRun }">
             {{ formatDate(data.run_date, filterHistoryModel.groupByChoices) }}
           </template>
         </Column>
@@ -158,7 +177,7 @@ watch(
           header="Distance(km)"
           class="cursor-pointer"
         >
-          <template #body="{ data }: { data: Run }">
+          <template #body="{ data }: { data: IRun }">
             {{ data.distanceKm() }}
           </template>
         </Column>
@@ -177,7 +196,7 @@ watch(
           header="Pace(k/h)"
           class="cursor-pointer"
         >
-          <template #body="{ data }: { data: Run }">
+          <template #body="{ data }: { data: IRun }">
             {{ data.pace.toFixed(2) }}
           </template>
         </Column>
@@ -188,7 +207,7 @@ watch(
           header="Time"
           class="cursor-pointer"
         >
-          <template #body="{ data }: { data: Run }">
+          <template #body="{ data }: { data: IRun }">
             {{ data.secondsToHHMMSS() }}
           </template>
         </Column>
@@ -204,7 +223,7 @@ watch(
           <template #header>
             <div class="text-center">-</div>
           </template>
-          <template #body="{ data }: { data: Run }">
+          <template #body="{ data }: { data: IRun }">
             <div v-if="isDailyView" class="flex items-center">
               <BaseIcon
                 icon-css="pi pi-pencil pr-1"

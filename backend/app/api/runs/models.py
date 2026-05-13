@@ -1,6 +1,6 @@
 import decimal
 from datetime import date
-from enum import Enum
+from app.api.runs.enums import PersonalBestType
 
 from sqlmodel import Field, Relationship, SQLModel
 from pydantic import computed_field
@@ -41,12 +41,6 @@ class RunPublic(RunBase):
 
 class RunsPublic(SQLModel):
     data: List[RunPublic]
-
-
-class PersonalBestType(str, Enum):
-    DISTANCE = "distance"
-    DURATION = "duration"
-    SPEED = "speed"
 
 
 class PersonalBestsBase(SQLModel):

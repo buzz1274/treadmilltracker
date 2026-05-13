@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import DataTable from 'primevue/datatable'
+
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import type { Run, PersonalBests } from '@/types/types.d.ts'
+import type { IRun, TPersonalBests } from '@/types/types.d.ts'
 
 const props = withDefaults(
   defineProps<{
-    tableData: Array<Run | PersonalBests>
+    tableData: Array<IRun | TPersonalBests>
     tableTitle: string
     paginate?: boolean
     rowsPerPage?: number
@@ -31,7 +32,9 @@ defineEmits(['rowSelect'])
       tableContainer: 'w-full pt-1 pl-2',
       table: 'w-95',
       header: 'bg-black text-white',
-      bodyRow: 'leading-loose text-xs hover:bg-gray-100 hover:cursor-zoom-in even:bg-gray-50',
+      bodyRow:
+        'leading-loose text-xs hover:bg-gray-100 ' +
+        'hover:cursor-zoom-in even:bg-gray-50',
       column: {
         sort: 'pl-1 text-xs small-icon',
         sortIcon: 'text-xs w-3 h-3',
@@ -62,8 +65,13 @@ defineEmits(['rowSelect'])
         nextPageCallback,
       }"
     >
-      <div v-if="props.paginate && (pageCount ?? 0) > 1" class="flex w-full justify-center">
-        <div class="flex items-middle justify-center border-b border-black w-95 py-3">
+      <div
+        v-if="props.paginate && (pageCount ?? 0) > 1"
+        class="flex w-full justify-center"
+      >
+        <div
+          class="flex items-middle justify-center border-b border-black w-95 py-3"
+        >
           <button
             class="size-4 pi pi-angle-double-left disabled:text-gray-200 enabled:cursor-pointer"
             text
@@ -80,7 +88,9 @@ defineEmits(['rowSelect'])
             <span class="hidden sm:block"
               >Showing {{ first }} to {{ last }} of {{ totalRecords }}</span
             >
-            <span class="block sm:hidden">Page {{ page + 1 }} of {{ pageCount ?? 1 }}</span>
+            <span class="block sm:hidden">
+              Page {{ page + 1 }} of {{ pageCount ?? 1 }}
+            </span>
           </div>
           <button
             class="size-4 pi pi-angle-right disabled:text-gray-200 enabled:cursor-pointer"

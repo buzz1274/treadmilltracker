@@ -50,7 +50,7 @@ repos:
   - repo: local
     hooks:
       - id: eslint
-        name: run eslint
+        name: run eslint & tsc
         language: python
         entry: docker
         args:

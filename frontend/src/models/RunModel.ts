@@ -1,21 +1,23 @@
 import { Model } from '@/models/Model.ts'
-import type { ResponsePayload, Run, RunData } from '@/types/types'
+import type { IResponsePayload, IRun, IRunData } from '@/types/types'
 import { formatSecondsAsHHMMSS, formatDate } from '@/helper/helper.ts'
 
-export class RunModel extends Model implements Run {
-  public id!: number | null
+export class RunModel extends Model implements IRun {
+  public id!: number
   public run_date!: string
   public distance_m!: number
   public duration_s!: number
   public calories!: number
   public vo2max!: number
   public pace!: number
+  public formattedSeconds!: string
 
-  public constructor(run: RunData | null = null) {
+  constructor(run: IRunData | null = null) {
     super()
 
     if (run) {
       this.hydrate(run)
+      this.formattedSeconds = this.secondsToHHMMSS()
     }
   }
 
@@ -27,7 +29,7 @@ export class RunModel extends Model implements Run {
     return this.duration_s ? formatSecondsAsHHMMSS(this.duration_s) : ''
   }
 
-  public save(): Promise<ResponsePayload> {
+  public override save(): Promise<IResponsePayload> {
     return super.save(
       'api/runs/',
       {
@@ -42,7 +44,7 @@ export class RunModel extends Model implements Run {
     )
   }
 
-  public override delete(): Promise<ResponsePayload> {
-    return super.delete('api/runs/' + this.id)
+  public override delete(): Promise<IResponsePayload> {
+    return super.delete(`api/runs/${this.id}`)
   }
 }

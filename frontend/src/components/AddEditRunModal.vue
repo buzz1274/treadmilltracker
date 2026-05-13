@@ -1,49 +1,54 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
-import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
-import { convertToSeconds } from '@/helper/helper.ts'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { computed, ref, type Ref, watch } from 'vue'
+import moment from 'moment'
+import { computed, ref, type Ref, type ComputedRef, watch } from 'vue'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import type { Run } from '@/types/types.d.ts'
-import BaseButton from '@/components/base/BaseButton.vue'
-import { object, string, number, ObjectSchema } from 'yup'
-import { RunModel } from '@/models/RunModel'
-import { store as useStore } from '@/stores/store'
+import type { ObjectSchema } from 'yup'
+import { object, string, number, date } from 'yup'
 import { storeToRefs } from 'pinia'
 import { useToast } from 'primevue/usetoast'
 
+import type { IRun } from '@/types/types.d.ts'
+import BaseButton from '@/components/base/BaseButton.vue'
+import { RunModel } from '@/models/RunModel'
+import { store as useStore } from '@/stores/store'
+import { convertToSeconds } from '@/helper/helper.ts'
+import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
+
 const toast = useToast()
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 
 const props = withDefaults(
   defineProps<{
     title: string
     visible: boolean
-    runData: Run | undefined
+    runData: IRun | undefined
   }>(),
   {},
 )
 
-const runData: Run = computed(() => props.runData)
+const runData: ComputedRef<IRun | undefined> = computed(() => props.runData)
 const run = ref(new RunModel(runData.value))
 
 const runModelValidationSchema: ObjectSchema<{
-  run_date: string
+  run_date: Date
   formattedSeconds: string
   distance_m: number
   calories: number
   vo2max: number
 }> = object({
-  run_date: string().required('Please enter a valid date'),
-  formattedSeconds: string().matches(
-    /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
-    'Please enter time in the format HH:MM:SS',
-  ),
+  run_date: date().required('Please enter a valid date'),
+  formattedSeconds: string()
+    .required('Please enter time in the format HH:MM:SS')
+    .matches(
+      /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
+      'Please enter time in the format HH:MM:SS',
+    ),
   distance_m: number().required('Please enter a valid distance'),
   calories: number().required('Please enter valid value for calories'),
   vo2max: number().required('Please enter valid value for VO2 max'),
@@ -68,11 +73,12 @@ watch(visible, (newValue: boolean): void => {
 })
 
 const save = (): void => {
-  let validationError: boolean = false
+  let validationError = false
 
   try {
+    run.value.formattedSeconds = run.value.secondsToHHMMSS()
     runModelValidationSchema.validateSync(run.value)
-  } catch (error) {
+  } catch {
     validationError = true
   }
 
@@ -82,16 +88,16 @@ const save = (): void => {
       .then(() => {
         const action = props.title.includes('Edit') ? 'updated' : 'created'
 
-        resync_runs.value++
+        resyncRuns.value++
 
         toast.add({
           severity: 'success',
-          summary: 'Run ' + action,
-          detail: 'Run ' + action + ' successfully',
+          summary: `Run ${action}`,
+          detail: `Run ${action} successfully`,
           life: 3000,
         })
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         toast.add({
           severity: 'error',
           summary: 'An error occurred',
@@ -102,6 +108,13 @@ const save = (): void => {
     emit('close')
   }
 }
+
+const runDateProxy = computed<Date | null>({
+  get: () => (run.value.run_date ? new Date(run.value.run_date) : null),
+  set: (val: Date | null) => {
+    run.value.run_date = val ? moment(val).format('YYYY-MM-DD') : ''
+  },
+})
 
 const formattedSeconds = computed({
   get(): string {
@@ -128,17 +141,26 @@ const formattedSeconds = computed({
       v-model="run"
       class="p-4"
       :initial-values="run"
+      autocomplete="off"
       :resolver="yupResolver(runModelValidationSchema)"
       @submit="save()"
     >
       <div class="flex items-center gap-4 mb-4">
         <label for="date" class="font-semibold w-24">Date</label>
-        <BaseDatePicker v-model="run.run_date" name="run_date" class="text-xs" />
+        <BaseDatePicker
+          v-model="runDateProxy"
+          name="run_date"
+          :max-date="new Date()"
+          class="text-xs"
+        />
       </div>
-      <div v-if="$form.run_date?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['run_date']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.run_date.error.message }}
+          {{ $form['run_date'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
@@ -150,49 +172,71 @@ const formattedSeconds = computed({
           class="text-xs"
         />
       </div>
-      <div v-if="$form.formattedSeconds?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['formattedSeconds']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.formattedSeconds.error.message }}
+          {{ $form['formattedSeconds'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label for="distance" class="font-semibold w-24">Distance(m)</label>
         <InputNumber
           v-model="run.distance_m"
-          autocomplete="off"
           name="distance_m"
           class="text-xs"
         />
       </div>
-      <div v-if="$form.distance_m?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['distance_m']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.distance_m.error.message }}
+          {{ $form['distance_m'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label for="distance" class="font-semibold w-24">Calories(kcal)</label>
-        <InputNumber v-model="run.calories" autocomplete="off" name="calories" class="text-xs" />
+        <InputNumber
+          v-model="run.calories"
+          autocomplete="off"
+          name="calories"
+          class="text-xs"
+        />
       </div>
-      <div v-if="$form.calories?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['calories']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.calories.error.message }}
+          {{ $form['calories'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label for="vo2" class="font-semibold w-24">VO₂ Max</label>
-        <InputNumber v-model="run.vo2max" autocomplete="off" name="vo2max" class="text-xs" />
+        <InputNumber
+          v-model="run.vo2max"
+          autocomplete="off"
+          name="vo2max"
+          class="text-xs"
+        />
       </div>
-      <div v-if="$form.vo2max?.invalid" class="flex items-center gap-4 mb-4">
+      <div v-if="$form['vo2max']?.invalid" class="flex items-center gap-4 mb-4">
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.vo2max.error.message }}
+          {{ $form['vo2max'].error.message }}
         </Message>
       </div>
       <div class="flex justify-end gap-2 mt-10">
-        <BaseButton label="Cancel" severity="secondary" @click="emit('close')" />
+        <BaseButton
+          label="Cancel"
+          severity="secondary"
+          @click="emit('close')"
+        />
         <BaseButton type="submit" label="Save" severity="primary" />
       </div>
     </Form>

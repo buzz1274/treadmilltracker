@@ -1,67 +1,76 @@
 import moment, { type Moment } from 'moment/moment'
 
-const formatSecondsAsHHMMSS = (seconds: number): string => {
-  const formattedHours: string = String(Math.floor(seconds / 3600)).padStart(2, '0')
-  const formattedMinutes: string = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0')
+import type { IIntervalConfig, TInterval } from '@/types/date.constants'
+import { dateConfig } from '@/types/date.constants'
+import type { IDateArray } from '@/types/types'
+
+const formatSecondsAsHHMMSS: (seconds: number) => string = (
+  seconds: number,
+): string => {
+  const formattedHours: string = String(Math.floor(seconds / 3600)).padStart(
+    2,
+    '0',
+  )
+  const formattedMinutes: string = String(
+    Math.floor((seconds % 3600) / 60),
+  ).padStart(2, '0')
   const formattedSeconds: string = String(seconds % 60).padStart(2, '0')
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
-const convertToSeconds = (time: string): number => {
-  if (!time) return 0
+const convertToSeconds: (time: string) => number = (time: string): number => {
+  if (!time || !/^\d{2}:\d{2}:\d{2}$/.test(time)) {
+    return 0
+  }
 
-  const [hours, minutes, seconds] = time.split(':')
+  const [hours, minutes, seconds] = time.split(':') as [string, string, string]
 
   return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds)
 }
 
-const formatDate = (date: string, format: string = 'daily'): string => {
-  if (format === 'daily' || format === 'weekly') {
-    return moment(date).format('MMM Do, YYYY')
-  } else if (format === 'monthly') {
-    return moment(date).format('MMM, YYYY')
-  } else if (format === 'ISO-8601') {
-    return moment(date).format('YYYY-MM-DD')
-  } else if (format === 'ISO-MONTHLY') {
-    return moment(date).format('YYYY-MM')
-  } else if (format === 'ISO-YEARLY') {
-    return moment(date).format('YYYY')
-  } else {
-    return date
-  }
-}
+const formatDate = (
+  date: Moment | string,
+  interval: TInterval = 'days',
+): string => moment(date).format(dateConfig[interval].format)
 
 const generateDateSequence = (
-  startDate: Date,
-  endDate: Date,
-  interval: string,
-): { date: string; data: number }[] => {
-  const dateArray = []
-  let dateFormat: string = 'ISO-8601'
-  let dateIncrement: string = 'days'
-  let currentDate: Moment = moment(startDate)
+  startDate: Date | Moment,
+  endDate: Date | Moment,
+  interval: TInterval,
+): IDateArray[] => {
+  const dateArray: IDateArray[] = []
+  const config: IIntervalConfig = dateConfig[interval]
 
-  endDate = moment(endDate)
-
-  if (interval === 'monthly') {
-    dateFormat = 'ISO-MONTHLY'
-    dateIncrement = 'months'
-  } else if (interval === 'weekly') {
-    if (currentDate.isoWeekday() >= 1) {
-      currentDate = currentDate.isoWeekday(1)
-    }
-    dateIncrement = 'weeks'
-  } else if (interval === 'yearly') {
-    dateFormat = 'ISO-YEARLY'
-    dateIncrement = 'years'
+  if (config.increment === null) {
+    throw new Error('Invalid interval configuration')
   }
 
-  while (currentDate <= endDate) {
-    dateArray.push({ date: formatDate(currentDate, dateFormat), data: null })
-    currentDate = currentDate.clone().add(1, dateIncrement)
+  const start: Moment = moment.isMoment(startDate)
+    ? startDate.clone()
+    : moment(startDate)
+
+  const end: Moment = moment.isMoment(endDate)
+    ? endDate.clone()
+    : moment(endDate)
+
+  let current: Moment = config.adjustStart
+    ? config.adjustStart(start.clone())
+    : start.clone()
+
+  while (current <= end) {
+    dateArray.push({ date: formatDate(current, interval), data: null })
+    current = current
+      .clone()
+      .add(1, config.increment as moment.unitOfTime.DurationConstructor)
   }
+
   return dateArray
 }
 
-export { formatSecondsAsHHMMSS, convertToSeconds, formatDate, generateDateSequence }
+export {
+  formatSecondsAsHHMMSS,
+  convertToSeconds,
+  formatDate,
+  generateDateSequence,
+}

@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from typing import Generator
 
 from app.core.config import settings
@@ -40,6 +41,10 @@ class DatabaseManager:
             yield session
         finally:
             session.close()
+
+    @contextmanager
+    def get_session_context(self) -> Generator[Session, None, None]:
+        return self.get_session()
 
 
 database_manager = DatabaseManager()

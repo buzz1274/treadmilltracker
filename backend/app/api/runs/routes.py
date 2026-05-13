@@ -7,6 +7,7 @@ from app.core.authentication import get_current_user
 from fastapi_utils.cbv import cbv
 from app.api.runs.models import RunsPublic, RunPublic, PersonalBestsPublic
 from app.api.runs.repository import RunsRepository
+from app.api.runs.enums import Interval
 
 
 router = APIRouter(prefix="/runs", tags=["runs"])
@@ -29,7 +30,7 @@ class RunRouter:
         self,
         start_date: str | None = None,
         end_date: str | None = None,
-        group_by: str = "daily",
+        group_by: Interval = Interval.days,
     ) -> RunsPublic:
         """retrieve Runs"""
         try:

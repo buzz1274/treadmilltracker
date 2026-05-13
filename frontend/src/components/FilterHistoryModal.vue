@@ -6,10 +6,15 @@ import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
-import { object, ObjectSchema, string } from 'yup'
-import type { filterHistoryModelType } from '@/types/types.d.ts'
+import type { ObjectSchema } from 'yup'
+import { object, string } from 'yup'
 
-const filterHistoryModel = defineModel<filterHistoryModelType>({ required: true })
+import { groupByChoices, type TInterval } from '@/types/date.constants'
+import type { IFilterHistoryModelType } from '@/types/types.d.ts'
+
+const filterHistoryModel = defineModel<IFilterHistoryModelType>({
+  required: true,
+})
 const props = withDefaults(
   defineProps<{
     visible: boolean
@@ -22,16 +27,10 @@ const viewChoices: { label: string; value: string }[] = [
   { label: 'Calories/Time', value: 'calories' },
   { label: 'VO₂ Max', value: 'vo2max' },
 ]
-const groupByChoices: { label: string; value: string }[] = [
-  { label: 'Daily', value: 'daily' },
-  { label: 'Weekly', value: 'weekly' },
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Yearly', value: 'yearly' },
-]
 
 const filterHistoryModelValidationSchema: ObjectSchema<{
   viewChoices: string
-  groupByChoices: string
+  groupByChoices: TInterval
 }> = object({
   viewChoices: string()
     .oneOf(
@@ -93,16 +92,28 @@ watch(visible, (newValue: boolean): void => {
           class="flex flex-wrap gap-4"
         >
           <label for="viewChoices" class="font-semibold w-24">Display</label>
-          <div v-for="(choice, index) in viewChoices" :key="index" class="flex items-center gap-2">
-            <RadioButton :input-id="'viewChoice_' + index" :value="choice.value" />
-            <label :for="'viewChoice_' + index" class="text-xs">{{ choice.label }}</label>
+          <div
+            v-for="(choice, index) in viewChoices"
+            :key="index"
+            class="flex items-center gap-2"
+          >
+            <RadioButton
+              :input-id="'viewChoice_' + index"
+              :value="choice.value"
+            />
+            <label :for="'viewChoice_' + index" class="text-xs">{{
+              choice.label
+            }}</label>
           </div>
         </RadioButtonGroup>
       </div>
-      <div v-if="$form.viewChoices?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['viewChoices']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.viewChoices.error.message }}
+          {{ $form['viewChoices'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
@@ -111,21 +122,31 @@ watch(visible, (newValue: boolean): void => {
           name="groupByChoices"
           class="flex flex-wrap gap-4"
         >
-          <label for="groupByChoices" class="font-semibold w-24">Group By</label>
+          <label for="groupByChoices" class="font-semibold w-24"
+            >Group By</label
+          >
           <div
             v-for="(choice, index) in groupByChoices"
             :key="index"
             class="flex items-center gap-2"
           >
-            <RadioButton :input-id="'groupByChoice_' + index" :value="choice.value" />
-            <label :for="'groupByChoice_' + index" class="text-xs">{{ choice.label }}</label>
+            <RadioButton
+              :input-id="'groupByChoice_' + index"
+              :value="choice.value"
+            />
+            <label :for="'groupByChoice_' + index" class="text-xs">{{
+              choice.label
+            }}</label>
           </div>
         </RadioButtonGroup>
       </div>
-      <div v-if="$form.groupByChoices?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['groupByChoices']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.groupByChoices.error.message }}
+          {{ $form['groupByChoices'].error.message }}
         </Message>
       </div>
     </Form>

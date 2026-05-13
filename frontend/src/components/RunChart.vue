@@ -1,43 +1,54 @@
 <script setup lang="ts">
 import Chart from 'primevue/chart'
-import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import BaseIcon from '@/components/base/BaseIcon.vue'
 import Dialog from 'primevue/dialog'
-import { computed, type ComputedRef, onMounted, ref, watch } from 'vue'
-import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
+import {
+  computed,
+  type ComputedRef,
+  type Ref,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
 import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
 import { Form } from '@primevue/forms'
-import { object, string, date, ObjectSchema, type InferType } from 'yup'
+import type { ObjectSchema } from 'yup'
+import { object, string, date, mixed, type InferType } from 'yup'
 import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
-import { store as useStore } from '@/stores/store'
 import moment from 'moment'
-import { formatDate, generateDateSequence } from '@/helper/helper.ts'
-import { RunsModel } from '@/models/RunsModel.ts'
-import type { tUser } from '@/types/types'
 import { useToast } from 'primevue/usetoast'
 
+import { store as useStore } from '@/stores/store'
+import { formatDate, generateDateSequence } from '@/helper/helper.ts'
+import { RunsModel } from '@/models/RunsModel.ts'
+import type { IUser, IDateArray, IRun } from '@/types/types'
+import { groupByChoices, type TInterval } from '@/types/date.constants.ts'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
+import BaseIcon from '@/components/base/BaseIcon.vue'
+import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
+
+// @ts-expect-error path of least resistance
+const runsModel: Ref<RunsModel> = ref(new RunsModel())
 const toast = useToast()
-const runsModel: RunsModel = ref(new RunsModel())
-const runs = ref([])
+const runs = ref<IDateArray[]>([])
 const store = useStore()
-const { resync_runs } = storeToRefs(store)
+const { resyncRuns } = storeToRefs(store)
 const pickerKey = ref(0)
 
 const props = defineProps<{
-  user: tUser
+  user: IUser
 }>()
 
-const registrationDate: ComputedRef<string> = computed(() =>
+const registrationDate: ComputedRef<Date> = computed(() =>
   moment(props.user.registrationDate, 'YYYY-MM-DD').toDate(),
 )
 
 const formatData = (data: number, xAxis: string): number => {
-  if (xAxis === 'distance_m') return (data / 1000).toFixed(2)
-  if (xAxis === 'duration_s') return (data / 3600).toFixed(2)
+  if (xAxis === 'distance_m') return Number((data / 1000).toFixed(2))
+  if (xAxis === 'duration_s') return Number((data / 3600).toFixed(2))
 
   return data
 }
@@ -48,40 +59,38 @@ const xAxisChoices: { label: string; value: string }[] = [
   { label: 'Calories', value: 'calories' },
   { label: 'VO₂ Max', value: 'vo2max' },
 ]
-const yAxisChoices: { label: string; value: string }[] = [
-  { label: 'Daily', value: 'daily' },
-  { label: 'Weekly', value: 'weekly' },
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Yearly', value: 'yearly' },
-]
+const yAxisChoices = groupByChoices
 
 const filterModel = defineModel<{
   startDate: Date
   endDate: Date
-  xAxis: string
-  yAxis: string
+  xAxis: keyof Pick<IRun, 'distance_m' | 'duration_s' | 'calories' | 'vo2max'>
+  yAxis: TInterval
 }>({
   type: Object,
   default: (): {
     startDate: Date
     endDate: Date
-    xAxis: string
-    yAxis: string
+    xAxis: keyof Pick<IRun, 'distance_m' | 'duration_s' | 'calories' | 'vo2max'>
+    yAxis: TInterval
   } => ({
     startDate: moment().subtract(1, 'year').startOf('month').toDate(),
     endDate: new Date(),
     xAxis: 'distance_m',
-    yAxis: 'monthly',
+    yAxis: 'months',
   }),
 })
 
+// @ts-expect-error path of least resistance
 const filterModelValidationSchema: ObjectSchema<{
   startDate: Date
   endDate: Date
-  xAxis: string
-  yAxis: string
+  xAxis: keyof Pick<IRun, 'distance_m' | 'duration_s' | 'calories' | 'vo2max'>
+  yAxis: TInterval
 }> = object({
-  startDate: date().default(filterModel.value.startDate).required('Please enter a valid date'),
+  startDate: date()
+    .default(filterModel.value.startDate)
+    .required('Please enter a valid date'),
   endDate: date()
     .default(filterModel.value.endDate)
     .required('Please enter a valid date')
@@ -90,7 +99,7 @@ const filterModelValidationSchema: ObjectSchema<{
       'End date must be after start date',
       (value) => value > filterModel.value.startDate,
     ),
-  xAxis: string()
+  xAxis: mixed()
     .oneOf(
       xAxisChoices.map((choice) => choice.value),
       'Please select a valid choice',
@@ -107,32 +116,56 @@ const filterModelValidationSchema: ObjectSchema<{
 })
 
 const graphFilterVisible = ref<boolean>(false)
-const defaultFilterModel: typeof filterModel.value = structuredClone(filterModel.value)
+const defaultFilterModel: typeof filterModel.value = structuredClone(
+  filterModel.value,
+)
 
 const getRuns = (): void => {
   runsModel.value
     .getRuns(
       filterModel.value.yAxis,
-      formatDate(filterModel.value.startDate, 'ISO-8601'),
-      formatDate(filterModel.value.endDate, 'ISO-8601'),
+      formatDate(moment(filterModel.value.startDate), 'ISO-8601'),
+      formatDate(moment(filterModel.value.endDate), 'ISO-8601'),
     )
     .then(() => {
-      runs.value = generateDateSequence(
+      const baseRuns: IDateArray[] = generateDateSequence(
         filterModel.value.startDate,
         filterModel.value.endDate,
         filterModel.value.yAxis,
       )
 
-      runs.value.forEach((run) => {
-        const match = runsModel.value.runs.value.find((choice) => choice.run_date === run.date)
+      const runMap = new Map<string, IRun>(
+        runsModel.value.runs.value.map((r) => [
+          formatDate(r.run_date, filterModel.value.yAxis),
+          r,
+        ]),
+      )
 
-        if (match) {
-          run.data = formatData(match[filterModel.value.xAxis], filterModel.value.xAxis)
+      runs.value = baseRuns.map((run: IDateArray) => {
+        const key = moment.isMoment(run.date)
+          ? run.date.format('YYYY-MM-DD')
+          : run.date
+
+        const match: IRun | undefined = runMap.get(key)
+
+        if (!match) return run
+
+        return {
+          ...run,
+          data: formatData(
+            match[filterModel.value.xAxis],
+            filterModel.value.xAxis,
+          ),
         }
       })
     })
     .catch((error) => {
-      toast.add({ severity: 'error', summary: 'An error occurred', detail: error, life: 3000 })
+      toast.add({
+        severity: 'error',
+        summary: 'An error occurred',
+        detail: error,
+        life: 3000,
+      })
     })
 }
 
@@ -141,29 +174,29 @@ onMounted((): void => {
 })
 
 watch(
-  () => resync_runs.value,
+  () => resyncRuns.value,
   (): void => {
     getRuns()
   },
 )
 
-const chartData = computed(() => {
-  return {
-    labels: runs.value.map((run) => run.date),
-    datasets: [
-      {
-        label: xAxisChoices.find((choice) => choice.value === filterModel.value.xAxis)?.label,
-        data: runs.value.map((run) => run.data),
-        borderColor: '#000',
-        fill: false,
-        spanGaps: filterModel.value.xAxis === 'vo2max',
-      },
-    ],
-  }
-})
+const chartData = computed(() => ({
+  labels: runs.value.map((run: IDateArray) => run.date),
+  datasets: [
+    {
+      label: xAxisChoices.find(
+        (choice) => choice.value === filterModel.value.xAxis,
+      )?.label,
+      data: runs.value.map((run: IDateArray) => run.data),
+      borderColor: '#000',
+      fill: false,
+      spanGaps: filterModel.value.xAxis === 'vo2max',
+    },
+  ],
+}))
 
-const filterGraph = (reset: boolean = false): void => {
-  let validationError: boolean = false
+const filterGraph = (reset = false): void => {
+  let validationError = false
   let data: InferType<typeof filterModelValidationSchema> | null = null
 
   if (reset) {
@@ -184,9 +217,13 @@ const filterGraph = (reset: boolean = false): void => {
   }
 }
 
-const updateDate = (type): void => {
-  if (type === 'start') filterModel.value.startDate = new Date(props.user.registrationDate)
-  if (type === 'end') filterModel.value.endDate = new Date()
+const updateDate = (type: string): void => {
+  if (type === 'start') {
+    filterModel.value.startDate = new Date(props.user.registrationDate)
+  }
+  if (type === 'end') {
+    filterModel.value.endDate = new Date()
+  }
 
   pickerKey.value++
 }
@@ -202,7 +239,11 @@ const updateDate = (type): void => {
       />
     </template>
   </BaseComponentHeader>
-  <Chart v-if="filterModel.xAxis == 'vo2max'" type="line" :data="chartData" />
+  <Chart
+    v-if="filterModel['xAxis'] == 'vo2max'"
+    type="line"
+    :data="chartData"
+  />
   <Chart v-else type="bar" :data="chartData" />
 
   <Dialog
@@ -233,12 +274,17 @@ const updateDate = (type): void => {
           name="startDate"
           class="text-xs"
         />
-        <span class="text-xs cursor-pointer" @click="updateDate('start')"> Earliest Date </span>
+        <span class="text-xs cursor-pointer" @click="updateDate('start')">
+          Earliest Date
+        </span>
       </div>
-      <div v-if="$form.startDate?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['startDate']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.startDate.error.message }}
+          {{ $form['startDate'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
@@ -251,48 +297,86 @@ const updateDate = (type): void => {
           name="endDate"
           class="text-xs"
         />
-        <span class="text-xs cursor-pointer" @click="updateDate('end')"> Latest Date </span>
+        <span class="text-xs cursor-pointer" @click="updateDate('end')">
+          Latest Date
+        </span>
       </div>
-      <div v-if="$form.endDate?.invalid" class="flex items-center gap-4 mb-4">
+      <div
+        v-if="$form['endDate']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.endDate.error.message }}
+          {{ $form['endDate'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
-        <RadioButtonGroup v-model="filterModel.xAxis" name="xAxis" class="flex flex-wrap gap-4">
+        <RadioButtonGroup
+          v-model="filterModel.xAxis"
+          name="xAxis"
+          class="flex flex-wrap gap-4"
+        >
           <label for="xAxis" class="font-semibold w-24">X-axis</label>
-          <div v-for="(choice, index) in xAxisChoices" :key="index" class="flex items-center gap-2">
+          <div
+            v-for="(choice, index) in xAxisChoices"
+            :key="index"
+            class="flex items-center gap-2"
+          >
             <RadioButton :input-id="'xAxis_' + index" :value="choice.value" />
-            <label :for="'aXis_' + index" class="text-xs">{{ choice.label }}</label>
+            <label :for="'aXis_' + index" class="text-xs">{{
+              choice.label
+            }}</label>
           </div>
         </RadioButtonGroup>
       </div>
-      <div v-if="$form.xAxis?.invalid" class="flex items-center gap-4 mb-4">
+      <div v-if="$form['xAxis']?.invalid" class="flex items-center gap-4 mb-4">
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.xAxis.error.message }}
+          {{ $form['xAxis'].error.message }}
         </Message>
       </div>
       <div class="flex items-center gap-4 mb-4">
-        <RadioButtonGroup v-model="filterModel.yAxis" name="yAxis" class="flex flex-wrap gap-4">
+        <RadioButtonGroup
+          v-model="filterModel.yAxis"
+          name="yAxis"
+          class="flex flex-wrap gap-4"
+        >
           <label for="yAxis" class="font-semibold w-24">Y-axis</label>
-          <div v-for="(choice, index) in yAxisChoices" :key="index" class="flex items-center gap-2">
+          <div
+            v-for="(choice, index) in yAxisChoices"
+            :key="index"
+            class="flex items-center gap-2"
+          >
             <RadioButton :input-id="'yAxis_' + index" :value="choice.value" />
-            <label :for="'yAxis_' + index" class="text-xs">{{ choice.label }}</label>
+            <label :for="'yAxis_' + index" class="text-xs">{{
+              choice.label
+            }}</label>
           </div>
         </RadioButtonGroup>
       </div>
-      <div v-if="$form.yAxis?.invalid" class="flex items-center gap-4">
+      <div v-if="$form['yAxis']?.invalid" class="flex items-center gap-4">
         <div class="w-24"></div>
         <Message severity="error" class="border w-100" size="small">
-          {{ $form.yAxis.error.message }}
+          {{ $form['yAxis'].error.message }}
         </Message>
       </div>
       <div class="flex justify-end gap-2 mt-10">
-        <BaseButton label="Cancel" severity="secondary" @click="graphFilterVisible = false" />
-        <BaseButton label="Reset" severity="secondary" @click="filterGraph(true)" />
-        <BaseButton type="submit" label="Filter" severity="primary" @click="filterGraph(false)" />
+        <BaseButton
+          label="Cancel"
+          severity="secondary"
+          @click="graphFilterVisible = false"
+        />
+        <BaseButton
+          label="Reset"
+          severity="secondary"
+          @click="filterGraph(true)"
+        />
+        <BaseButton
+          type="submit"
+          label="Filter"
+          severity="primary"
+          @click="filterGraph(false)"
+        />
       </div>
     </Form>
   </Dialog>
