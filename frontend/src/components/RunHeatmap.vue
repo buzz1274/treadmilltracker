@@ -119,5 +119,6 @@ const changeYear = (year: string): void => {
     :tooltip-formatter="(v) => tooltipFormatter(v)"
     :range-color="['#e8e8e8', '#e8e8e8', '#000000']"
     :end-date="endDate"
+    :week-start="1"
   />
 </template>

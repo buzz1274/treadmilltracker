@@ -1,0 +1,2421 @@
+diff --git a/node_modules/vue3-calendar-heatmap/dist/components/CalendarHeatmap.vue.d.ts b/node_modules/vue3-calendar-heatmap/dist/components/CalendarHeatmap.vue.d.ts
+index c7dba50..47c11b3 100644
+--- a/node_modules/vue3-calendar-heatmap/dist/components/CalendarHeatmap.vue.d.ts
++++ b/node_modules/vue3-calendar-heatmap/dist/components/CalendarHeatmap.vue.d.ts
+@@ -1,344 +1,274 @@
+ import { PropType } from 'vue';
+ import { Locale, Month, TooltipFormatter, Value } from '../components/Heatmap';
+ declare const _sfc_main: import("vue").DefineComponent<{
+-    endDate: {
+-        required: true;
+-    };
+-    max: {
+-        type: NumberConstructor;
++  endDate: {
++    required: true;
++  };
++  max: {
++    type: NumberConstructor;
++  };
++  rangeColor: {
++    type: PropType<string[]>;
++  };
++  values: {
++    type: PropType<Value[]>;
++    required: true;
++  };
++  locale: {
++    type: PropType<Partial<Locale>>;
++  };
++  tooltip: {
++    type: BooleanConstructor;
++    default: boolean;
++  };
++  tooltipUnit: {
++    type: StringConstructor;
++    default: string;
++  };
++  tooltipFormatter: {
++    type: PropType<TooltipFormatter>;
++  };
++  vertical: {
++    type: BooleanConstructor;
++    default: boolean;
++  };
++  noDataText: {
++    type: (BooleanConstructor | StringConstructor)[];
++    default: null;
++  };
++  round: {
++    type: NumberConstructor;
++    default: number;
++  };
++  weekStart: {
++    type: NumberConstructor;
++    default: number;
++  };
++  darkMode: BooleanConstructor;
++}, {
++  SQUARE_BORDER_SIZE: number;
++  SQUARE_SIZE: number;
++  LEFT_SECTION_WIDTH: number;
++  RIGHT_SECTION_WIDTH: number;
++  TOP_SECTION_HEIGHT: number;
++  BOTTOM_SECTION_HEIGHT: number;
++  svg: import("vue").Ref<SVGElement | null>;
++  heatmap: import("vue").Ref<{
++    startDate: {
++      toString: () => string;
++      toDateString: () => string;
++      toTimeString: () => string;
++      toLocaleString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      toLocaleDateString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      toLocaleTimeString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      valueOf: () => number;
++      getTime: () => number;
++      getFullYear: () => number;
++      getUTCFullYear: () => number;
++      getMonth: () => number;
++      getUTCMonth: () => number;
++      getDate: () => number;
++      getUTCDate: () => number;
++      getDay: () => number;
++      getUTCDay: () => number;
++      getHours: () => number;
++      getUTCHours: () => number;
++      getMinutes: () => number;
++      getUTCMinutes: () => number;
++      getSeconds: () => number;
++      getUTCSeconds: () => number;
++      getMilliseconds: () => number;
++      getUTCMilliseconds: () => number;
++      getTimezoneOffset: () => number;
++      setTime: (time: number) => number;
++      setMilliseconds: (ms: number) => number;
++      setUTCMilliseconds: (ms: number) => number;
++      setSeconds: (sec: number, ms?: number | undefined) => number;
++      setUTCSeconds: (sec: number, ms?: number | undefined) => number;
++      setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++      setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++      setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++      setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++      setDate: (date: number) => number;
++      setUTCDate: (date: number) => number;
++      setMonth: (month: number, date?: number | undefined) => number;
++      setUTCMonth: (month: number, date?: number | undefined) => number;
++      setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++      setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++      toUTCString: () => string;
++      toISOString: () => string;
++      toJSON: (key?: any) => string;
++      [Symbol.toPrimitive]: {
++        (hint: "default"): string;
++        (hint: "string"): string;
++        (hint: "number"): number;
++        (hint: string): string | number;
++      };
+     };
+-    rangeColor: {
+-        type: PropType<string[]>;
++    endDate: {
++      toString: () => string;
++      toDateString: () => string;
++      toTimeString: () => string;
++      toLocaleString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      toLocaleDateString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      toLocaleTimeString: {
++        (): string;
++        (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++        (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++      };
++      valueOf: () => number;
++      getTime: () => number;
++      getFullYear: () => number;
++      getUTCFullYear: () => number;
++      getMonth: () => number;
++      getUTCMonth: () => number;
++      getDate: () => number;
++      getUTCDate: () => number;
++      getDay: () => number;
++      getUTCDay: () => number;
++      getHours: () => number;
++      getUTCHours: () => number;
++      getMinutes: () => number;
++      getUTCMinutes: () => number;
++      getSeconds: () => number;
++      getUTCSeconds: () => number;
++      getMilliseconds: () => number;
++      getUTCMilliseconds: () => number;
++      getTimezoneOffset: () => number;
++      setTime: (time: number) => number;
++      setMilliseconds: (ms: number) => number;
++      setUTCMilliseconds: (ms: number) => number;
++      setSeconds: (sec: number, ms?: number | undefined) => number;
++      setUTCSeconds: (sec: number, ms?: number | undefined) => number;
++      setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++      setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++      setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++      setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++      setDate: (date: number) => number;
++      setUTCDate: (date: number) => number;
++      setMonth: (month: number, date?: number | undefined) => number;
++      setUTCMonth: (month: number, date?: number | undefined) => number;
++      setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++      setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++      toUTCString: () => string;
++      toISOString: () => string;
++      toJSON: (key?: any) => string;
++      [Symbol.toPrimitive]: {
++        (hint: "default"): string;
++        (hint: "string"): string;
++        (hint: "number"): number;
++        (hint: string): string | number;
++      };
+     };
++    max: number;
++    weekStart: number;
+     values: {
+-        type: PropType<Value[]>;
+-        required: true;
+-    };
+-    locale: {
+-        type: PropType<Partial<Locale>>;
+-    };
+-    tooltip: {
+-        type: BooleanConstructor;
+-        default: boolean;
+-    };
+-    tooltipUnit: {
+-        type: StringConstructor;
+-        default: string;
+-    };
+-    tooltipFormatter: {
+-        type: PropType<TooltipFormatter>;
+-    };
+-    vertical: {
+-        type: BooleanConstructor;
+-        default: boolean;
+-    };
+-    noDataText: {
+-        type: (BooleanConstructor | StringConstructor)[];
+-        default: null;
+-    };
+-    round: {
+-        type: NumberConstructor;
+-        default: number;
+-    };
+-    darkMode: BooleanConstructor;
+-}, {
+-    SQUARE_BORDER_SIZE: number;
+-    SQUARE_SIZE: number;
+-    LEFT_SECTION_WIDTH: number;
+-    RIGHT_SECTION_WIDTH: number;
+-    TOP_SECTION_HEIGHT: number;
+-    BOTTOM_SECTION_HEIGHT: number;
+-    svg: import("vue").Ref<SVGElement | null>;
+-    heatmap: import("vue").Ref<{
+-        startDate: {
+-            toString: () => string;
+-            toDateString: () => string;
+-            toTimeString: () => string;
+-            toLocaleString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            toLocaleDateString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            toLocaleTimeString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            valueOf: () => number;
+-            getTime: () => number;
+-            getFullYear: () => number;
+-            getUTCFullYear: () => number;
+-            getMonth: () => number;
+-            getUTCMonth: () => number;
+-            getDate: () => number;
+-            getUTCDate: () => number;
+-            getDay: () => number;
+-            getUTCDay: () => number;
+-            getHours: () => number;
+-            getUTCHours: () => number;
+-            getMinutes: () => number;
+-            getUTCMinutes: () => number;
+-            getSeconds: () => number;
+-            getUTCSeconds: () => number;
+-            getMilliseconds: () => number;
+-            getUTCMilliseconds: () => number;
+-            getTimezoneOffset: () => number;
+-            setTime: (time: number) => number;
+-            setMilliseconds: (ms: number) => number;
+-            setUTCMilliseconds: (ms: number) => number;
+-            setSeconds: (sec: number, ms?: number | undefined) => number;
+-            setUTCSeconds: (sec: number, ms?: number | undefined) => number;
+-            setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-            setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-            setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-            setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-            setDate: (date: number) => number;
+-            setUTCDate: (date: number) => number;
+-            setMonth: (month: number, date?: number | undefined) => number;
+-            setUTCMonth: (month: number, date?: number | undefined) => number;
+-            setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-            setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-            toUTCString: () => string;
+-            toISOString: () => string;
+-            toJSON: (key?: any) => string;
+-            [Symbol.toPrimitive]: {
+-                (hint: "default"): string;
+-                (hint: "string"): string;
+-                (hint: "number"): number;
+-                (hint: string): string | number;
+-            };
++      date: string | {
++        toString: () => string;
++        toDateString: () => string;
++        toTimeString: () => string;
++        toLocaleString: {
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++        };
++        toLocaleDateString: {
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+         };
+-        endDate: {
+-            toString: () => string;
+-            toDateString: () => string;
+-            toTimeString: () => string;
+-            toLocaleString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            toLocaleDateString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            toLocaleTimeString: {
+-                (): string;
+-                (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            };
+-            valueOf: () => number;
+-            getTime: () => number;
+-            getFullYear: () => number;
+-            getUTCFullYear: () => number;
+-            getMonth: () => number;
+-            getUTCMonth: () => number;
+-            getDate: () => number;
+-            getUTCDate: () => number;
+-            getDay: () => number;
+-            getUTCDay: () => number;
+-            getHours: () => number;
+-            getUTCHours: () => number;
+-            getMinutes: () => number;
+-            getUTCMinutes: () => number;
+-            getSeconds: () => number;
+-            getUTCSeconds: () => number;
+-            getMilliseconds: () => number;
+-            getUTCMilliseconds: () => number;
+-            getTimezoneOffset: () => number;
+-            setTime: (time: number) => number;
+-            setMilliseconds: (ms: number) => number;
+-            setUTCMilliseconds: (ms: number) => number;
+-            setSeconds: (sec: number, ms?: number | undefined) => number;
+-            setUTCSeconds: (sec: number, ms?: number | undefined) => number;
+-            setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-            setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-            setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-            setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-            setDate: (date: number) => number;
+-            setUTCDate: (date: number) => number;
+-            setMonth: (month: number, date?: number | undefined) => number;
+-            setUTCMonth: (month: number, date?: number | undefined) => number;
+-            setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-            setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-            toUTCString: () => string;
+-            toISOString: () => string;
+-            toJSON: (key?: any) => string;
+-            [Symbol.toPrimitive]: {
+-                (hint: "default"): string;
+-                (hint: "string"): string;
+-                (hint: "number"): number;
+-                (hint: string): string | number;
+-            };
++        toLocaleTimeString: {
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+         };
+-        max: number;
+-        values: {
+-            date: string | {
+-                toString: () => string;
+-                toDateString: () => string;
+-                toTimeString: () => string;
+-                toLocaleString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                toLocaleDateString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                toLocaleTimeString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                valueOf: () => number;
+-                getTime: () => number;
+-                getFullYear: () => number;
+-                getUTCFullYear: () => number;
+-                getMonth: () => number;
+-                getUTCMonth: () => number;
+-                getDate: () => number;
+-                getUTCDate: () => number;
+-                getDay: () => number;
+-                getUTCDay: () => number;
+-                getHours: () => number;
+-                getUTCHours: () => number;
+-                getMinutes: () => number;
+-                getUTCMinutes: () => number;
+-                getSeconds: () => number;
+-                getUTCSeconds: () => number;
+-                getMilliseconds: () => number;
+-                getUTCMilliseconds: () => number;
+-                getTimezoneOffset: () => number;
+-                setTime: (time: number) => number;
+-                setMilliseconds: (ms: number) => number;
+-                setUTCMilliseconds: (ms: number) => number;
+-                setSeconds: (sec: number, ms?: number | undefined) => number;
+-                setUTCSeconds: (sec: number, ms?: number | undefined) => number;
+-                setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-                setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-                setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-                setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-                setDate: (date: number) => number;
+-                setUTCDate: (date: number) => number;
+-                setMonth: (month: number, date?: number | undefined) => number;
+-                setUTCMonth: (month: number, date?: number | undefined) => number;
+-                setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-                setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-                toUTCString: () => string;
+-                toISOString: () => string;
+-                toJSON: (key?: any) => string;
+-                [Symbol.toPrimitive]: {
+-                    (hint: "default"): string;
+-                    (hint: "string"): string;
+-                    (hint: "number"): number;
+-                    (hint: string): string | number;
+-                };
+-            };
+-            count: number;
+-        }[];
+-        readonly activities: import('../components/Heatmap').Activities;
+-        readonly weekCount: number;
+-        readonly calendar: {
+-            date: {
+-                toString: () => string;
+-                toDateString: () => string;
+-                toTimeString: () => string;
+-                toLocaleString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                toLocaleDateString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                toLocaleTimeString: {
+-                    (): string;
+-                    (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                    (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+-                };
+-                valueOf: () => number;
+-                getTime: () => number;
+-                getFullYear: () => number;
+-                getUTCFullYear: () => number;
+-                getMonth: () => number;
+-                getUTCMonth: () => number;
+-                getDate: () => number;
+-                getUTCDate: () => number;
+-                getDay: () => number;
+-                getUTCDay: () => number;
+-                getHours: () => number;
+-                getUTCHours: () => number;
+-                getMinutes: () => number;
+-                getUTCMinutes: () => number;
+-                getSeconds: () => number;
+-                getUTCSeconds: () => number;
+-                getMilliseconds: () => number;
+-                getUTCMilliseconds: () => number;
+-                getTimezoneOffset: () => number;
+-                setTime: (time: number) => number;
+-                setMilliseconds: (ms: number) => number;
+-                setUTCMilliseconds: (ms: number) => number;
+-                setSeconds: (sec: number, ms?: number | undefined) => number;
+-                setUTCSeconds: (sec: number, ms?: number | undefined) => number;
+-                setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-                setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
+-                setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-                setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
+-                setDate: (date: number) => number;
+-                setUTCDate: (date: number) => number;
+-                setMonth: (month: number, date?: number | undefined) => number;
+-                setUTCMonth: (month: number, date?: number | undefined) => number;
+-                setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-                setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
+-                toUTCString: () => string;
+-                toISOString: () => string;
+-                toJSON: (key?: any) => string;
+-                [Symbol.toPrimitive]: {
+-                    (hint: "default"): string;
+-                    (hint: "string"): string;
+-                    (hint: "number"): number;
+-                    (hint: string): string | number;
+-                };
+-            };
+-            count?: number | undefined;
+-            colorIndex: number;
+-        }[][];
+-        readonly firstFullWeekOfMonths: {
+-            value: number;
+-            index: number;
+-        }[];
+-        getColorIndex: (count?: number | undefined) => number;
+-        getCountEmptyDaysAtStart: () => number;
+-        getCountEmptyDaysAtEnd: () => number;
+-        getDaysCount: () => number;
+-    }>;
+-    now: import("vue").Ref<{
++        valueOf: () => number;
++        getTime: () => number;
++        getFullYear: () => number;
++        getUTCFullYear: () => number;
++        getMonth: () => number;
++        getUTCMonth: () => number;
++        getDate: () => number;
++        getUTCDate: () => number;
++        getDay: () => number;
++        getUTCDay: () => number;
++        getHours: () => number;
++        getUTCHours: () => number;
++        getMinutes: () => number;
++        getUTCMinutes: () => number;
++        getSeconds: () => number;
++        getUTCSeconds: () => number;
++        getMilliseconds: () => number;
++        getUTCMilliseconds: () => number;
++        getTimezoneOffset: () => number;
++        setTime: (time: number) => number;
++        setMilliseconds: (ms: number) => number;
++        setUTCMilliseconds: (ms: number) => number;
++        setSeconds: (sec: number, ms?: number | undefined) => number;
++        setUTCSeconds: (sec: number, ms?: number | undefined) => number;
++        setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++        setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++        setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++        setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++        setDate: (date: number) => number;
++        setUTCDate: (date: number) => number;
++        setMonth: (month: number, date?: number | undefined) => number;
++        setUTCMonth: (month: number, date?: number | undefined) => number;
++        setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++        setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++        toUTCString: () => string;
++        toISOString: () => string;
++        toJSON: (key?: any) => string;
++        [Symbol.toPrimitive]: {
++          (hint: "default"): string;
++          (hint: "string"): string;
++          (hint: "number"): number;
++          (hint: string): string | number;
++        };
++      };
++      count: number;
++    }[];
++    readonly activities: import('../components/Heatmap').Activities;
++    readonly weekCount: number;
++    readonly calendar: {
++      date: {
+         toString: () => string;
+         toDateString: () => string;
+         toTimeString: () => string;
+         toLocaleString: {
+-            (): string;
+-            (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+         };
+         toLocaleDateString: {
+-            (): string;
+-            (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+         };
+         toLocaleTimeString: {
+-            (): string;
+-            (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
+-            (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (): string;
++          (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++          (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+         };
+         valueOf: () => number;
+         getTime: () => number;
+@@ -378,84 +308,164 @@ declare const _sfc_main: import("vue").DefineComponent<{
+         toISOString: () => string;
+         toJSON: (key?: any) => string;
+         [Symbol.toPrimitive]: {
+-            (hint: "default"): string;
+-            (hint: "string"): string;
+-            (hint: "number"): number;
+-            (hint: string): string | number;
++          (hint: "default"): string;
++          (hint: "string"): string;
++          (hint: "number"): number;
++          (hint: string): string | number;
+         };
+-    }>;
+-    width: import("vue").Ref<number>;
+-    height: import("vue").Ref<number>;
+-    viewbox: import("vue").Ref<string>;
+-    daysLabelWrapperTransform: import("vue").Ref<string>;
+-    monthsLabelWrapperTransform: import("vue").Ref<string>;
+-    yearWrapperTransform: string;
+-    legendWrapperTransform: import("vue").Ref<string>;
+-    lo: import("vue").Ref<{
+-        months: string[];
+-        days: string[];
+-        on: string;
+-        less: string;
+-        more: string;
+-    }>;
+-    legendViewbox: import("vue").Ref<string>;
+-    curRangeColor: import("vue").Ref<string[]>;
+-    getWeekPosition: (index: number) => string;
+-    getDayPosition: (index: number) => string;
+-    getMonthLabelPosition: (month: Month) => {
+-        x: number;
+-        y: number;
++      };
++      count?: number | undefined;
++      colorIndex: number;
++    }[][];
++    readonly firstFullWeekOfMonths: {
++      value: number;
++      index: number;
++    }[];
++    getColorIndex: (count?: number | undefined) => number;
++    getCountEmptyDaysAtStart: () => number;
++    getCountEmptyDaysAtEnd: () => number;
++    getDaysCount: () => number;
++  }>;
++  now: import("vue").Ref<{
++    toString: () => string;
++    toDateString: () => string;
++    toTimeString: () => string;
++    toLocaleString: {
++      (): string;
++      (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++      (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+     };
+-    initTippyLazy: (e: MouseEvent) => void;
+-}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "dayClick"[], "dayClick", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+-    endDate: {
+-        required: true;
++    toLocaleDateString: {
++      (): string;
++      (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++      (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+     };
+-    max: {
+-        type: NumberConstructor;
++    toLocaleTimeString: {
++      (): string;
++      (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string;
++      (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions | undefined): string;
+     };
+-    rangeColor: {
+-        type: PropType<string[]>;
+-    };
+-    values: {
+-        type: PropType<Value[]>;
+-        required: true;
++    valueOf: () => number;
++    getTime: () => number;
++    getFullYear: () => number;
++    getUTCFullYear: () => number;
++    getMonth: () => number;
++    getUTCMonth: () => number;
++    getDate: () => number;
++    getUTCDate: () => number;
++    getDay: () => number;
++    getUTCDay: () => number;
++    getHours: () => number;
++    getUTCHours: () => number;
++    getMinutes: () => number;
++    getUTCMinutes: () => number;
++    getSeconds: () => number;
++    getUTCSeconds: () => number;
++    getMilliseconds: () => number;
++    getUTCMilliseconds: () => number;
++    getTimezoneOffset: () => number;
++    setTime: (time: number) => number;
++    setMilliseconds: (ms: number) => number;
++    setUTCMilliseconds: (ms: number) => number;
++    setSeconds: (sec: number, ms?: number | undefined) => number;
++    setUTCSeconds: (sec: number, ms?: number | undefined) => number;
++    setMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++    setUTCMinutes: (min: number, sec?: number | undefined, ms?: number | undefined) => number;
++    setHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++    setUTCHours: (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number;
++    setDate: (date: number) => number;
++    setUTCDate: (date: number) => number;
++    setMonth: (month: number, date?: number | undefined) => number;
++    setUTCMonth: (month: number, date?: number | undefined) => number;
++    setFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++    setUTCFullYear: (year: number, month?: number | undefined, date?: number | undefined) => number;
++    toUTCString: () => string;
++    toISOString: () => string;
++    toJSON: (key?: any) => string;
++    [Symbol.toPrimitive]: {
++      (hint: "default"): string;
++      (hint: "string"): string;
++      (hint: "number"): number;
++      (hint: string): string | number;
+     };
+-    locale: {
+-        type: PropType<Partial<Locale>>;
+-    };
+-    tooltip: {
+-        type: BooleanConstructor;
+-        default: boolean;
+-    };
+-    tooltipUnit: {
+-        type: StringConstructor;
+-        default: string;
+-    };
+-    tooltipFormatter: {
+-        type: PropType<TooltipFormatter>;
+-    };
+-    vertical: {
+-        type: BooleanConstructor;
+-        default: boolean;
+-    };
+-    noDataText: {
+-        type: (BooleanConstructor | StringConstructor)[];
+-        default: null;
+-    };
+-    round: {
+-        type: NumberConstructor;
+-        default: number;
+-    };
+-    darkMode: BooleanConstructor;
++  }>;
++  width: import("vue").Ref<number>;
++  height: import("vue").Ref<number>;
++  viewbox: import("vue").Ref<string>;
++  daysLabelWrapperTransform: import("vue").Ref<string>;
++  monthsLabelWrapperTransform: import("vue").Ref<string>;
++  yearWrapperTransform: string;
++  legendWrapperTransform: import("vue").Ref<string>;
++  lo: import("vue").Ref<{
++    months: string[];
++    days: string[];
++    on: string;
++    less: string;
++    more: string;
++  }>;
++  legendViewbox: import("vue").Ref<string>;
++  curRangeColor: import("vue").Ref<string[]>;
++  getWeekPosition: (index: number) => string;
++  getDayPosition: (index: number) => string;
++  getMonthLabelPosition: (month: Month) => {
++    x: number;
++    y: number;
++  };
++  initTippyLazy: (e: MouseEvent) => void;
++}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "dayClick"[], "dayClick", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
++  endDate: {
++    required: true;
++  };
++  max: {
++    type: NumberConstructor;
++  };
++  rangeColor: {
++    type: PropType<string[]>;
++  };
++  values: {
++    type: PropType<Value[]>;
++    required: true;
++  };
++  locale: {
++    type: PropType<Partial<Locale>>;
++  };
++  tooltip: {
++    type: BooleanConstructor;
++    default: boolean;
++  };
++  tooltipUnit: {
++    type: StringConstructor;
++    default: string;
++  };
++  tooltipFormatter: {
++    type: PropType<TooltipFormatter>;
++  };
++  vertical: {
++    type: BooleanConstructor;
++    default: boolean;
++  };
++  noDataText: {
++    type: (BooleanConstructor | StringConstructor)[];
++    default: null;
++  };
++  round: {
++    type: NumberConstructor;
++    default: number;
++  };
++  weekStart: {
++    type: NumberConstructor;
++    default: number;
++  };
++  darkMode: BooleanConstructor;
+ }>> & {
+-    onDayClick?: ((...args: any[]) => any) | undefined;
++  onDayClick?: ((...args: any[]) => any) | undefined;
+ }, {
+-    tooltip: boolean;
+-    tooltipUnit: string;
+-    vertical: boolean;
+-    noDataText: string | boolean;
+-    round: number;
+-    darkMode: boolean;
++  tooltip: boolean;
++  tooltipUnit: string;
++  vertical: boolean;
++  noDataText: string | boolean;
++  round: number;
++  weekStart: number;
++  darkMode: boolean;
+ }>;
+ export default _sfc_main;
+diff --git a/node_modules/vue3-calendar-heatmap/dist/components/Heatmap.d.ts b/node_modules/vue3-calendar-heatmap/dist/components/Heatmap.d.ts
+index 9c2875b..8fd8064 100644
+--- a/node_modules/vue3-calendar-heatmap/dist/components/Heatmap.d.ts
++++ b/node_modules/vue3-calendar-heatmap/dist/components/Heatmap.d.ts
+@@ -1,57 +1,180 @@
+ export interface Value {
+-    date: Date | string;
+-    count: number;
++  date: Date | string;
++  count: number;
+ }
++
+ export interface Activity {
+-    count: number;
+-    colorIndex: number;
++  count: number;
++  colorIndex: number;
+ }
++
+ export type Activities = Map<string, Activity>;
++
+ export interface CalendarItem {
+-    date: Date;
+-    count?: number;
+-    colorIndex: number;
++  date: Date;
++  count?: number;
++  colorIndex: number;
+ }
++
+ export type Calendar = CalendarItem[][];
++
+ export interface Month {
+-    value: number;
+-    index: number;
++  value: number;
++  index: number;
+ }
++
+ export interface Locale {
+-    months: string[];
+-    days: string[];
+-    on: string;
+-    less: string;
+-    more: string;
++  months: string[];
++  days: string[];
++  on: string;
++  less: string;
++  more: string;
+ }
++
+ export type TooltipFormatter = (item: CalendarItem, unit: string) => string;
+-export declare class Heatmap {
+-    static readonly DEFAULT_RANGE_COLOR_LIGHT: string[];
+-    static readonly DEFAULT_RANGE_COLOR_DARK: string[];
+-    static readonly DEFAULT_LOCALE: Locale;
+-    static readonly DEFAULT_TOOLTIP_UNIT = "contributions";
+-    static readonly DAYS_IN_ONE_YEAR = 365;
+-    static readonly DAYS_IN_WEEK = 7;
+-    static readonly SQUARE_SIZE = 10;
+-    startDate: Date;
+-    endDate: Date;
+-    max: number;
+-    private _values;
+-    private _firstFullWeekOfMonths?;
+-    private _activities?;
+-    private _calendar?;
+-    constructor(endDate: Date | string, values: Value[], max?: number);
+-    set values(v: Value[]);
+-    get values(): Value[];
+-    get activities(): Activities;
+-    get weekCount(): number;
+-    get calendar(): Calendar;
+-    get firstFullWeekOfMonths(): Month[];
+-    getColorIndex(count?: number): number;
+-    getCountEmptyDaysAtStart(): number;
+-    getCountEmptyDaysAtEnd(): number;
+-    getDaysCount(): number;
+-    private shiftDate;
+-    private parseDate;
+-    private keyDayParser;
++
++export class Heatmap {
++
++  static readonly DEFAULT_RANGE_COLOR_LIGHT = [ '#ebedf0', '#dae2ef', '#c0ddf9', '#73b3f3', '#3886e1', '#17459e' ];
++  static readonly DEFAULT_RANGE_COLOR_DARK  = [ '#1f1f22', '#1e334a', '#1d466c', '#1d5689', '#1d69ac', '#1B95D1' ];
++  // other color candidates
++  // static readonly DEFAULT_RANGE_COLOR_LIGHT = [ '#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39' ];
++  // static readonly DEFAULT_RANGE_COLOR_DARK  = [ '#161b22', '#0e4429', '#006d32', '#26a641', '#39d353' ];
++  // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#011526', '#012E40', '#025959', '#02735E', '#038C65' ];
++  // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#161b22', '#015958', '#008F8C', '#0CABA8', '#0FC2C0' ];
++  // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#012030', '#13678A', '#45C4B0', '#9AEBA3', '#DAFDBA' ];
++  static readonly DEFAULT_LOCALE: Locale = {
++    months: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
++    days  : [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ],
++    on    : 'on',
++    less  : 'Less',
++    more  : 'More'
++  };
++  static readonly DEFAULT_TOOLTIP_UNIT   = 'contributions';
++  static readonly DAYS_IN_ONE_YEAR       = 365;
++  static readonly DAYS_IN_WEEK           = 7;
++  static readonly SQUARE_SIZE            = 10;
++
++  startDate: Date;
++  endDate: Date;
++  max: number;
++  weekStart: number;
++
++  private _values: Value[];
++  private _firstFullWeekOfMonths?: Month[];
++  private _activities?: Activities;
++  private _calendar?: Calendar;
++
++  constructor(endDate: Date | string, values: Value[], max?: number, weekStart?: number) {
++    this.endDate   = this.parseDate(endDate);
++    this.max       = max || Math.ceil((Math.max(...values.map(day => day.count)) / 5) * 4);
++    this.weekStart = weekStart ?? 0;
++    this.startDate = this.shiftDate(endDate, -Heatmap.DAYS_IN_ONE_YEAR);
++    this._values   = values;
++  }
++
++  set values(v: Value[]) {
++    this.max                    = Math.ceil((Math.max(...v.map(day => day.count)) / 5) * 4);
++    this._values                = v;
++    this._firstFullWeekOfMonths = undefined;
++    this._calendar              = undefined;
++    this._activities            = undefined;
++  }
++
++  get values(): Value[] {
++    return this._values;
++  }
++
++  get activities(): Activities {
++    if (!this._activities) {
++      this._activities = new Map();
++      for (let i = 0, len = this.values.length; i < len; i++) {
++        this._activities.set(this.keyDayParser(this.values[ i ].date), {
++          count     : this.values[ i ].count,
++          colorIndex: this.getColorIndex(this.values[ i ].count)
++        });
++      }
++    }
++    return this._activities;
++  }
++
++  get weekCount() {
++    return this.getDaysCount() / Heatmap.DAYS_IN_WEEK;
++  }
++
++  get calendar() {
++    if (!this._calendar) {
++      let date       = this.shiftDate(this.startDate, -this.getCountEmptyDaysAtStart() + this.weekStart);
++      date           = new Date(date.getFullYear(), date.getMonth(), date.getDate());
++      this._calendar = new Array(this.weekCount);
++      for (let i = 0, len = this._calendar.length; i < len; i++) {
++        this._calendar[ i ] = new Array(Heatmap.DAYS_IN_WEEK);
++        for (let j = 0; j < Heatmap.DAYS_IN_WEEK; j++) {
++          const dayValues          = this.activities.get(this.keyDayParser(date));
++          this._calendar![ i ][ j ] = {
++            date      : new Date(date.valueOf()),
++            count     : dayValues ? dayValues.count : undefined,
++            colorIndex: dayValues ? dayValues.colorIndex : 0
++          };
++          date.setDate(date.getDate() + 1);
++        }
++      }
++    }
++    return this._calendar;
++  }
++
++  get firstFullWeekOfMonths(): Month[] {
++    if (!this._firstFullWeekOfMonths) {
++      const cal                   = this.calendar;
++      this._firstFullWeekOfMonths = [];
++      for (let index = 1, len = cal.length; index < len; index++) {
++        const lastWeek    = cal[ index - 1 ][ 0 ].date,
++          currentWeek = cal[ index ][ 0 ].date;
++        if (lastWeek.getFullYear() < currentWeek.getFullYear() || lastWeek.getMonth() < currentWeek.getMonth()) {
++          this._firstFullWeekOfMonths.push({ value: currentWeek.getMonth(), index });
++        }
++      }
++    }
++    return this._firstFullWeekOfMonths;
++  }
++
++  getColorIndex(count?: number) {
++    if (count === null || count === undefined) {
++      return 0;
++    } else if (count <= 0) {
++      return 1;
++    } else if (count >= this.max) {
++      return 5;
++    } else {
++      return (Math.ceil(((count * 100) / this.max) * (0.03))) + 1;
++    }
++  }
++
++  getCountEmptyDaysAtStart() {
++    return this.startDate.getDay();
++  }
++
++  getCountEmptyDaysAtEnd() {
++    return (Heatmap.DAYS_IN_WEEK - 1) - this.endDate.getDay();
++  }
++
++  getDaysCount() {
++    return Heatmap.DAYS_IN_ONE_YEAR + 1 + this.getCountEmptyDaysAtStart() + this.getCountEmptyDaysAtEnd();
++  }
++
++  private shiftDate(date: Date | string, numDays: number) {
++    const newDate = new Date(date);
++    newDate.setDate(newDate.getDate() + numDays);
++    return newDate;
++  }
++
++  private parseDate(entry: Date | string) {
++    return (entry instanceof Date) ? entry : (new Date(entry));
++  }
++
++  private keyDayParser(date: Date | string) {
++    const day = this.parseDate(date);
++    return String(day.getFullYear()) + String(day.getMonth()).padStart(2, '0') + String(day.getDate()).padStart(2, '0');
++  }
++
+ }
+diff --git a/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.es.js b/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.es.js
+index 210ce12..f792386 100644
+--- a/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.es.js
++++ b/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.es.js
+@@ -1,18 +1,19 @@
+ var ae = Object.defineProperty;
+ var re = (e, t, a) => t in e ? ae(e, t, { enumerable: !0, configurable: !0, writable: !0, value: a }) : e[t] = a;
+ var l = (e, t, a) => (re(e, typeof t != "symbol" ? t + "" : t, a), a);
+-import { defineComponent as ne, ref as v, toRefs as se, watch as R, toRef as P, nextTick as oe, onMounted as le, onBeforeUnmount as ie, openBlock as i, createElementBlock as u, normalizeClass as ue, createElementVNode as _, Fragment as m, renderList as w, toDisplayString as y, normalizeStyle as $, createCommentVNode as M, renderSlot as N } from "vue";
+-import _e, { createSingleton as de } from "tippy.js";
++import { defineComponent as ne, ref as S, toRefs as se, watch as R, toRef as P, nextTick as oe, onMounted as le, onBeforeUnmount as ie, openBlock as i, createElementBlock as u, normalizeClass as ue, createElementVNode as d, Fragment as m, renderList as O, toDisplayString as y, normalizeStyle as $, createCommentVNode as N, renderSlot as M } from "vue";
++import de, { createSingleton as _e } from "tippy.js";
+ const A = class {
+-  constructor(t, a, s) {
++  constructor(t, a, s, _) {
+     l(this, "startDate");
+     l(this, "endDate");
+     l(this, "max");
++    l(this, "weekStart");
+     l(this, "_values");
+     l(this, "_firstFullWeekOfMonths");
+     l(this, "_activities");
+     l(this, "_calendar");
+-    this.endDate = this.parseDate(t), this.max = s || Math.ceil(Math.max(...a.map((d) => d.count)) / 5 * 4), this.startDate = this.shiftDate(t, -A.DAYS_IN_ONE_YEAR), this._values = a;
++    this.endDate = this.parseDate(t), this.max = s || Math.ceil(Math.max(...a.map((o) => o.count)) / 5 * 4), this.weekStart = _ ?? 0, this.startDate = this.shiftDate(t, -A.DAYS_IN_ONE_YEAR), this._values = a;
+   }
+   set values(t) {
+     this.max = Math.ceil(Math.max(...t.map((a) => a.count)) / 5 * 4), this._values = t, this._firstFullWeekOfMonths = void 0, this._calendar = void 0, this._activities = void 0;
+@@ -36,13 +37,19 @@ const A = class {
+   }
+   get calendar() {
+     if (!this._calendar) {
+-      let t = this.shiftDate(this.startDate, -this.getCountEmptyDaysAtStart());
++      const weekStart = this.weekStart ?? 0;
++
++      const startWeekDay = this.startDate.getDay();
++      const offset = (startWeekDay - weekStart + 7) % 7;
++
++      let t = this.shiftDate(this.startDate, -offset);
++
+       t = new Date(t.getFullYear(), t.getMonth(), t.getDate()), this._calendar = new Array(this.weekCount);
+       for (let a = 0, s = this._calendar.length; a < s; a++) {
+         this._calendar[a] = new Array(A.DAYS_IN_WEEK);
+-        for (let d = 0; d < A.DAYS_IN_WEEK; d++) {
++        for (let _ = 0; _ < A.DAYS_IN_WEEK; _++) {
+           const o = this.activities.get(this.keyDayParser(t));
+-          this._calendar[a][d] = {
++          this._calendar[a][_] = {
+             date: new Date(t.valueOf()),
+             count: o ? o.count : void 0,
+             colorIndex: o ? o.colorIndex : 0
+@@ -57,8 +64,8 @@ const A = class {
+       const t = this.calendar;
+       this._firstFullWeekOfMonths = [];
+       for (let a = 1, s = t.length; a < s; a++) {
+-        const d = t[a - 1][0].date, o = t[a][0].date;
+-        (d.getFullYear() < o.getFullYear() || d.getMonth() < o.getMonth()) && this._firstFullWeekOfMonths.push({ value: o.getMonth(), index: a });
++        const _ = t[a - 1][0].date, o = t[a][0].date;
++        (_.getFullYear() < o.getFullYear() || _.getMonth() < o.getMonth()) && this._firstFullWeekOfMonths.push({ value: o.getMonth(), index: a });
+       }
+     }
+     return this._firstFullWeekOfMonths;
+@@ -67,10 +74,15 @@ const A = class {
+     return t == null ? 0 : t <= 0 ? 1 : t >= this.max ? 5 : Math.ceil(t * 100 / this.max * 0.03) + 1;
+   }
+   getCountEmptyDaysAtStart() {
+-    return this.startDate.getDay();
++    const weekStart = this.weekStart ?? 0;
++    return (this.startDate.getDay() - weekStart + 7) % 7;
+   }
+   getCountEmptyDaysAtEnd() {
+-    return A.DAYS_IN_WEEK - 1 - this.endDate.getDay();
++    const weekStart = this.weekStart ?? 0;
++    const endDay = this.endDate.getDay();
++
++    const normalized = (endDay - weekStart + 7) % 7;
++    return 6 - normalized;
+   }
+   getDaysCount() {
+     return A.DAYS_IN_ONE_YEAR + 1 + this.getCountEmptyDaysAtStart() + this.getCountEmptyDaysAtEnd();
+@@ -94,13 +106,13 @@ l(n, "DEFAULT_RANGE_COLOR_LIGHT", ["#ebedf0", "#dae2ef", "#c0ddf9", "#73b3f3", "
+ // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#011526', '#012E40', '#025959', '#02735E', '#038C65' ];
+ // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#161b22', '#015958', '#008F8C', '#0CABA8', '#0FC2C0' ];
+ // static readonly DEFAULT_RANGE_COLOR_DARK    = [ '#012030', '#13678A', '#45C4B0', '#9AEBA3', '#DAFDBA' ];
+-l(n, "DEFAULT_LOCALE", {
+-  months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+-  days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+-  on: "on",
+-  less: "Less",
+-  more: "More"
+-}), l(n, "DEFAULT_TOOLTIP_UNIT", "contributions"), l(n, "DAYS_IN_ONE_YEAR", 365), l(n, "DAYS_IN_WEEK", 7), l(n, "SQUARE_SIZE", 10);
++  l(n, "DEFAULT_LOCALE", {
++    months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
++    days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
++    on: "on",
++    less: "Less",
++    more: "More"
++  }), l(n, "DEFAULT_TOOLTIP_UNIT", "contributions"), l(n, "DAYS_IN_ONE_YEAR", 365), l(n, "DAYS_IN_WEEK", 7), l(n, "SQUARE_SIZE", 10);
+ const he = /* @__PURE__ */ ne({
+   name: "CalendarHeatmap",
+   props: {
+@@ -143,14 +155,18 @@ const he = /* @__PURE__ */ ne({
+       type: Number,
+       default: 0
+     },
++    weekStart: {
++      type: Number,
++      default: 0
++    },
+     darkMode: Boolean
+   },
+   emits: ["dayClick"],
+   setup(e) {
+-    const t = n.SQUARE_SIZE / 5, a = n.SQUARE_SIZE + t, s = Math.ceil(n.SQUARE_SIZE * 2.5), d = a * 3, o = n.SQUARE_SIZE + n.SQUARE_SIZE / 2, h = n.SQUARE_SIZE + n.SQUARE_SIZE / 2, E = `translate(${s}, ${o})`, I = v(null), U = v(/* @__PURE__ */ new Date()), S = v(new n(e.endDate, e.values, e.max)), p = v(0), T = v(0), F = v("0 0 0 0"), W = v("0 0 0 0"), k = v(""), L = v(""), b = v(""), D = v({}), O = v(e.rangeColor || (e.darkMode ? n.DEFAULT_RANGE_COLOR_DARK : n.DEFAULT_RANGE_COLOR_LIGHT)), { values: K, tooltipUnit: H, tooltipFormatter: z, noDataText: V, max: q, vertical: B, locale: J } = se(e), c = /* @__PURE__ */ new Map();
+-    let g;
++    const t = n.SQUARE_SIZE / 5, a = n.SQUARE_SIZE + t, s = Math.ceil(n.SQUARE_SIZE * 2.5), _ = a * 3, o = n.SQUARE_SIZE + n.SQUARE_SIZE / 2, h = n.SQUARE_SIZE + n.SQUARE_SIZE / 2, E = `translate(${s}, ${o})`, I = S(null), U = S(/* @__PURE__ */ new Date()), v = S(new n(e.endDate, e.values, e.max)), w = S(0), p = S(0), F = S("0 0 0 0"), b = S("0 0 0 0"), C = S(""), L = S(""), W = S(""), D = S({}), T = S(e.rangeColor || (e.darkMode ? n.DEFAULT_RANGE_COLOR_DARK : n.DEFAULT_RANGE_COLOR_LIGHT)), { values: K, tooltipUnit: H, tooltipFormatter: z, noDataText: V, max: q, vertical: B, locale: J } = se(e), g = /* @__PURE__ */ new Map();
++    let f;
+     function Y() {
+-      c.clear(), g ? g.setInstances(Array.from(c.values())) : g = de(Array.from(c.values()), {
++      g.clear(), f ? f.setInstances(Array.from(g.values())) : f = _e(Array.from(g.values()), {
+         overrides: [],
+         moveTransition: "transform 0.1s ease-out",
+         allowHTML: !0
+@@ -167,36 +183,36 @@ const he = /* @__PURE__ */ ne({
+       }
+     }
+     function X(r) {
+-      return e.vertical ? `translate(0, ${a * S.value.weekCount - (r + 1) * a})` : `translate(${r * a}, 0)`;
++      return e.vertical ? `translate(0, ${a * v.value.weekCount - (r + 1) * a})` : `translate(${r * a}, 0)`;
+     }
+     function x(r) {
+       return e.vertical ? `translate(${r * a}, 0)` : `translate(0, ${r * a})`;
+     }
+     function ee(r) {
+-      return e.vertical ? { x: 3, y: a * S.value.weekCount - a * r.index - a / 4 } : { x: a * r.index, y: a - t };
++      return e.vertical ? { x: 3, y: a * v.value.weekCount - a * r.index - a / 4 } : { x: a * r.index, y: a - t };
+     }
+-    R([P(e, "rangeColor"), P(e, "darkMode")], ([r, f]) => {
+-      O.value = r || (f ? n.DEFAULT_RANGE_COLOR_DARK : n.DEFAULT_RANGE_COLOR_LIGHT);
++    R([P(e, "rangeColor"), P(e, "darkMode")], ([r, c]) => {
++      T.value = r || (c ? n.DEFAULT_RANGE_COLOR_DARK : n.DEFAULT_RANGE_COLOR_LIGHT);
+     }), R(B, (r) => {
+-      r ? (p.value = s + a * n.DAYS_IN_WEEK + d, T.value = o + a * S.value.weekCount + t, k.value = `translate(${s}, 0)`, L.value = `translate(0, ${o})`) : (p.value = s + a * S.value.weekCount + t, T.value = o + a * n.DAYS_IN_WEEK, k.value = `translate(0, ${o})`, L.value = `translate(${s}, 0)`);
+-    }, { immediate: !0 }), R([p, T], ([r, f]) => F.value = ` 0 0 ${r} ${f}`, { immediate: !0 }), R([p, T, O], ([r, f, C]) => {
+-      b.value = B.value ? `translate(${s + a * n.DAYS_IN_WEEK}, ${o})` : `translate(${r - a * C.length - 30}, ${f - h})`;
+-    }, { immediate: !0 }), R(J, (r) => D.value = r ? { ...n.DEFAULT_LOCALE, ...r } : n.DEFAULT_LOCALE, { immediate: !0 }), R(O, (r) => W.value = `0 0 ${n.SQUARE_SIZE * (r.length + 1)} ${n.SQUARE_SIZE}`, { immediate: !0 }), R(
+-      [K, H, z, V, q, O],
++      r ? (w.value = s + a * n.DAYS_IN_WEEK + _, p.value = o + a * v.value.weekCount + t, C.value = `translate(${s}, 0)`, L.value = `translate(0, ${o})`) : (w.value = s + a * v.value.weekCount + t, p.value = o + a * n.DAYS_IN_WEEK, C.value = `translate(0, ${o})`, L.value = `translate(${s}, 0)`);
++    }, { immediate: !0 }), R([w, p], ([r, c]) => F.value = ` 0 0 ${r} ${c}`, { immediate: !0 }), R([w, p, T], ([r, c, k]) => {
++      W.value = B.value ? `translate(${s + a * n.DAYS_IN_WEEK}, ${o})` : `translate(${r - a * k.length - 30}, ${c - h})`;
++    }, { immediate: !0 }), R(J, (r) => D.value = r ? { ...n.DEFAULT_LOCALE, ...r } : n.DEFAULT_LOCALE, { immediate: !0 }), R(T, (r) => b.value = `0 0 ${n.SQUARE_SIZE * (r.length + 1)} ${n.SQUARE_SIZE}`, { immediate: !0 }), R(
++      [K, H, z, V, q, T],
+       () => {
+-        S.value = new n(e.endDate, e.values, e.max), c.forEach((r) => r.destroy()), oe(Y);
++        v.value = new n(e.endDate, e.values, e.max, e.weekStart), g.forEach((r) => r.destroy()), oe(Y);
+       }
+     ), le(Y), ie(() => {
+-      g == null || g.destroy(), c.forEach((r) => r.destroy());
++      f == null || f.destroy(), g.forEach((r) => r.destroy());
+     });
+     function te(r) {
+-      if (g && r.target && r.target.classList.contains("vch__day__square") && r.target.dataset.weekIndex !== void 0 && r.target.dataset.dayIndex !== void 0) {
+-        const f = Number(r.target.dataset.weekIndex), C = Number(r.target.dataset.dayIndex);
+-        if (!isNaN(f) && !isNaN(C)) {
+-          const Q = j(S.value.calendar[f][C]);
++      if (f && r.target && r.target.classList.contains("vch__day__square") && r.target.dataset.weekIndex !== void 0 && r.target.dataset.dayIndex !== void 0) {
++        const c = Number(r.target.dataset.weekIndex), k = Number(r.target.dataset.dayIndex);
++        if (!isNaN(c) && !isNaN(k)) {
++          const Q = j(v.value.calendar[c][k]);
+           if (Q) {
+-            const Z = c.get(r.target);
+-            Z ? Z.setContent(Q) : Z || (c.set(r.target, _e(r.target, { content: Q })), g.setInstances(Array.from(c.values())));
++            const Z = g.get(r.target);
++            Z ? Z.setContent(Q) : Z || (g.set(r.target, de(r.target, { content: Q })), f.setInstances(Array.from(g.values())));
+           }
+         }
+       }
+@@ -205,22 +221,22 @@ const he = /* @__PURE__ */ ne({
+       SQUARE_BORDER_SIZE: t,
+       SQUARE_SIZE: a,
+       LEFT_SECTION_WIDTH: s,
+-      RIGHT_SECTION_WIDTH: d,
++      RIGHT_SECTION_WIDTH: _,
+       TOP_SECTION_HEIGHT: o,
+       BOTTOM_SECTION_HEIGHT: h,
+       svg: I,
+-      heatmap: S,
++      heatmap: v,
+       now: U,
+-      width: p,
+-      height: T,
++      width: w,
++      height: p,
+       viewbox: F,
+-      daysLabelWrapperTransform: k,
++      daysLabelWrapperTransform: C,
+       monthsLabelWrapperTransform: L,
+       yearWrapperTransform: E,
+-      legendWrapperTransform: b,
++      legendWrapperTransform: W,
+       lo: D,
+-      legendViewbox: W,
+-      curRangeColor: O,
++      legendViewbox: b,
++      curRangeColor: T,
+       getWeekPosition: X,
+       getDayPosition: x,
+       getMonthLabelPosition: ee,
+@@ -230,11 +246,11 @@ const he = /* @__PURE__ */ ne({
+ });
+ const Ee = (e, t) => {
+   const a = e.__vccOpts || e;
+-  for (const [s, d] of t)
+-    a[s] = d;
++  for (const [s, _] of t)
++    a[s] = _;
+   return a;
+-}, ve = ["viewBox"], Se = ["transform"], ce = ["x", "y"], ge = ["transform"], fe = ["x", "y"], ye = ["x", "y"], Ae = ["x", "y"], Re = ["transform"], De = ["x"], me = ["rx", "ry", "width", "height", "x", "y"], Ie = ["x", "y"], Ue = ["transform"], pe = ["transform"], Te = ["rx", "ry", "transform", "width", "height", "data-week-index", "data-day-index", "onClick"], Oe = { class: "vch__legend" }, we = { class: "vch__legend-left" }, Ce = { class: "vch__legend-right" }, ke = { class: "vch__legend" }, Le = ["viewBox", "height"], Qe = { class: "vch__legend__wrapper" }, Ze = ["rx", "ry", "width", "height", "x"];
+-function $e(e, t, a, s, d, o) {
++}, Se = ["viewBox"], ve = ["transform"], ge = ["x", "y"], fe = ["transform"], ce = ["x", "y"], ye = ["x", "y"], Ae = ["x", "y"], Re = ["transform"], De = ["x"], me = ["rx", "ry", "width", "height", "x", "y"], Ie = ["x", "y"], Ue = ["transform"], we = ["transform"], pe = ["rx", "ry", "transform", "width", "height", "data-week-index", "data-day-index", "onClick"], Te = { class: "vch__legend" }, Oe = { class: "vch__legend-left" }, ke = { class: "vch__legend-right" }, Ce = { class: "vch__legend" }, Le = ["viewBox", "height"], Qe = { class: "vch__legend__wrapper" }, Ze = ["rx", "ry", "width", "height", "x"];
++function $e(e, t, a, s, _, o) {
+   return i(), u("div", {
+     class: ue({ vch__container: !0, "dark-mode": e.darkMode })
+   }, [
+@@ -243,47 +259,47 @@ function $e(e, t, a, s, d, o) {
+       ref: "svg",
+       viewBox: e.viewbox
+     }, [
+-      _("g", {
++      d("g", {
+         class: "vch__months__labels__wrapper",
+         transform: e.monthsLabelWrapperTransform
+       }, [
+-        (i(!0), u(m, null, w(e.heatmap.firstFullWeekOfMonths, (h, E) => (i(), u("text", {
++        (i(!0), u(m, null, O(e.heatmap.firstFullWeekOfMonths, (h, E) => (i(), u("text", {
+           class: "vch__month__label",
+           key: E,
+           x: e.getMonthLabelPosition(h).x,
+           y: e.getMonthLabelPosition(h).y
+-        }, y(e.lo.months[h.value]), 9, ce))), 128))
+-      ], 8, Se),
+-      _("g", {
++        }, y(e.lo.months[h.value]), 9, ge))), 128))
++      ], 8, ve),
++      d("g", {
+         class: "vch__days__labels__wrapper",
+         transform: e.daysLabelWrapperTransform
+       }, [
+-        _("text", {
++        d("text", {
+           class: "vch__day__label",
+           x: e.vertical ? e.SQUARE_SIZE : 0,
+           y: e.vertical ? e.SQUARE_SIZE - e.SQUARE_BORDER_SIZE : 20
+-        }, y(e.lo.days[1]), 9, fe),
+-        _("text", {
++        }, y(e.lo.days[1 + e.weekStart]), 9, ce),
++        d("text", {
+           class: "vch__day__label",
+           x: e.vertical ? e.SQUARE_SIZE * 3 : 0,
+           y: e.vertical ? e.SQUARE_SIZE - e.SQUARE_BORDER_SIZE : 44
+-        }, y(e.lo.days[3]), 9, ye),
+-        _("text", {
++        }, y(e.lo.days[3 + e.weekStart]), 9, ye),
++        d("text", {
+           class: "vch__day__label",
+           x: e.vertical ? e.SQUARE_SIZE * 5 : 0,
+           y: e.vertical ? e.SQUARE_SIZE - e.SQUARE_BORDER_SIZE : 69
+-        }, y(e.lo.days[5]), 9, Ae)
+-      ], 8, ge),
++        }, y(e.lo.days[5 + e.weekStart]), 9, Ae)
++      ], 8, fe),
+       e.vertical ? (i(), u("g", {
+         key: 0,
+         class: "vch__legend__wrapper",
+         transform: e.legendWrapperTransform
+       }, [
+-        _("text", {
++        d("text", {
+           x: e.SQUARE_SIZE * 1.25,
+           y: "8"
+         }, y(e.lo.less), 9, De),
+-        (i(!0), u(m, null, w(e.curRangeColor, (h, E) => (i(), u("rect", {
++        (i(!0), u(m, null, O(e.curRangeColor, (h, E) => (i(), u("rect", {
+           key: E,
+           rx: e.round,
+           ry: e.round,
+@@ -293,22 +309,22 @@ function $e(e, t, a, s, d, o) {
+           x: e.SQUARE_SIZE * 1.75,
+           y: e.SQUARE_SIZE * (E + 1)
+         }, null, 12, me))), 128)),
+-        _("text", {
++        d("text", {
+           x: e.SQUARE_SIZE * 1.25,
+           y: e.SQUARE_SIZE * (e.curRangeColor.length + 2) - e.SQUARE_BORDER_SIZE
+         }, y(e.lo.more), 9, Ie)
+-      ], 8, Re)) : M("", !0),
+-      _("g", {
++      ], 8, Re)) : N("", !0),
++      d("g", {
+         class: "vch__year__wrapper",
+         transform: e.yearWrapperTransform,
+         onMouseover: t[0] || (t[0] = (...h) => e.initTippyLazy && e.initTippyLazy(...h))
+       }, [
+-        (i(!0), u(m, null, w(e.heatmap.calendar, (h, E) => (i(), u("g", {
++        (i(!0), u(m, null, O(e.heatmap.calendar, (h, E) => (i(), u("g", {
+           class: "vch__month__wrapper",
+           key: E,
+           transform: e.getWeekPosition(E)
+         }, [
+-          (i(!0), u(m, null, w(h, (I, U) => (i(), u(m, { key: U }, [
++          (i(!0), u(m, null, O(h, (I, U) => (i(), u(m, { key: U }, [
+             I.date < e.now ? (i(), u("rect", {
+               key: 0,
+               class: "vch__day__square",
+@@ -320,29 +336,29 @@ function $e(e, t, a, s, d, o) {
+               style: $({ fill: e.curRangeColor[I.colorIndex] }),
+               "data-week-index": E,
+               "data-day-index": U,
+-              onClick: (S) => e.$emit("dayClick", I)
+-            }, null, 12, Te)) : M("", !0)
++              onClick: (v) => e.$emit("dayClick", I)
++            }, null, 12, pe)) : N("", !0)
+           ], 64))), 128))
+-        ], 8, pe))), 128))
++        ], 8, we))), 128))
+       ], 40, Ue)
+-    ], 8, ve)),
+-    _("div", Oe, [
+-      N(e.$slots, "legend", {}, () => [
+-        _("div", we, [
+-          N(e.$slots, "vch__legend-left")
++    ], 8, Se)),
++    d("div", Te, [
++      M(e.$slots, "legend", {}, () => [
++        d("div", Oe, [
++          M(e.$slots, "vch__legend-left")
+         ]),
+-        _("div", Ce, [
+-          N(e.$slots, "legend-right", {}, () => [
+-            _("div", ke, [
+-              _("div", null, y(e.lo.less), 1),
+-              e.vertical ? M("", !0) : (i(), u("svg", {
++        d("div", ke, [
++          M(e.$slots, "legend-right", {}, () => [
++            d("div", Ce, [
++              d("div", null, y(e.lo.less), 1),
++              e.vertical ? N("", !0) : (i(), u("svg", {
+                 key: 0,
+                 class: "vch__external-legend-wrapper",
+                 viewBox: e.legendViewbox,
+                 height: e.SQUARE_SIZE - e.SQUARE_BORDER_SIZE
+               }, [
+-                _("g", Qe, [
+-                  (i(!0), u(m, null, w(e.curRangeColor, (h, E) => (i(), u("rect", {
++                d("g", Qe, [
++                  (i(!0), u(m, null, O(e.curRangeColor, (h, E) => (i(), u("rect", {
+                     key: E,
+                     rx: e.round,
+                     ry: e.round,
+@@ -353,7 +369,7 @@ function $e(e, t, a, s, d, o) {
+                   }, null, 12, Ze))), 128))
+                 ])
+               ], 8, Le)),
+-              _("div", null, y(e.lo.more), 1)
++              d("div", null, y(e.lo.more), 1)
+             ])
+           ])
+         ])
+@@ -362,13 +378,13 @@ function $e(e, t, a, s, d, o) {
+   ], 2);
+ }
+ const G = /* @__PURE__ */ Ee(he, [["render", $e]]);
+-function Me(e) {
++function Ne(e) {
+   e.component(G.name, G);
+ }
+-const be = { install: Me };
++const We = { install: Ne };
+ export {
+   G as CalendarHeatmap,
+   n as Heatmap,
+-  be as default
++  We as default
+ };
+ //# sourceMappingURL=vue3-calendar-heatmap.es.js.map
+diff --git a/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.umd.js b/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.umd.js
+index 93af75e..e162357 100644
+--- a/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.umd.js
++++ b/node_modules/vue3-calendar-heatmap/dist/vue3-calendar-heatmap.umd.js
+@@ -1,2 +1,2 @@
+-(function(i,e){typeof exports=="object"&&typeof module<"u"?e(exports,require("vue"),require("tippy.js")):typeof define=="function"&&define.amd?define(["exports","vue","tippy.js"],e):(i=typeof globalThis<"u"?globalThis:i||self,e(i.CalendarHeatmap={},i.Vue,i.tippy))})(this,function(i,e,h){"use strict";var ue=Object.defineProperty;var De=(i,e,h)=>e in i?ue(i,e,{enumerable:!0,configurable:!0,writable:!0,value:h}):i[e]=h;var d=(i,e,h)=>(De(i,typeof e!="symbol"?e+"":e,h),h);const f=class{constructor(a,n,l){d(this,"startDate");d(this,"endDate");d(this,"max");d(this,"_values");d(this,"_firstFullWeekOfMonths");d(this,"_activities");d(this,"_calendar");this.endDate=this.parseDate(a),this.max=l||Math.ceil(Math.max(...n.map(E=>E.count))/5*4),this.startDate=this.shiftDate(a,-f.DAYS_IN_ONE_YEAR),this._values=n}set values(a){this.max=Math.ceil(Math.max(...a.map(n=>n.count))/5*4),this._values=a,this._firstFullWeekOfMonths=void 0,this._calendar=void 0,this._activities=void 0}get values(){return this._values}get activities(){if(!this._activities){this._activities=new Map;for(let a=0,n=this.values.length;a<n;a++)this._activities.set(this.keyDayParser(this.values[a].date),{count:this.values[a].count,colorIndex:this.getColorIndex(this.values[a].count)})}return this._activities}get weekCount(){return this.getDaysCount()/f.DAYS_IN_WEEK}get calendar(){if(!this._calendar){let a=this.shiftDate(this.startDate,-this.getCountEmptyDaysAtStart());a=new Date(a.getFullYear(),a.getMonth(),a.getDate()),this._calendar=new Array(this.weekCount);for(let n=0,l=this._calendar.length;n<l;n++){this._calendar[n]=new Array(f.DAYS_IN_WEEK);for(let E=0;E<f.DAYS_IN_WEEK;E++){const s=this.activities.get(this.keyDayParser(a));this._calendar[n][E]={date:new Date(a.valueOf()),count:s?s.count:void 0,colorIndex:s?s.colorIndex:0},a.setDate(a.getDate()+1)}}}return this._calendar}get firstFullWeekOfMonths(){if(!this._firstFullWeekOfMonths){const a=this.calendar;this._firstFullWeekOfMonths=[];for(let n=1,l=a.length;n<l;n++){const E=a[n-1][0].date,s=a[n][0].date;(E.getFullYear()<s.getFullYear()||E.getMonth()<s.getMonth())&&this._firstFullWeekOfMonths.push({value:s.getMonth(),index:n})}}return this._firstFullWeekOfMonths}getColorIndex(a){return a==null?0:a<=0?1:a>=this.max?5:Math.ceil(a*100/this.max*.03)+1}getCountEmptyDaysAtStart(){return this.startDate.getDay()}getCountEmptyDaysAtEnd(){return f.DAYS_IN_WEEK-1-this.endDate.getDay()}getDaysCount(){return f.DAYS_IN_ONE_YEAR+1+this.getCountEmptyDaysAtStart()+this.getCountEmptyDaysAtEnd()}shiftDate(a,n){const l=new Date(a);return l.setDate(l.getDate()+n),l}parseDate(a){return a instanceof Date?a:new Date(a)}keyDayParser(a){const n=this.parseDate(a);return String(n.getFullYear())+String(n.getMonth()).padStart(2,"0")+String(n.getDate()).padStart(2,"0")}};let o=f;d(o,"DEFAULT_RANGE_COLOR_LIGHT",["#ebedf0","#dae2ef","#c0ddf9","#73b3f3","#3886e1","#17459e"]),d(o,"DEFAULT_RANGE_COLOR_DARK",["#1f1f22","#1e334a","#1d466c","#1d5689","#1d69ac","#1B95D1"]),d(o,"DEFAULT_LOCALE",{months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],on:"on",less:"Less",more:"More"}),d(o,"DEFAULT_TOOLTIP_UNIT","contributions"),d(o,"DAYS_IN_ONE_YEAR",365),d(o,"DAYS_IN_WEEK",7),d(o,"SQUARE_SIZE",10);const Ae="",Re="",M=e.defineComponent({name:"CalendarHeatmap",props:{endDate:{required:!0},max:{type:Number},rangeColor:{type:Array},values:{type:Array,required:!0},locale:{type:Object},tooltip:{type:Boolean,default:!0},tooltipUnit:{type:String,default:o.DEFAULT_TOOLTIP_UNIT},tooltipFormatter:{type:Function},vertical:{type:Boolean,default:!1},noDataText:{type:[Boolean,String],default:null},round:{type:Number,default:0},darkMode:Boolean},emits:["dayClick"],setup(t){const a=o.SQUARE_SIZE/5,n=o.SQUARE_SIZE+a,l=Math.ceil(o.SQUARE_SIZE*2.5),E=n*3,s=o.SQUARE_SIZE+o.SQUARE_SIZE/2,c=o.SQUARE_SIZE+o.SQUARE_SIZE/2,_=`translate(${l}, ${s})`,D=e.ref(null),A=e.ref(new Date),m=e.ref(new o(t.endDate,t.values,t.max)),R=e.ref(0),p=e.ref(0),B=e.ref("0 0 0 0"),C=e.ref("0 0 0 0"),T=e.ref(""),w=e.ref(""),L=e.ref(""),u=e.ref({}),I=e.ref(t.rangeColor||(t.darkMode?o.DEFAULT_RANGE_COLOR_DARK:o.DEFAULT_RANGE_COLOR_LIGHT)),{values:ie,tooltipUnit:de,tooltipFormatter:Ee,noDataText:ce,max:_e,vertical:Q,locale:he}=e.toRefs(t),S=new Map;let g;function Z(){S.clear(),g?g.setInstances(Array.from(S.values())):g=h.createSingleton(Array.from(S.values()),{overrides:[],moveTransition:"transform 0.1s ease-out",allowHTML:!0})}function fe(r){if(t.tooltip){if(r.count!==void 0)return t.tooltipFormatter?t.tooltipFormatter(r,t.tooltipUnit):`<b>${r.count} ${t.tooltipUnit}</b> ${u.value.on} ${u.value.months[r.date.getMonth()]} ${r.date.getDate()}, ${r.date.getFullYear()}`;if(t.noDataText)return`${t.noDataText}`;if(t.noDataText!==!1)return`<b>No ${t.tooltipUnit}</b> ${u.value.on} ${u.value.months[r.date.getMonth()]} ${r.date.getDate()}, ${r.date.getFullYear()}`}}function me(r){return t.vertical?`translate(0, ${n*m.value.weekCount-(r+1)*n})`:`translate(${r*n}, 0)`}function Se(r){return t.vertical?`translate(${r*n}, 0)`:`translate(0, ${r*n})`}function ge(r){return t.vertical?{x:3,y:n*m.value.weekCount-n*r.index-n/4}:{x:n*r.index,y:n-a}}e.watch([e.toRef(t,"rangeColor"),e.toRef(t,"darkMode")],([r,y])=>{I.value=r||(y?o.DEFAULT_RANGE_COLOR_DARK:o.DEFAULT_RANGE_COLOR_LIGHT)}),e.watch(Q,r=>{r?(R.value=l+n*o.DAYS_IN_WEEK+E,p.value=s+n*m.value.weekCount+a,T.value=`translate(${l}, 0)`,w.value=`translate(0, ${s})`):(R.value=l+n*m.value.weekCount+a,p.value=s+n*o.DAYS_IN_WEEK,T.value=`translate(0, ${s})`,w.value=`translate(${l}, 0)`)},{immediate:!0}),e.watch([R,p],([r,y])=>B.value=` 0 0 ${r} ${y}`,{immediate:!0}),e.watch([R,p,I],([r,y,k])=>{L.value=Q.value?`translate(${l+n*o.DAYS_IN_WEEK}, ${s})`:`translate(${r-n*k.length-30}, ${y-c})`},{immediate:!0}),e.watch(he,r=>u.value=r?{...o.DEFAULT_LOCALE,...r}:o.DEFAULT_LOCALE,{immediate:!0}),e.watch(I,r=>C.value=`0 0 ${o.SQUARE_SIZE*(r.length+1)} ${o.SQUARE_SIZE}`,{immediate:!0}),e.watch([ie,de,Ee,ce,_e,I],()=>{m.value=new o(t.endDate,t.values,t.max),S.forEach(r=>r.destroy()),e.nextTick(Z)}),e.onMounted(Z),e.onBeforeUnmount(()=>{g==null||g.destroy(),S.forEach(r=>r.destroy())});function ye(r){if(g&&r.target&&r.target.classList.contains("vch__day__square")&&r.target.dataset.weekIndex!==void 0&&r.target.dataset.dayIndex!==void 0){const y=Number(r.target.dataset.weekIndex),k=Number(r.target.dataset.dayIndex);if(!isNaN(y)&&!isNaN(k)){const O=fe(m.value.calendar[y][k]);if(O){const N=S.get(r.target);N?N.setContent(O):N||(S.set(r.target,h(r.target,{content:O})),g.setInstances(Array.from(S.values())))}}}}return{SQUARE_BORDER_SIZE:a,SQUARE_SIZE:n,LEFT_SECTION_WIDTH:l,RIGHT_SECTION_WIDTH:E,TOP_SECTION_HEIGHT:s,BOTTOM_SECTION_HEIGHT:c,svg:D,heatmap:m,now:A,width:R,height:p,viewbox:B,daysLabelWrapperTransform:T,monthsLabelWrapperTransform:w,yearWrapperTransform:_,legendWrapperTransform:L,lo:u,legendViewbox:C,curRangeColor:I,getWeekPosition:me,getDayPosition:Se,getMonthLabelPosition:ge,initTippyLazy:ye}}}),pe="",F=(t,a)=>{const n=t.__vccOpts||t;for(const[l,E]of a)n[l]=E;return n},$=["viewBox"],b=["transform"],W=["x","y"],v=["transform"],V=["x","y"],Y=["x","y"],P=["x","y"],G=["transform"],K=["x"],H=["rx","ry","width","height","x","y"],z=["x","y"],j=["transform"],q=["transform"],J=["rx","ry","transform","width","height","data-week-index","data-day-index","onClick"],X={class:"vch__legend"},x={class:"vch__legend-left"},ee={class:"vch__legend-right"},te={class:"vch__legend"},ae=["viewBox","height"],ne={class:"vch__legend__wrapper"},re=["rx","ry","width","height","x"];function oe(t,a,n,l,E,s){return e.openBlock(),e.createElementBlock("div",{class:e.normalizeClass({vch__container:!0,"dark-mode":t.darkMode})},[(e.openBlock(),e.createElementBlock("svg",{class:"vch__wrapper",ref:"svg",viewBox:t.viewbox},[e.createElementVNode("g",{class:"vch__months__labels__wrapper",transform:t.monthsLabelWrapperTransform},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.heatmap.firstFullWeekOfMonths,(c,_)=>(e.openBlock(),e.createElementBlock("text",{class:"vch__month__label",key:_,x:t.getMonthLabelPosition(c).x,y:t.getMonthLabelPosition(c).y},e.toDisplayString(t.lo.months[c.value]),9,W))),128))],8,b),e.createElementVNode("g",{class:"vch__days__labels__wrapper",transform:t.daysLabelWrapperTransform},[e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:20},e.toDisplayString(t.lo.days[1]),9,V),e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE*3:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:44},e.toDisplayString(t.lo.days[3]),9,Y),e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE*5:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:69},e.toDisplayString(t.lo.days[5]),9,P)],8,v),t.vertical?(e.openBlock(),e.createElementBlock("g",{key:0,class:"vch__legend__wrapper",transform:t.legendWrapperTransform},[e.createElementVNode("text",{x:t.SQUARE_SIZE*1.25,y:"8"},e.toDisplayString(t.lo.less),9,K),(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.curRangeColor,(c,_)=>(e.openBlock(),e.createElementBlock("rect",{key:_,rx:t.round,ry:t.round,style:e.normalizeStyle({fill:c}),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,x:t.SQUARE_SIZE*1.75,y:t.SQUARE_SIZE*(_+1)},null,12,H))),128)),e.createElementVNode("text",{x:t.SQUARE_SIZE*1.25,y:t.SQUARE_SIZE*(t.curRangeColor.length+2)-t.SQUARE_BORDER_SIZE},e.toDisplayString(t.lo.more),9,z)],8,G)):e.createCommentVNode("",!0),e.createElementVNode("g",{class:"vch__year__wrapper",transform:t.yearWrapperTransform,onMouseover:a[0]||(a[0]=(...c)=>t.initTippyLazy&&t.initTippyLazy(...c))},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.heatmap.calendar,(c,_)=>(e.openBlock(),e.createElementBlock("g",{class:"vch__month__wrapper",key:_,transform:t.getWeekPosition(_)},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(c,(D,A)=>(e.openBlock(),e.createElementBlock(e.Fragment,{key:A},[D.date<t.now?(e.openBlock(),e.createElementBlock("rect",{key:0,class:"vch__day__square",rx:t.round,ry:t.round,transform:t.getDayPosition(A),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,style:e.normalizeStyle({fill:t.curRangeColor[D.colorIndex]}),"data-week-index":_,"data-day-index":A,onClick:m=>t.$emit("dayClick",D)},null,12,J)):e.createCommentVNode("",!0)],64))),128))],8,q))),128))],40,j)],8,$)),e.createElementVNode("div",X,[e.renderSlot(t.$slots,"legend",{},()=>[e.createElementVNode("div",x,[e.renderSlot(t.$slots,"vch__legend-left")]),e.createElementVNode("div",ee,[e.renderSlot(t.$slots,"legend-right",{},()=>[e.createElementVNode("div",te,[e.createElementVNode("div",null,e.toDisplayString(t.lo.less),1),t.vertical?e.createCommentVNode("",!0):(e.openBlock(),e.createElementBlock("svg",{key:0,class:"vch__external-legend-wrapper",viewBox:t.legendViewbox,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE},[e.createElementVNode("g",ne,[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.curRangeColor,(c,_)=>(e.openBlock(),e.createElementBlock("rect",{key:_,rx:t.round,ry:t.round,style:e.normalizeStyle({fill:c}),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,x:t.SQUARE_SIZE*_},null,12,re))),128))])],8,ae)),e.createElementVNode("div",null,e.toDisplayString(t.lo.more),1)])])])])])],2)}const U=F(M,[["render",oe]]);function le(t){t.component(U.name,U)}const se={install:le};i.CalendarHeatmap=U,i.Heatmap=o,i.default=se,Object.defineProperties(i,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}})});
++(function(i,e){typeof exports=="object"&&typeof module<"u"?e(exports,require("vue"),require("tippy.js")):typeof define=="function"&&define.amd?define(["exports","vue","tippy.js"],e):(i=typeof globalThis<"u"?globalThis:i||self,e(i.CalendarHeatmap={},i.Vue,i.tippy))})(this,function(i,e,h){"use strict";var ye=Object.defineProperty;var De=(i,e,h)=>e in i?ye(i,e,{enumerable:!0,configurable:!0,writable:!0,value:h}):i[e]=h;var d=(i,e,h)=>(De(i,typeof e!="symbol"?e+"":e,h),h);const S=class{constructor(a,r,l,E){d(this,"startDate");d(this,"endDate");d(this,"max");d(this,"weekStart");d(this,"_values");d(this,"_firstFullWeekOfMonths");d(this,"_activities");d(this,"_calendar");this.endDate=this.parseDate(a),this.max=l||Math.ceil(Math.max(...r.map(s=>s.count))/5*4),this.weekStart=E??0,this.startDate=this.shiftDate(a,-S.DAYS_IN_ONE_YEAR),this._values=r}set values(a){this.max=Math.ceil(Math.max(...a.map(r=>r.count))/5*4),this._values=a,this._firstFullWeekOfMonths=void 0,this._calendar=void 0,this._activities=void 0}get values(){return this._values}get activities(){if(!this._activities){this._activities=new Map;for(let a=0,r=this.values.length;a<r;a++)this._activities.set(this.keyDayParser(this.values[a].date),{count:this.values[a].count,colorIndex:this.getColorIndex(this.values[a].count)})}return this._activities}get weekCount(){return this.getDaysCount()/S.DAYS_IN_WEEK}get calendar(){if(!this._calendar){let a=this.shiftDate(this.startDate,-this.getCountEmptyDaysAtStart()+this.weekStart);a=new Date(a.getFullYear(),a.getMonth(),a.getDate()),this._calendar=new Array(this.weekCount);for(let r=0,l=this._calendar.length;r<l;r++){this._calendar[r]=new Array(S.DAYS_IN_WEEK);for(let E=0;E<S.DAYS_IN_WEEK;E++){const s=this.activities.get(this.keyDayParser(a));this._calendar[r][E]={date:new Date(a.valueOf()),count:s?s.count:void 0,colorIndex:s?s.colorIndex:0},a.setDate(a.getDate()+1)}}}return this._calendar}get firstFullWeekOfMonths(){if(!this._firstFullWeekOfMonths){const a=this.calendar;this._firstFullWeekOfMonths=[];for(let r=1,l=a.length;r<l;r++){const E=a[r-1][0].date,s=a[r][0].date;(E.getFullYear()<s.getFullYear()||E.getMonth()<s.getMonth())&&this._firstFullWeekOfMonths.push({value:s.getMonth(),index:r})}}return this._firstFullWeekOfMonths}getColorIndex(a){return a==null?0:a<=0?1:a>=this.max?5:Math.ceil(a*100/this.max*.03)+1}getCountEmptyDaysAtStart(){return this.startDate.getDay()}getCountEmptyDaysAtEnd(){return S.DAYS_IN_WEEK-1-this.endDate.getDay()}getDaysCount(){return S.DAYS_IN_ONE_YEAR+1+this.getCountEmptyDaysAtStart()+this.getCountEmptyDaysAtEnd()}shiftDate(a,r){const l=new Date(a);return l.setDate(l.getDate()+r),l}parseDate(a){return a instanceof Date?a:new Date(a)}keyDayParser(a){const r=this.parseDate(a);return String(r.getFullYear())+String(r.getMonth()).padStart(2,"0")+String(r.getDate()).padStart(2,"0")}};let o=S;d(o,"DEFAULT_RANGE_COLOR_LIGHT",["#ebedf0","#dae2ef","#c0ddf9","#73b3f3","#3886e1","#17459e"]),d(o,"DEFAULT_RANGE_COLOR_DARK",["#1f1f22","#1e334a","#1d466c","#1d5689","#1d69ac","#1B95D1"]),d(o,"DEFAULT_LOCALE",{months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],on:"on",less:"Less",more:"More"}),d(o,"DEFAULT_TOOLTIP_UNIT","contributions"),d(o,"DAYS_IN_ONE_YEAR",365),d(o,"DAYS_IN_WEEK",7),d(o,"SQUARE_SIZE",10);const Ae="",Re="",M=e.defineComponent({name:"CalendarHeatmap",props:{endDate:{required:!0},max:{type:Number},rangeColor:{type:Array},values:{type:Array,required:!0},locale:{type:Object},tooltip:{type:Boolean,default:!0},tooltipUnit:{type:String,default:o.DEFAULT_TOOLTIP_UNIT},tooltipFormatter:{type:Function},vertical:{type:Boolean,default:!1},noDataText:{type:[Boolean,String],default:null},round:{type:Number,default:0},weekStart:{type:Number,default:0},darkMode:Boolean},emits:["dayClick"],setup(t){const a=o.SQUARE_SIZE/5,r=o.SQUARE_SIZE+a,l=Math.ceil(o.SQUARE_SIZE*2.5),E=r*3,s=o.SQUARE_SIZE+o.SQUARE_SIZE/2,c=o.SQUARE_SIZE+o.SQUARE_SIZE/2,_=`translate(${l}, ${s})`,D=e.ref(null),A=e.ref(new Date),f=e.ref(new o(t.endDate,t.values,t.max)),R=e.ref(0),p=e.ref(0),B=e.ref("0 0 0 0"),C=e.ref("0 0 0 0"),U=e.ref(""),T=e.ref(""),L=e.ref(""),y=e.ref({}),k=e.ref(t.rangeColor||(t.darkMode?o.DEFAULT_RANGE_COLOR_DARK:o.DEFAULT_RANGE_COLOR_LIGHT)),{values:ie,tooltipUnit:de,tooltipFormatter:Ee,noDataText:ce,max:_e,vertical:Q,locale:he}=e.toRefs(t),m=new Map;let g;function Z(){m.clear(),g?g.setInstances(Array.from(m.values())):g=h.createSingleton(Array.from(m.values()),{overrides:[],moveTransition:"transform 0.1s ease-out",allowHTML:!0})}function Se(n){if(t.tooltip){if(n.count!==void 0)return t.tooltipFormatter?t.tooltipFormatter(n,t.tooltipUnit):`<b>${n.count} ${t.tooltipUnit}</b> ${y.value.on} ${y.value.months[n.date.getMonth()]} ${n.date.getDate()}, ${n.date.getFullYear()}`;if(t.noDataText)return`${t.noDataText}`;if(t.noDataText!==!1)return`<b>No ${t.tooltipUnit}</b> ${y.value.on} ${y.value.months[n.date.getMonth()]} ${n.date.getDate()}, ${n.date.getFullYear()}`}}function fe(n){return t.vertical?`translate(0, ${r*f.value.weekCount-(n+1)*r})`:`translate(${n*r}, 0)`}function me(n){return t.vertical?`translate(${n*r}, 0)`:`translate(0, ${n*r})`}function ge(n){return t.vertical?{x:3,y:r*f.value.weekCount-r*n.index-r/4}:{x:r*n.index,y:r-a}}e.watch([e.toRef(t,"rangeColor"),e.toRef(t,"darkMode")],([n,u])=>{k.value=n||(u?o.DEFAULT_RANGE_COLOR_DARK:o.DEFAULT_RANGE_COLOR_LIGHT)}),e.watch(Q,n=>{n?(R.value=l+r*o.DAYS_IN_WEEK+E,p.value=s+r*f.value.weekCount+a,U.value=`translate(${l}, 0)`,T.value=`translate(0, ${s})`):(R.value=l+r*f.value.weekCount+a,p.value=s+r*o.DAYS_IN_WEEK,U.value=`translate(0, ${s})`,T.value=`translate(${l}, 0)`)},{immediate:!0}),e.watch([R,p],([n,u])=>B.value=` 0 0 ${n} ${u}`,{immediate:!0}),e.watch([R,p,k],([n,u,I])=>{L.value=Q.value?`translate(${l+r*o.DAYS_IN_WEEK}, ${s})`:`translate(${n-r*I.length-30}, ${u-c})`},{immediate:!0}),e.watch(he,n=>y.value=n?{...o.DEFAULT_LOCALE,...n}:o.DEFAULT_LOCALE,{immediate:!0}),e.watch(k,n=>C.value=`0 0 ${o.SQUARE_SIZE*(n.length+1)} ${o.SQUARE_SIZE}`,{immediate:!0}),e.watch([ie,de,Ee,ce,_e,k],()=>{f.value=new o(t.endDate,t.values,t.max,t.weekStart),m.forEach(n=>n.destroy()),e.nextTick(Z)}),e.onMounted(Z),e.onBeforeUnmount(()=>{g==null||g.destroy(),m.forEach(n=>n.destroy())});function ue(n){if(g&&n.target&&n.target.classList.contains("vch__day__square")&&n.target.dataset.weekIndex!==void 0&&n.target.dataset.dayIndex!==void 0){const u=Number(n.target.dataset.weekIndex),I=Number(n.target.dataset.dayIndex);if(!isNaN(u)&&!isNaN(I)){const N=Se(f.value.calendar[u][I]);if(N){const O=m.get(n.target);O?O.setContent(N):O||(m.set(n.target,h(n.target,{content:N})),g.setInstances(Array.from(m.values())))}}}}return{SQUARE_BORDER_SIZE:a,SQUARE_SIZE:r,LEFT_SECTION_WIDTH:l,RIGHT_SECTION_WIDTH:E,TOP_SECTION_HEIGHT:s,BOTTOM_SECTION_HEIGHT:c,svg:D,heatmap:f,now:A,width:R,height:p,viewbox:B,daysLabelWrapperTransform:U,monthsLabelWrapperTransform:T,yearWrapperTransform:_,legendWrapperTransform:L,lo:y,legendViewbox:C,curRangeColor:k,getWeekPosition:fe,getDayPosition:me,getMonthLabelPosition:ge,initTippyLazy:ue}}}),pe="",F=(t,a)=>{const r=t.__vccOpts||t;for(const[l,E]of a)r[l]=E;return r},$=["viewBox"],b=["transform"],W=["x","y"],v=["transform"],V=["x","y"],Y=["x","y"],P=["x","y"],G=["transform"],K=["x"],H=["rx","ry","width","height","x","y"],z=["x","y"],j=["transform"],q=["transform"],J=["rx","ry","transform","width","height","data-week-index","data-day-index","onClick"],X={class:"vch__legend"},x={class:"vch__legend-left"},ee={class:"vch__legend-right"},te={class:"vch__legend"},ae=["viewBox","height"],re={class:"vch__legend__wrapper"},ne=["rx","ry","width","height","x"];function oe(t,a,r,l,E,s){return e.openBlock(),e.createElementBlock("div",{class:e.normalizeClass({vch__container:!0,"dark-mode":t.darkMode})},[(e.openBlock(),e.createElementBlock("svg",{class:"vch__wrapper",ref:"svg",viewBox:t.viewbox},[e.createElementVNode("g",{class:"vch__months__labels__wrapper",transform:t.monthsLabelWrapperTransform},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.heatmap.firstFullWeekOfMonths,(c,_)=>(e.openBlock(),e.createElementBlock("text",{class:"vch__month__label",key:_,x:t.getMonthLabelPosition(c).x,y:t.getMonthLabelPosition(c).y},e.toDisplayString(t.lo.months[c.value]),9,W))),128))],8,b),e.createElementVNode("g",{class:"vch__days__labels__wrapper",transform:t.daysLabelWrapperTransform},[e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:20},e.toDisplayString(t.lo.days[1+t.weekStart]),9,V),e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE*3:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:44},e.toDisplayString(t.lo.days[3+t.weekStart]),9,Y),e.createElementVNode("text",{class:"vch__day__label",x:t.vertical?t.SQUARE_SIZE*5:0,y:t.vertical?t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE:69},e.toDisplayString(t.lo.days[5+t.weekStart]),9,P)],8,v),t.vertical?(e.openBlock(),e.createElementBlock("g",{key:0,class:"vch__legend__wrapper",transform:t.legendWrapperTransform},[e.createElementVNode("text",{x:t.SQUARE_SIZE*1.25,y:"8"},e.toDisplayString(t.lo.less),9,K),(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.curRangeColor,(c,_)=>(e.openBlock(),e.createElementBlock("rect",{key:_,rx:t.round,ry:t.round,style:e.normalizeStyle({fill:c}),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,x:t.SQUARE_SIZE*1.75,y:t.SQUARE_SIZE*(_+1)},null,12,H))),128)),e.createElementVNode("text",{x:t.SQUARE_SIZE*1.25,y:t.SQUARE_SIZE*(t.curRangeColor.length+2)-t.SQUARE_BORDER_SIZE},e.toDisplayString(t.lo.more),9,z)],8,G)):e.createCommentVNode("",!0),e.createElementVNode("g",{class:"vch__year__wrapper",transform:t.yearWrapperTransform,onMouseover:a[0]||(a[0]=(...c)=>t.initTippyLazy&&t.initTippyLazy(...c))},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.heatmap.calendar,(c,_)=>(e.openBlock(),e.createElementBlock("g",{class:"vch__month__wrapper",key:_,transform:t.getWeekPosition(_)},[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(c,(D,A)=>(e.openBlock(),e.createElementBlock(e.Fragment,{key:A},[D.date<t.now?(e.openBlock(),e.createElementBlock("rect",{key:0,class:"vch__day__square",rx:t.round,ry:t.round,transform:t.getDayPosition(A),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,style:e.normalizeStyle({fill:t.curRangeColor[D.colorIndex]}),"data-week-index":_,"data-day-index":A,onClick:f=>t.$emit("dayClick",D)},null,12,J)):e.createCommentVNode("",!0)],64))),128))],8,q))),128))],40,j)],8,$)),e.createElementVNode("div",X,[e.renderSlot(t.$slots,"legend",{},()=>[e.createElementVNode("div",x,[e.renderSlot(t.$slots,"vch__legend-left")]),e.createElementVNode("div",ee,[e.renderSlot(t.$slots,"legend-right",{},()=>[e.createElementVNode("div",te,[e.createElementVNode("div",null,e.toDisplayString(t.lo.less),1),t.vertical?e.createCommentVNode("",!0):(e.openBlock(),e.createElementBlock("svg",{key:0,class:"vch__external-legend-wrapper",viewBox:t.legendViewbox,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE},[e.createElementVNode("g",re,[(e.openBlock(!0),e.createElementBlock(e.Fragment,null,e.renderList(t.curRangeColor,(c,_)=>(e.openBlock(),e.createElementBlock("rect",{key:_,rx:t.round,ry:t.round,style:e.normalizeStyle({fill:c}),width:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,height:t.SQUARE_SIZE-t.SQUARE_BORDER_SIZE,x:t.SQUARE_SIZE*_},null,12,ne))),128))])],8,ae)),e.createElementVNode("div",null,e.toDisplayString(t.lo.more),1)])])])])])],2)}const w=F(M,[["render",oe]]);function le(t){t.component(w.name,w)}const se={install:le};i.CalendarHeatmap=w,i.Heatmap=o,i.default=se,Object.defineProperties(i,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}})});
+ //# sourceMappingURL=vue3-calendar-heatmap.umd.js.map
+diff --git a/node_modules/vue3-calendar-heatmap/src/App.vue b/node_modules/vue3-calendar-heatmap/src/App.vue
+index ce41047..b90dfe1 100644
+--- a/node_modules/vue3-calendar-heatmap/src/App.vue
++++ b/node_modules/vue3-calendar-heatmap/src/App.vue
+@@ -1,46 +1,56 @@
+ <template>
+-	<div>
+-		<h4>Unit Select</h4>
+-		<div>
+-			<input type="radio" id="one" value="Dings" v-model="picked"/>
+-			<label for="one">Dings</label>
+-			<br/>
+-			<input type="radio" id="two" value="Da" v-model="picked"/>
+-			<label for="two">Da</label>
+-			<br/>
+-			<span>Current Unit: {{ picked }}</span><br/>
+-			<br/>
++  <div>
++    <h4>Unit Select</h4>
++    <div>
++      <input type="radio" id="one" value="Dings" v-model="picked"/>
++      <label for="one">Dings</label>
++      <br/>
++      <input type="radio" id="two" value="Da" v-model="picked"/>
++      <label for="two">Da</label>
++      <br/>
++      <span>Current Unit: {{ picked }}</span><br/>
++      <br/>
+
+-			<input type="radio" id="horizontal" value="horizontal" v-model="orientation"/>
+-			<label for="one">Horizontal</label>
+-			<br/>
+-			<input type="radio" id="vertical" value="vertical" v-model="orientation"/>
+-			<label for="two">Vertical</label>
+-		</div>
+-		<br>
+-		<h4>None</h4>
+-		<calendar-heatmap :values="[]" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
+-						  :vertical="orientation === 'vertical'" :no-data-text="false"/>
+-		<br>
+-		<h4>Some</h4>
+-		<calendar-heatmap
+-			:values="values"
+-			:end-date="endDate"
+-			:style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
+-			:vertical="orientation === 'vertical'"
+-			no-data-text="NOTHING"
+-		/>
+-		<br>
+-		<h4>Some (rounded corners)</h4>
+-		<calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :round="2"
+-						  :vertical="orientation === 'vertical'"/>
+-		<br>
+-		<h4>Some (circles)</h4>
+-		<calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :round="5"
+-						  :vertical="orientation === 'vertical'"/>
+-		<br>
+-		<h4>Locale</h4>
+-		<calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :locale="{
++      <input type="radio" id="horizontal" value="horizontal" v-model="orientation"/>
++      <label for="one">Horizontal</label>
++      <br/>
++      <input type="radio" id="vertical" value="vertical" v-model="orientation"/>
++      <label for="two">Vertical</label>
++    </div>
++    <br>
++    <h4>None</h4>
++    <calendar-heatmap :values="[]" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
++                      :vertical="orientation === 'vertical'" :no-data-text="false"/>
++    <br>
++    <h4>Some</h4>
++    <calendar-heatmap
++      :values="values"
++      :end-date="endDate"
++      :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
++      :vertical="orientation === 'vertical'"
++      no-data-text="NOTHING"
++    />
++    <br>
++    <h4>Some (rounded corners)</h4>
++    <calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :round="2"
++                      :vertical="orientation === 'vertical'"/>
++    <br>
++    <h4>Some (circles)</h4>
++    <calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :round="5"
++                      :vertical="orientation === 'vertical'"/>
++    <br>
++    <h4>Some (monday)</h4>
++    <calendar-heatmap
++      :values="values"
++      :end-date="endDate"
++      :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
++      :vertical="orientation === 'vertical'"
++      :week-start="1"
++      no-data-text="NOTHING"
++    />
++    <br>
++    <h4>Locale</h4>
++    <calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :locale="{
+ 			months: [ 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez' ],
+ 			days  : [ 'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa' ],
+ 			on    : 'am',
+@@ -48,50 +58,50 @@
+ 			more  : 'Mehr'
+
+ 		}" :vertical="orientation === 'vertical'"/>
+-		<br>
+-		<h4>Tooltip Unit</h4>
+-		<calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :tooltip-unit="picked"
+-						  :vertical="orientation === 'vertical'"/>
+-		<br>
+-		<h4>TooltipFormatter</h4>
+-		<calendar-heatmap
+-			:values="values"
+-			:end-date="endDate"
+-			:style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
+-			:tooltip-formatter="(c, u) => c.count ? (c.count / 3600 / 1000) + ' ' + u: 'NÖX'"
+-			no-data-text="NIX"
+-			:tooltip-unit="picked"
+-			:vertical="orientation === 'vertical'"
+-		/>
+-	</div>
++    <br>
++    <h4>Tooltip Unit</h4>
++    <calendar-heatmap :values="values" :end-date="endDate" :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}" :tooltip-unit="picked"
++                      :vertical="orientation === 'vertical'"/>
++    <br>
++    <h4>TooltipFormatter</h4>
++    <calendar-heatmap
++      :values="values"
++      :end-date="endDate"
++      :style="{'max-width': orientation === 'vertical' ? '145px' :  '675px'}"
++      :tooltip-formatter="(c, u) => c.count ? (c.count / 3600 / 1000) + ' ' + u: 'NÖX'"
++      no-data-text="NIX"
++      :tooltip-unit="picked"
++      :vertical="orientation === 'vertical'"
++    />
++  </div>
+ </template>
+
+ <script lang="ts">
+-	import { defineComponent } from 'vue';
+-	import Vue3CalendarHeatmap from '@/components/CalendarHeatmap.vue';
+-	import CalendarHeatmap from '@/components/CalendarHeatmap.vue';
+-	import { data } from './data';
++import { defineComponent } from 'vue';
++import Vue3CalendarHeatmap from '@/components/CalendarHeatmap.vue';
++import CalendarHeatmap from '@/components/CalendarHeatmap.vue';
++import { data } from './data';
+
+-	export default defineComponent({
+-		name      : 'ServeDev',
+-		components: {
+-			CalendarHeatmap,
+-			Vue3CalendarHeatmap
+-		},
+-		data() {
+-			return {
+-				values     : data,
+-				endDate    : new Date('2021-08-01'),
+-				picked     : 'Dings',
+-				orientation: 'horizontal'
+-			};
+-		}
+-	});
++export default defineComponent({
++  name      : 'ServeDev',
++  components: {
++    CalendarHeatmap,
++    Vue3CalendarHeatmap
++  },
++  data() {
++    return {
++      values     : data,
++      endDate    : new Date('2021-08-01'),
++      picked     : 'Dings',
++      orientation: 'horizontal'
++    };
++  }
++});
+ </script>
+
+ <style>
+-	body {
+-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+-		font-size: 12px;
+-	}
++body {
++  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
++  font-size: 12px;
++}
+ </style>
+diff --git a/node_modules/vue3-calendar-heatmap/src/components/CalendarHeatmap.vue b/node_modules/vue3-calendar-heatmap/src/components/CalendarHeatmap.vue
+index 3817e49..011c99a 100644
+--- a/node_modules/vue3-calendar-heatmap/src/components/CalendarHeatmap.vue
++++ b/node_modules/vue3-calendar-heatmap/src/components/CalendarHeatmap.vue
+@@ -1,384 +1,388 @@
+ <template>
+-	<div :class="{'vch__container': true, 'dark-mode': darkMode}">
+-		<svg class="vch__wrapper" ref="svg" :viewBox="viewbox">
+-			<g class="vch__months__labels__wrapper" :transform="monthsLabelWrapperTransform">
+-				<text
+-					class="vch__month__label"
+-					v-for="(month, index) in heatmap.firstFullWeekOfMonths"
+-					:key="index"
+-					:x="getMonthLabelPosition(month).x"
+-					:y="getMonthLabelPosition(month).y"
+-				>
+-					{{ lo.months[ month.value ] }}
+-				</text>
+-			</g>
+-
+-			<g class="vch__days__labels__wrapper" :transform="daysLabelWrapperTransform">
+-				<text class="vch__day__label"
+-					  :x="vertical ? SQUARE_SIZE : 0"
+-					  :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 20"
+-				>
+-					{{ lo.days[ 1 ] }}
+-				</text>
+-				<text class="vch__day__label"
+-					  :x="vertical ? SQUARE_SIZE * 3 : 0"
+-					  :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 44"
+-				>
+-					{{ lo.days[ 3 ] }}
+-				</text>
+-				<text class="vch__day__label"
+-					  :x="vertical ? SQUARE_SIZE * 5 : 0"
+-					  :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 69"
+-				>
+-					{{ lo.days[ 5 ] }}
+-				</text>
+-			</g>
+-
+-			<g v-if="vertical" class="vch__legend__wrapper" :transform="legendWrapperTransform">
+-				<text :x="SQUARE_SIZE * 1.25" y="8">{{ lo.less }}</text>
+-				<rect
+-					v-for="(color, index) in curRangeColor"
+-					:key="index"
+-					:rx="round"
+-					:ry="round"
+-					:style="{ fill: color }"
+-					:width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-					:height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-					:x="SQUARE_SIZE * 1.75"
+-					:y="SQUARE_SIZE * (index + 1)"
+-				/>
+-				<text
+-					:x="SQUARE_SIZE * 1.25"
+-					:y="SQUARE_SIZE * (curRangeColor.length + 2) - SQUARE_BORDER_SIZE"
+-				>
+-					{{ lo.more }}
+-				</text>
+-			</g>
+-
+-			<g class="vch__year__wrapper" :transform="yearWrapperTransform" @mouseover="initTippyLazy">
+-				<g class="vch__month__wrapper"
+-				   v-for="(week, weekIndex) in heatmap.calendar"
+-				   :key="weekIndex"
+-				   :transform="getWeekPosition(weekIndex)"
+-				>
+-					<template v-for="(day, dayIndex) in week" :key="dayIndex">
+-						<rect class="vch__day__square"
+-							  v-if="day.date < now"
+-							  :rx="round"
+-							  :ry="round"
+-							  :transform="getDayPosition(dayIndex)"
+-							  :width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-							  :height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-							  :style="{ fill: curRangeColor[day.colorIndex] }"
+-							  :data-week-index="weekIndex"
+-							  :data-day-index="dayIndex"
+-							  @click="$emit('dayClick', day)"
+-						/>
+-					</template>
+-				</g>
+-			</g>
+-		</svg>
+-		<div class="vch__legend">
+-			<slot name="legend">
+-				<div class="vch__legend-left">
+-					<slot name="vch__legend-left"></slot>
+-				</div>
+-				<div class="vch__legend-right">
+-					<slot name="legend-right">
+-						<div class="vch__legend">
+-							<div>{{ lo.less }}</div>
+-							<svg v-if="!vertical" class="vch__external-legend-wrapper" :viewBox="legendViewbox" :height="SQUARE_SIZE - SQUARE_BORDER_SIZE">
+-								<g class="vch__legend__wrapper">
+-									<rect
+-										v-for="(color, index) in curRangeColor"
+-										:key="index"
+-										:rx="round"
+-										:ry="round"
+-										:style="{ fill: color }"
+-										:width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-										:height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
+-										:x="SQUARE_SIZE * index"
+-									/>
+-								</g>
+-							</svg>
+-							<div>{{ lo.more }}</div>
+-						</div>
+-					</slot>
+-				</div>
+-			</slot>
+-		</div>
+-	</div>
++  <div :class="{'vch__container': true, 'dark-mode': darkMode}">
++    <svg class="vch__wrapper" ref="svg" :viewBox="viewbox">
++      <g class="vch__months__labels__wrapper" :transform="monthsLabelWrapperTransform">
++        <text
++          class="vch__month__label"
++          v-for="(month, index) in heatmap.firstFullWeekOfMonths"
++          :key="index"
++          :x="getMonthLabelPosition(month).x"
++          :y="getMonthLabelPosition(month).y"
++        >
++          {{ lo.months[ month.value ] }}
++        </text>
++      </g>
++
++      <g class="vch__days__labels__wrapper" :transform="daysLabelWrapperTransform">
++        <text class="vch__day__label"
++              :x="vertical ? SQUARE_SIZE : 0"
++              :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 20"
++        >
++          {{ lo.days[ 1 + weekStart ] }}
++        </text>
++        <text class="vch__day__label"
++              :x="vertical ? SQUARE_SIZE * 3 : 0"
++              :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 44"
++        >
++          {{ lo.days[ 3 + weekStart ] }}
++        </text>
++        <text class="vch__day__label"
++              :x="vertical ? SQUARE_SIZE * 5 : 0"
++              :y="vertical ? SQUARE_SIZE - SQUARE_BORDER_SIZE : 69"
++        >
++          {{ lo.days[ 5 + weekStart ] }}
++        </text>
++      </g>
++
++      <g v-if="vertical" class="vch__legend__wrapper" :transform="legendWrapperTransform">
++        <text :x="SQUARE_SIZE * 1.25" y="8">{{ lo.less }}</text>
++        <rect
++          v-for="(color, index) in curRangeColor"
++          :key="index"
++          :rx="round"
++          :ry="round"
++          :style="{ fill: color }"
++          :width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++          :height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++          :x="SQUARE_SIZE * 1.75"
++          :y="SQUARE_SIZE * (index + 1)"
++        />
++        <text
++          :x="SQUARE_SIZE * 1.25"
++          :y="SQUARE_SIZE * (curRangeColor.length + 2) - SQUARE_BORDER_SIZE"
++        >
++          {{ lo.more }}
++        </text>
++      </g>
++
++      <g class="vch__year__wrapper" :transform="yearWrapperTransform" @mouseover="initTippyLazy">
++        <g class="vch__month__wrapper"
++           v-for="(week, weekIndex) in heatmap.calendar"
++           :key="weekIndex"
++           :transform="getWeekPosition(weekIndex)"
++        >
++          <template v-for="(day, dayIndex) in week" :key="dayIndex">
++            <rect class="vch__day__square"
++                  v-if="day.date < now"
++                  :rx="round"
++                  :ry="round"
++                  :transform="getDayPosition(dayIndex)"
++                  :width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++                  :height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++                  :style="{ fill: curRangeColor[day.colorIndex] }"
++                  :data-week-index="weekIndex"
++                  :data-day-index="dayIndex"
++                  @click="$emit('dayClick', day)"
++            />
++          </template>
++        </g>
++      </g>
++    </svg>
++    <div class="vch__legend">
++      <slot name="legend">
++        <div class="vch__legend-left">
++          <slot name="vch__legend-left"></slot>
++        </div>
++        <div class="vch__legend-right">
++          <slot name="legend-right">
++            <div class="vch__legend">
++              <div>{{ lo.less }}</div>
++              <svg v-if="!vertical" class="vch__external-legend-wrapper" :viewBox="legendViewbox" :height="SQUARE_SIZE - SQUARE_BORDER_SIZE">
++                <g class="vch__legend__wrapper">
++                  <rect
++                    v-for="(color, index) in curRangeColor"
++                    :key="index"
++                    :rx="round"
++                    :ry="round"
++                    :style="{ fill: color }"
++                    :width="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++                    :height="SQUARE_SIZE - SQUARE_BORDER_SIZE"
++                    :x="SQUARE_SIZE * index"
++                  />
++                </g>
++              </svg>
++              <div>{{ lo.more }}</div>
++            </div>
++          </slot>
++        </div>
++      </slot>
++    </div>
++  </div>
+ </template>
+
+ <script lang="ts">
+-	import { defineComponent, nextTick, onBeforeUnmount, onMounted, PropType, ref, toRef, toRefs, watch } from 'vue';
+-	import { CalendarItem, Heatmap, Locale, Month, TooltipFormatter, Value } from '@/components/Heatmap';
+-	import tippy, { createSingleton, CreateSingletonInstance, Instance } from 'tippy.js';
+-	import 'tippy.js/dist/tippy.css';
+-	import 'tippy.js/dist/svg-arrow.css';
+-
+-	export default /*#__PURE__*/defineComponent({
+-		name : 'CalendarHeatmap',
+-		props: {
+-			endDate         : {
+-				required: true
+-			},
+-			max             : {
+-				type: Number
+-			},
+-			rangeColor      : {
+-				type: Array as PropType<string[]>
+-			},
+-			values          : {
+-				type    : Array as PropType<Value[]>,
+-				required: true
+-			},
+-			locale          : {
+-				type: Object as PropType<Partial<Locale>>
+-			},
+-			tooltip         : {
+-				type   : Boolean,
+-				default: true
+-			},
+-			tooltipUnit     : {
+-				type   : String,
+-				default: Heatmap.DEFAULT_TOOLTIP_UNIT
+-			},
+-			tooltipFormatter: {
+-				type: Function as PropType<TooltipFormatter>
+-			},
+-			vertical        : {
+-				type   : Boolean,
+-				default: false
+-			},
+-			noDataText      : {
+-				type   : [ Boolean, String ],
+-				default: null
+-			},
+-			round           : {
+-				type   : Number,
+-				default: 0
+-			},
+-			darkMode        : Boolean
+-		},
+-		emits: [ 'dayClick' ],
+-		setup(props) {
+-
+-			const SQUARE_BORDER_SIZE          = Heatmap.SQUARE_SIZE / 5,
+-				  SQUARE_SIZE                 = Heatmap.SQUARE_SIZE + SQUARE_BORDER_SIZE,
+-				  LEFT_SECTION_WIDTH          = Math.ceil(Heatmap.SQUARE_SIZE * 2.5),
+-				  RIGHT_SECTION_WIDTH         = SQUARE_SIZE * 3,
+-				  TOP_SECTION_HEIGHT          = Heatmap.SQUARE_SIZE + (Heatmap.SQUARE_SIZE / 2),
+-				  BOTTOM_SECTION_HEIGHT       = Heatmap.SQUARE_SIZE + (Heatmap.SQUARE_SIZE / 2),
+-				  yearWrapperTransform        = `translate(${LEFT_SECTION_WIDTH}, ${TOP_SECTION_HEIGHT})`,
+-
+-				  svg                         = ref<null | SVGElement>(null),
+-				  now                         = ref(new Date()),
+-				  heatmap                     = ref(new Heatmap(props.endDate as Date, props.values, props.max)),
+-
+-				  width                       = ref(0),
+-				  height                      = ref(0),
+-				  viewbox                     = ref('0 0 0 0'),
+-				  legendViewbox               = ref('0 0 0 0'),
+-				  daysLabelWrapperTransform   = ref(''),
+-				  monthsLabelWrapperTransform = ref(''),
+-				  legendWrapperTransform      = ref(''),
+-				  lo                          = ref<Locale>({} as any),
+-				  rangeColor                  = ref<string[]>(props.rangeColor || (props.darkMode ? Heatmap.DEFAULT_RANGE_COLOR_DARK : Heatmap.DEFAULT_RANGE_COLOR_LIGHT));
+-
+-			const { values, tooltipUnit, tooltipFormatter, noDataText, max, vertical, locale } = toRefs(props),
+-				  tippyInstances                                                               = new Map<HTMLElement, Instance>();
+-
+-			let tippySingleton: CreateSingletonInstance;
+-
+-
+-			function initTippy() {
+-				tippyInstances.clear();
+-				if (tippySingleton) {
+-					tippySingleton.setInstances(Array.from(tippyInstances.values()));
+-				} else {
+-					tippySingleton = createSingleton(Array.from(tippyInstances.values()), {
+-						overrides     : [],
+-						moveTransition: 'transform 0.1s ease-out',
+-						allowHTML     : true
+-					});
+-				}
+-			}
+-
+-			function tooltipOptions(day: CalendarItem) {
+-				if (props.tooltip) {
+-					if (day.count !== undefined) {
+-						if (props.tooltipFormatter) {
+-							return props.tooltipFormatter(day, props.tooltipUnit!);
+-						}
+-						return `<b>${day.count} ${props.tooltipUnit}</b> ${lo.value.on} ${lo.value.months[ day.date.getMonth() ]} ${day.date.getDate()}, ${day.date.getFullYear()}`;
+-					} else if (props.noDataText) {
+-						return `${props.noDataText}`;
+-					} else if (props.noDataText !== false) {
+-						return `<b>No ${props.tooltipUnit}</b> ${lo.value.on} ${lo.value.months[ day.date.getMonth() ]} ${day.date.getDate()}, ${day.date.getFullYear()}`;
+-					}
+-				}
+-				return undefined;
+-			}
+-
+-			function getWeekPosition(index: number) {
+-				if (props.vertical) {
+-					return `translate(0, ${(SQUARE_SIZE * heatmap.value.weekCount) - ((index + 1) * SQUARE_SIZE)})`;
+-				}
+-				return `translate(${index * SQUARE_SIZE}, 0)`;
+-			}
+-
+-			function getDayPosition(index: number) {
+-				if (props.vertical) {
+-					return `translate(${index * SQUARE_SIZE}, 0)`;
+-				}
+-				return `translate(0, ${index * SQUARE_SIZE})`;
+-			}
+-
+-			function getMonthLabelPosition(month: Month) {
+-				if (props.vertical) {
+-					return { x: 3, y: (SQUARE_SIZE * heatmap.value.weekCount) - (SQUARE_SIZE * (month.index)) - (SQUARE_SIZE / 4) };
+-				}
+-				return { x: SQUARE_SIZE * month.index, y: SQUARE_SIZE - SQUARE_BORDER_SIZE };
+-			}
+-
+-			watch([ toRef(props, 'rangeColor'), toRef(props, 'darkMode') ], ([ rc, dm ]) => {
+-				rangeColor.value = rc || (dm ? Heatmap.DEFAULT_RANGE_COLOR_DARK : Heatmap.DEFAULT_RANGE_COLOR_LIGHT);
+-			});
+-
+-			watch(vertical, v => {
+-				if (v) {
+-					width.value                       = LEFT_SECTION_WIDTH + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK) + RIGHT_SECTION_WIDTH;
+-					height.value                      = TOP_SECTION_HEIGHT + (SQUARE_SIZE * heatmap.value.weekCount) + SQUARE_BORDER_SIZE;
+-					daysLabelWrapperTransform.value   = `translate(${LEFT_SECTION_WIDTH}, 0)`;
+-					monthsLabelWrapperTransform.value = `translate(0, ${TOP_SECTION_HEIGHT})`;
+-				} else {
+-					width.value                       = LEFT_SECTION_WIDTH + (SQUARE_SIZE * heatmap.value.weekCount) + SQUARE_BORDER_SIZE;
+-					height.value                      = TOP_SECTION_HEIGHT + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK);
+-					daysLabelWrapperTransform.value   = `translate(0, ${TOP_SECTION_HEIGHT})`;
+-					monthsLabelWrapperTransform.value = `translate(${LEFT_SECTION_WIDTH}, 0)`;
+-				}
+-			}, { immediate: true });
+-
+-			watch([ width, height ], ([ w, h ]) => (viewbox.value = ` 0 0 ${w} ${h}`), { immediate: true });
+-			watch([ width, height, rangeColor ], ([ w, h, rc ]) => {
+-				legendWrapperTransform.value = vertical.value
+-					? `translate(${LEFT_SECTION_WIDTH + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK)}, ${TOP_SECTION_HEIGHT})`
+-					: `translate(${w - (SQUARE_SIZE * rc.length) - 30}, ${h - BOTTOM_SECTION_HEIGHT})`;
+-			}, { immediate: true });
+-
+-			watch(locale, l => (lo.value = l ? { ...Heatmap.DEFAULT_LOCALE, ...l } : Heatmap.DEFAULT_LOCALE), { immediate: true });
+-			watch(rangeColor, rc => (legendViewbox.value = `0 0 ${Heatmap.SQUARE_SIZE * (rc.length + 1)} ${Heatmap.SQUARE_SIZE}`), { immediate: true });
+-
+-			watch(
+-				[ values, tooltipUnit, tooltipFormatter, noDataText, max, rangeColor ],
+-				() => {
+-					heatmap.value = new Heatmap(props.endDate as Date, props.values, props.max);
+-					tippyInstances.forEach((item) => item.destroy());
+-					nextTick(initTippy);
+-				}
+-			);
+-
+-			onMounted(initTippy);
+-			onBeforeUnmount(() => {
+-				tippySingleton?.destroy();
+-				tippyInstances.forEach((item) => item.destroy());
+-			});
+-
+-			function initTippyLazy(e: MouseEvent) {
+-
+-				if (tippySingleton
+-					&& e.target
+-					&& (e.target as HTMLElement).classList.contains('vch__day__square')
+-					&& (e.target as HTMLElement).dataset.weekIndex !== undefined
+-					&& (e.target as HTMLElement).dataset.dayIndex !== undefined
+-				) {
+-
+-					const weekIndex = Number((e.target as HTMLElement).dataset.weekIndex),
+-						  dayIndex  = Number((e.target as HTMLElement).dataset.dayIndex);
+-
+-					if (!isNaN(weekIndex) && !isNaN(dayIndex)) {
+-
+-						const tooltip = tooltipOptions(heatmap.value.calendar[ weekIndex ][ dayIndex ]);
+-						if (tooltip) {
+-
+-							const instance = tippyInstances.get(e.target as HTMLElement);
+-
+-							if (instance) {
+-								instance.setContent(tooltip);
+-							} else if (!instance) {
+-								tippyInstances.set(e.target as HTMLElement, tippy(e.target as HTMLElement, { content: tooltip } as any));
+-								tippySingleton.setInstances(Array.from(tippyInstances.values()));
+-							}
+-
+-						}
+-					}
+-
+-				}
+-
+-			}
+-
+-			return {
+-				SQUARE_BORDER_SIZE, SQUARE_SIZE, LEFT_SECTION_WIDTH, RIGHT_SECTION_WIDTH, TOP_SECTION_HEIGHT, BOTTOM_SECTION_HEIGHT,
+-				svg, heatmap, now, width, height, viewbox, daysLabelWrapperTransform, monthsLabelWrapperTransform, yearWrapperTransform, legendWrapperTransform,
+-				lo, legendViewbox, curRangeColor: rangeColor,
+-				getWeekPosition, getDayPosition, getMonthLabelPosition, initTippyLazy
+-			};
+-		}
+-	});
++import { defineComponent, nextTick, onBeforeUnmount, onMounted, PropType, ref, toRef, toRefs, watch } from 'vue';
++import { CalendarItem, Heatmap, Locale, Month, TooltipFormatter, Value } from '@/components/Heatmap';
++import tippy, { createSingleton, CreateSingletonInstance, Instance } from 'tippy.js';
++import 'tippy.js/dist/tippy.css';
++import 'tippy.js/dist/svg-arrow.css';
++
++export default /*#__PURE__*/defineComponent({
++  name : 'CalendarHeatmap',
++  props: {
++    endDate         : {
++      required: true
++    },
++    max             : {
++      type: Number
++    },
++    rangeColor      : {
++      type: Array as PropType<string[]>
++    },
++    values          : {
++      type    : Array as PropType<Value[]>,
++      required: true
++    },
++    locale          : {
++      type: Object as PropType<Partial<Locale>>
++    },
++    tooltip         : {
++      type   : Boolean,
++      default: true
++    },
++    tooltipUnit     : {
++      type   : String,
++      default: Heatmap.DEFAULT_TOOLTIP_UNIT
++    },
++    tooltipFormatter: {
++      type: Function as PropType<TooltipFormatter>
++    },
++    vertical        : {
++      type   : Boolean,
++      default: false
++    },
++    noDataText      : {
++      type   : [ Boolean, String ],
++      default: null
++    },
++    round           : {
++      type   : Number,
++      default: 0
++    },
++    weekStart       : {
++      type   : Number,
++      default: 0
++    },
++    darkMode        : Boolean
++  },
++  emits: [ 'dayClick' ],
++  setup(props) {
++
++    const SQUARE_BORDER_SIZE          = Heatmap.SQUARE_SIZE / 5,
++      SQUARE_SIZE                 = Heatmap.SQUARE_SIZE + SQUARE_BORDER_SIZE,
++      LEFT_SECTION_WIDTH          = Math.ceil(Heatmap.SQUARE_SIZE * 2.5),
++      RIGHT_SECTION_WIDTH         = SQUARE_SIZE * 3,
++      TOP_SECTION_HEIGHT          = Heatmap.SQUARE_SIZE + (Heatmap.SQUARE_SIZE / 2),
++      BOTTOM_SECTION_HEIGHT       = Heatmap.SQUARE_SIZE + (Heatmap.SQUARE_SIZE / 2),
++      yearWrapperTransform        = `translate(${LEFT_SECTION_WIDTH}, ${TOP_SECTION_HEIGHT})`,
++
++      svg                         = ref<null | SVGElement>(null),
++      now                         = ref(new Date()),
++      heatmap                     = ref(new Heatmap(props.endDate as Date, props.values, props.max)),
++
++      width                       = ref(0),
++      height                      = ref(0),
++      viewbox                     = ref('0 0 0 0'),
++      legendViewbox               = ref('0 0 0 0'),
++      daysLabelWrapperTransform   = ref(''),
++      monthsLabelWrapperTransform = ref(''),
++      legendWrapperTransform      = ref(''),
++      lo                          = ref<Locale>({} as any),
++      rangeColor                  = ref<string[]>(props.rangeColor || (props.darkMode ? Heatmap.DEFAULT_RANGE_COLOR_DARK : Heatmap.DEFAULT_RANGE_COLOR_LIGHT));
++
++    const { values, tooltipUnit, tooltipFormatter, noDataText, max, vertical, locale } = toRefs(props),
++      tippyInstances                                                               = new Map<HTMLElement, Instance>();
++
++    let tippySingleton: CreateSingletonInstance;
++
++
++    function initTippy() {
++      tippyInstances.clear();
++      if (tippySingleton) {
++        tippySingleton.setInstances(Array.from(tippyInstances.values()));
++      } else {
++        tippySingleton = createSingleton(Array.from(tippyInstances.values()), {
++          overrides     : [],
++          moveTransition: 'transform 0.1s ease-out',
++          allowHTML     : true
++        });
++      }
++    }
++
++    function tooltipOptions(day: CalendarItem) {
++      if (props.tooltip) {
++        if (day.count !== undefined) {
++          if (props.tooltipFormatter) {
++            return props.tooltipFormatter(day, props.tooltipUnit!);
++          }
++          return `<b>${day.count} ${props.tooltipUnit}</b> ${lo.value.on} ${lo.value.months[ day.date.getMonth() ]} ${day.date.getDate()}, ${day.date.getFullYear()}`;
++        } else if (props.noDataText) {
++          return `${props.noDataText}`;
++        } else if (props.noDataText !== false) {
++          return `<b>No ${props.tooltipUnit}</b> ${lo.value.on} ${lo.value.months[ day.date.getMonth() ]} ${day.date.getDate()}, ${day.date.getFullYear()}`;
++        }
++      }
++      return undefined;
++    }
++
++    function getWeekPosition(index: number) {
++      if (props.vertical) {
++        return `translate(0, ${(SQUARE_SIZE * heatmap.value.weekCount) - ((index + 1) * SQUARE_SIZE)})`;
++      }
++      return `translate(${index * SQUARE_SIZE}, 0)`;
++    }
++
++    function getDayPosition(index: number) {
++      if (props.vertical) {
++        return `translate(${index * SQUARE_SIZE}, 0)`;
++      }
++      return `translate(0, ${index * SQUARE_SIZE})`;
++    }
++
++    function getMonthLabelPosition(month: Month) {
++      if (props.vertical) {
++        return { x: 3, y: (SQUARE_SIZE * heatmap.value.weekCount) - (SQUARE_SIZE * (month.index)) - (SQUARE_SIZE / 4) };
++      }
++      return { x: SQUARE_SIZE * month.index, y: SQUARE_SIZE - SQUARE_BORDER_SIZE };
++    }
++
++    watch([ toRef(props, 'rangeColor'), toRef(props, 'darkMode') ], ([ rc, dm ]) => {
++      rangeColor.value = rc || (dm ? Heatmap.DEFAULT_RANGE_COLOR_DARK : Heatmap.DEFAULT_RANGE_COLOR_LIGHT);
++    });
++
++    watch(vertical, v => {
++      if (v) {
++        width.value                       = LEFT_SECTION_WIDTH + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK) + RIGHT_SECTION_WIDTH;
++        height.value                      = TOP_SECTION_HEIGHT + (SQUARE_SIZE * heatmap.value.weekCount) + SQUARE_BORDER_SIZE;
++        daysLabelWrapperTransform.value   = `translate(${LEFT_SECTION_WIDTH}, 0)`;
++        monthsLabelWrapperTransform.value = `translate(0, ${TOP_SECTION_HEIGHT})`;
++      } else {
++        width.value                       = LEFT_SECTION_WIDTH + (SQUARE_SIZE * heatmap.value.weekCount) + SQUARE_BORDER_SIZE;
++        height.value                      = TOP_SECTION_HEIGHT + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK);
++        daysLabelWrapperTransform.value   = `translate(0, ${TOP_SECTION_HEIGHT})`;
++        monthsLabelWrapperTransform.value = `translate(${LEFT_SECTION_WIDTH}, 0)`;
++      }
++    }, { immediate: true });
++
++    watch([ width, height ], ([ w, h ]) => (viewbox.value = ` 0 0 ${w} ${h}`), { immediate: true });
++    watch([ width, height, rangeColor ], ([ w, h, rc ]) => {
++      legendWrapperTransform.value = vertical.value
++        ? `translate(${LEFT_SECTION_WIDTH + (SQUARE_SIZE * Heatmap.DAYS_IN_WEEK)}, ${TOP_SECTION_HEIGHT})`
++        : `translate(${w - (SQUARE_SIZE * rc.length) - 30}, ${h - BOTTOM_SECTION_HEIGHT})`;
++    }, { immediate: true });
++
++    watch(locale, l => (lo.value = l ? { ...Heatmap.DEFAULT_LOCALE, ...l } : Heatmap.DEFAULT_LOCALE), { immediate: true });
++    watch(rangeColor, rc => (legendViewbox.value = `0 0 ${Heatmap.SQUARE_SIZE * (rc.length + 1)} ${Heatmap.SQUARE_SIZE}`), { immediate: true });
++
++    watch(
++      [ values, tooltipUnit, tooltipFormatter, noDataText, max, rangeColor ],
++      () => {
++        heatmap.value = new Heatmap(props.endDate as Date, props.values, props.max, props.weekStart);
++        tippyInstances.forEach((item) => item.destroy());
++        nextTick(initTippy);
++      }
++    );
++
++    onMounted(initTippy);
++    onBeforeUnmount(() => {
++      tippySingleton?.destroy();
++      tippyInstances.forEach((item) => item.destroy());
++    });
++
++    function initTippyLazy(e: MouseEvent) {
++
++      if (tippySingleton
++        && e.target
++        && (e.target as HTMLElement).classList.contains('vch__day__square')
++        && (e.target as HTMLElement).dataset.weekIndex !== undefined
++        && (e.target as HTMLElement).dataset.dayIndex !== undefined
++      ) {
++
++        const weekIndex = Number((e.target as HTMLElement).dataset.weekIndex),
++          dayIndex  = Number((e.target as HTMLElement).dataset.dayIndex);
++
++        if (!isNaN(weekIndex) && !isNaN(dayIndex)) {
++
++          const tooltip = tooltipOptions(heatmap.value.calendar[ weekIndex ][ dayIndex ]);
++          if (tooltip) {
++
++            const instance = tippyInstances.get(e.target as HTMLElement);
++
++            if (instance) {
++              instance.setContent(tooltip);
++            } else if (!instance) {
++              tippyInstances.set(e.target as HTMLElement, tippy(e.target as HTMLElement, { content: tooltip } as any));
++              tippySingleton.setInstances(Array.from(tippyInstances.values()));
++            }
++
++          }
++        }
++
++      }
++
++    }
++
++    return {
++      SQUARE_BORDER_SIZE, SQUARE_SIZE, LEFT_SECTION_WIDTH, RIGHT_SECTION_WIDTH, TOP_SECTION_HEIGHT, BOTTOM_SECTION_HEIGHT,
++      svg, heatmap, now, width, height, viewbox, daysLabelWrapperTransform, monthsLabelWrapperTransform, yearWrapperTransform, legendWrapperTransform,
++      lo, legendViewbox, curRangeColor: rangeColor,
++      getWeekPosition, getDayPosition, getMonthLabelPosition, initTippyLazy
++    };
++  }
++});
+ </script>
+
+ <style lang="scss">
+
+-	.vch__container {
+-		.vch__legend {
+-			display: flex;
+-			justify-content: space-between;
+-			align-items: center;
+-		}
+-
+-		.vch__external-legend-wrapper {
+-			margin: 0 8px;
+-		}
+-	}
+-
+-	svg.vch__wrapper {
+-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+-		line-height: 10px;
+-		width: 100%;
+-
+-		.vch__months__labels__wrapper text.vch__month__label {
+-			font-size: 10px;
+-		}
+-
+-		.vch__days__labels__wrapper text.vch__day__label,
+-		.vch__legend__wrapper text {
+-			font-size: 9px;
+-		}
+-
+-		text.vch__month__label,
+-		text.vch__day__label,
+-		.vch__legend__wrapper text {
+-			fill: #767676;
+-		}
+-
+-		rect.vch__day__square:hover {
+-			stroke: #555;
+-			stroke-width: 2px;
+-			paint-order: stroke;
+-		}
+-
+-		rect.vch__day__square:focus {
+-			outline: none;
+-		}
+-
+-		&.dark-mode {
+-			text.vch__month__label,
+-			text.vch__day__label,
+-			.vch__legend__wrapper text {
+-				fill: #fff;
+-			}
+-		}
+-	}
++.vch__container {
++  .vch__legend {
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++  }
++
++  .vch__external-legend-wrapper {
++    margin: 0 8px;
++  }
++}
++
++svg.vch__wrapper {
++  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
++  line-height: 10px;
++  width: 100%;
++
++  .vch__months__labels__wrapper text.vch__month__label {
++    font-size: 10px;
++  }
++
++  .vch__days__labels__wrapper text.vch__day__label,
++  .vch__legend__wrapper text {
++    font-size: 9px;
++  }
++
++  text.vch__month__label,
++  text.vch__day__label,
++  .vch__legend__wrapper text {
++    fill: #767676;
++  }
++
++  rect.vch__day__square:hover {
++    stroke: #555;
++    stroke-width: 2px;
++    paint-order: stroke;
++  }
++
++  rect.vch__day__square:focus {
++    outline: none;
++  }
++
++  &.dark-mode {
++    text.vch__month__label,
++    text.vch__day__label,
++    .vch__legend__wrapper text {
++      fill: #fff;
++    }
++  }
++}
+
+ </style>
