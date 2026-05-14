@@ -1,23 +1,16 @@
 import { StatusCodes } from 'http-status-codes'
 import Cookies from 'js-cookie'
 
-import type { IRunData, IResponsePayload } from '@/types/types.d.ts'
+import type {
+  IRunData,
+  IResponsePayload,
+  IDataArrayResponse,
+} from '@/types/types.d.ts'
 import { store as useStore } from '@/stores/store'
 
 export class Model {
   private _host = `https://${window.location.hostname}/`
   protected _store: ReturnType<typeof useStore> = useStore()
-
-  protected hydrate<T extends Partial<IRunData>>(data: T): this {
-    for (const property in data) {
-      if (this.isPropertyOf(property)) {
-        this[property as unknown as keyof this] = data[
-          property
-        ] as unknown as this[keyof this]
-      }
-    }
-    return this
-  }
 
   protected fetch = async (
     endpointURL: string,
@@ -104,11 +97,36 @@ export class Model {
     })
   }
 
+  protected hydrate<T extends Partial<IRunData>>(data: T): this {
+    for (const property in data) {
+      if (this.isPropertyOf(property)) {
+        this[property as unknown as keyof this] = data[
+          property
+        ] as unknown as this[keyof this]
+      }
+    }
+    return this
+  }
+
   protected isPropertyOf(property: string): boolean {
     return (
       Object.hasOwn(this, property) &&
       typeof this[property as keyof this] !== 'function' &&
       property[0] !== '_'
+    )
+  }
+
+  protected isValidResponse<T>(
+    response: IResponsePayload | void,
+  ): response is IDataArrayResponse<T> {
+    return !!(
+      response &&
+      typeof response === 'object' &&
+      response.data &&
+      typeof response.data === 'object' &&
+      !Array.isArray(response.data) &&
+      'data' in response.data &&
+      Array.isArray(response.data.data)
     )
   }
 

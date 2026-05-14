@@ -1,34 +1,24 @@
-//import { ref, type Ref } from 'vue'
-
 import { Model } from '@/models/Model'
-//import type { IResponsePayload, IRun } from '@/types/types.d.ts'
-//import { RunModel } from '@/models/RunModel'
+import type { IResponsePayload } from '@/types/types'
+import type { IPersonalBests, IPersonalBest } from '@/types/personal_best_types'
+import { PersonalBestModel } from '@/models/PersonalBestModel'
 
-export class PersonalBestsModel extends Model {
-  //public runs: Ref<Array<IRun>> = ref([])
-  /*
+export class PersonalBestsModel extends Model implements IPersonalBests {
+  public personalBests: Array<IPersonalBest> = []
+
   public getPersonalBests(): Promise<IResponsePayload | void> {
-    this.runs.value = []
+    this.personalBests = []
 
-    //const url = 'api/personal-bests/'
+    const url = 'api/runs/personal_bests/'
 
-    /*
-    return this.fetch(url, { method: 'GET' }).
-      then((response: IResponsePayload | void) => {
-      if (
-        response &&
-        typeof response === 'object' &&
-        response.data &&
-        typeof response.data === 'object' &&
-        !Array.isArray(response.data) &&
-        'data' in response.data &&
-        Array.isArray(response.data.data)
-      ) {
-        for (const run of response.data.data) {
-          this.runs.value.push(new RunModel(run))
+    return this.fetch(url, { method: 'GET' }).then(
+      (response: IResponsePayload | void) => {
+        if (this.isValidResponse<IPersonalBest>(response)) {
+          for (const personalBest of response.data.data) {
+            this.personalBests.push(new PersonalBestModel(personalBest))
+          }
         }
-      }
-    })
+      },
+    )
   }
-  */
 }

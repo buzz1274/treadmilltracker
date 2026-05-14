@@ -2,11 +2,13 @@
 import DataTable from 'primevue/datatable'
 
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
-import type { IRun, TPersonalBests } from '@/types/types.d.ts'
+import type { IRun } from '@/types/types.d.ts'
+import type { IPersonalBest, IPersonalBests } from '@/types/personal_best_types'
 
 const props = withDefaults(
   defineProps<{
-    tableData: Array<IRun | TPersonalBests>
+    tableData: Array<IRun | IPersonalBests | IPersonalBest> | null
+    showHeader?: boolean
     tableTitle: string
     paginate?: boolean
     rowsPerPage?: number
@@ -14,6 +16,7 @@ const props = withDefaults(
   {
     paginate: false,
     newRecord: false,
+    showHeader: true,
     rowsPerPage: 10,
   },
 )
@@ -45,7 +48,10 @@ defineEmits(['rowSelect'])
     @row-select="(event) => $emit('rowSelect', event)"
   >
     <template #header>
-      <BaseComponentHeader :table-title="props.tableTitle">
+      <BaseComponentHeader
+        v-if="props.showHeader"
+        :table-title="props.tableTitle"
+      >
         <template #header_action>
           <slot name="header_action" />
         </template>

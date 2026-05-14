@@ -33,6 +33,12 @@ export interface IResponsePayload {
   data: object | string | Array<object>
 }
 
+interface IDataArrayResponse<T = unknown> extends IResponsePayload {
+  data: {
+    data: T[]
+  }
+}
+
 export interface IUser {
   name: string
   authenticated: boolean

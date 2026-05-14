@@ -174,8 +174,8 @@ watch(
           v-if="isDistanceView"
           :sortable="true"
           field="distance_m"
+          class="!text-end"
           header="Distance(km)"
-          class="cursor-pointer"
         >
           <template #body="{ data }: { data: IRun }">
             {{ data.distanceKm() }}
@@ -185,16 +185,16 @@ watch(
           v-if="isCaloriesView"
           :sortable="true"
           field="calories"
+          class="!text-end"
           header="Calories"
-          class="cursor-pointer"
         >
         </Column>
         <Column
           v-if="isDistanceView"
           :sortable="true"
           field="pace"
+          class="!text-end pr-5"
           header="Pace(k/h)"
-          class="cursor-pointer"
         >
           <template #body="{ data }: { data: IRun }">
             {{ data.pace.toFixed(2) }}
@@ -205,7 +205,6 @@ watch(
           :sortable="true"
           field="duration_s"
           header="Time"
-          class="cursor-pointer"
         >
           <template #body="{ data }: { data: IRun }">
             {{ data.secondsToHHMMSS() }}
@@ -214,7 +213,6 @@ watch(
         <Column
           v-if="isVo2View"
           :sortable="true"
-          class="cursor-pointer"
           field="vo2max"
           header="VO₂ Max"
         >
