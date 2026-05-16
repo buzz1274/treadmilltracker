@@ -6,3 +6,8 @@ export interface IApiResponse<T> {
 export interface IAccessTokenResponse {
   token: string
 }
+
+export interface IUserDataResponse {
+  full_name: string
+  registered_date: string
+}
