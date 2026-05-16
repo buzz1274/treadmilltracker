@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
-import { authStore } from '@/api/AuthStore.ts'
 
+import { authStore } from '@/api/AuthStore.ts'
 import type {
   IRunData,
   IResponsePayload,
@@ -16,15 +16,11 @@ export class Model {
     endpointURL: string,
     request: RequestInit,
   ): Promise<IResponsePayload> => {
-    let updatedRequest: RequestInit = {
-      ...request,
-    }
-
-    updatedRequest = {
+    const updatedRequest: RequestInit = {
       ...request,
       headers: await this.setHeaders(request['headers'] ?? {}),
     }
-    
+
     const callId: number = this._store.addAPICall()
 
     return fetch(this.apiUrl(endpointURL), {
@@ -131,9 +127,8 @@ export class Model {
   private setHeaders = async (headers: HeadersInit): Promise<HeadersInit> => ({
     ...headers,
     ...(authStore.getToken()
-        ? { Authorization: `Bearer ${authStore.getToken()}` }
-        : {}
-    ),
+      ? { Authorization: `Bearer ${authStore.getToken()}` }
+      : {}),
     'Access-Control-Allow-Origin': '',
     Accept: 'application/json',
     'Content-Type': 'application/json',

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from app.core.repository import Repository
 from app.api.user.models import User
 from sqlmodel import select
@@ -8,7 +10,9 @@ class UserRepository(Repository):
         """create a new user"""
         return self.add(User(email=email, name=name))
 
-    def get_user(self, *, user_id: int = None, email: str = None):
+    def get_user(
+        self, *, user_id: Optional[int] = None, email: Optional[str] = None
+    ):
         """retrieve a user"""
         query = select(User)
 

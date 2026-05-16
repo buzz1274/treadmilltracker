@@ -80,7 +80,7 @@ class AuthService:
             payload, settings.SESSION_SECRET, algorithm=self.JWT_ALGORITHM
         )
 
-    def _calculate_token_expiry(self) -> datetime:
+    def _calculate_token_expiry(self) -> datetime.datetime:
         """calculate token expiry time"""
         return datetime.datetime.now(datetime.UTC) + datetime.timedelta(
             minutes=self.TOKEN_EXPIRY_MINUTES
