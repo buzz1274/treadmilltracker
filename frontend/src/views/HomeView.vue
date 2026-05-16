@@ -1,35 +1,38 @@
 <script setup lang="ts">
-/*global google */
 import { onMounted } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
-import type { IUser } from '@/types/types'
-import { UserStore as UseUserStore } from '@/stores/UserStore'
-const UserStore: ReturnType<typeof UseUserStore> = UseUserStore()
-const { login } = UserStore
+import { userStore as UseUserStore } from '@/stores/UserStore'
+const userStore: ReturnType<typeof UseUserStore> = UseUserStore()
 
 const toast = useToast()
-const props: {
-  user: IUser
-} = defineProps<{
-  user: IUser
-}>()
+const loginCallback = async (credentials: { credential: string }) => {
+  try {
+    await userStore.login(credentials)
+  } catch (error: unknown) {
+    const err = error as { status?: string; message?: string }
 
-onMounted(() => {
-  if (typeof google !== 'undefined' && typeof google.accounts !== 'undefined') {
-    initSignIn()
+    toast.add({
+      severity: 'error',
+      summary: err.status ?? 'Error',
+      detail: err.message ?? 'Unknown error',
+      life: 3000,
+    })
   }
-})
+}
 
 const initSignIn = () => {
-  google.accounts.id.initialize({
+  window.google.accounts.id.initialize({
     client_id:
-      '805742976196-mf8qb4ok4gc216g6d4oascohmbor6ghh.apps.googleusercontent.com',
+      '805742976196-mf8qb4ok4gc216g6d4oascohmbor6'+
+      'ghh.apps.googleusercontent.com',
     auto_select: true,
     callback: loginCallback,
   })
 
-  google.accounts.id.renderButton(document.getElementById('gSignInButton'), {
+  window.google.accounts.id.renderButton(
+    document.getElementById('gSignInButton'
+  ), {
     type: 'standard',
     text: 'sign_in_with',
     theme: 'outline',
@@ -38,18 +41,11 @@ const initSignIn = () => {
   })
 }
 
-const loginCallback = async (credentials) => {
-  try {
-    await login(credentials)
-  } catch (ApiError) {
-    toast.add({
-      severity: 'error',
-      summary: ApiError.status,
-      detail: ApiError.message,
-      life: 3000,
-    })
+onMounted(() => {
+  if (window.google?.accounts) {
+    initSignIn()
   }
-}
+})
 </script>
 
 <template>

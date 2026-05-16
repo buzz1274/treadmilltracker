@@ -1,26 +1,26 @@
 import { httpClient } from '@/api/HttpClient.ts'
 import { UserModel } from '@/models/UserModel'
 import { authStore } from '@/api/AuthStore.ts'
-import { type IAccessTokenResponse } from '@/types/http.d.ts'
+import type { IAccessTokenResponse } from '@/types/api_types.d.ts'
 
 export class UserService {
-  public async login(credentials: Array): Promise<UserModel> {
-    const LoginResponse: IAccessTokenResponse =
+  public async login(credentials: { credential: string }): Promise<UserModel> {
+    const loginResponse: IAccessTokenResponse =
       await httpClient.post<IAccessTokenResponse>('/api/auth/login', {
         credential: credentials.credential,
       })
 
-    authStore.setToken(LoginResponse.token)
+    authStore.setToken(loginResponse.token)
 
-    const UserResponse = await httpClient.get<UserModel>('api/users/me')
+    const userResponse = await httpClient.get<UserModel>('api/users/me')
 
-    const user: UserModel = UserModel.fromAPI(UserResponse)
-    user.IsAuthenticated = true
+    const user: UserModel = UserModel.fromAPI(userResponse)
+    user.isAuthenticated = true
 
     return user
   }
 
-  public async logout(): Promise<UserModel> {
+  public logout(): Promise<UserModel> {
     return new UserModel()
   }
 }

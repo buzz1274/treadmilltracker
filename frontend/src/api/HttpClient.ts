@@ -1,4 +1,4 @@
-import { type IApiResponse } from '@/types/http.d.ts'
+import { type IApiResponse } from '@/types/api_types.d.ts'
 import { ApiError } from '@/api/ApiError.ts'
 import { authStore } from '@/api/AuthStore.ts'
 

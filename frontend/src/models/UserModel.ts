@@ -1,9 +1,9 @@
 export class UserModel {
-  public IsAuthenticated = false
-  public name = ''
+  public isAuthenticated: boolean = false
+  public name: string = ''
   public date: Date | null = null
 
-  static fromAPI(data: any): UserModel {
+  static fromAPI(data: object): UserModel {
     const user: UserModel = new UserModel()
 
     user.name = data.full_name

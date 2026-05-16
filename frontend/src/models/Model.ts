@@ -7,10 +7,12 @@ import type {
   IDataArrayResponse,
 } from '@/types/types.d.ts'
 import { store as useStore } from '@/stores/store'
+import { userStore as useUserStore } from '@/stores/UserStore'
 
 export class Model {
   private _host = `https://${window.location.hostname}/`
   protected _store: ReturnType<typeof useStore> = useStore()
+  protected _userStore: ReturnType<typeof useUserStore> = useUserStore()
 
   protected fetch = async (
     endpointURL: string,
@@ -18,7 +20,7 @@ export class Model {
   ): Promise<IResponsePayload> => {
     const updatedRequest: RequestInit = {
       ...request,
-      headers: await this.setHeaders(request['headers'] ?? {}),
+      headers: this.setHeaders(request['headers'] ?? {}),
     }
 
     const callId: number = this._store.addAPICall()
@@ -48,7 +50,7 @@ export class Model {
         ) {
           throw new Error(this.errorMessage(response))
         } else if (response.status === StatusCodes.FORBIDDEN) {
-          this._store.user.logout()
+          void this._userStore.logout()
           throw new Error('403: Forbidden')
         }
         return response
@@ -124,7 +126,7 @@ export class Model {
     )
   }
 
-  private setHeaders = async (headers: HeadersInit): Promise<HeadersInit> => ({
+  private setHeaders = (headers: HeadersInit): HeadersInit => ({
     ...headers,
     ...(authStore.getToken()
       ? { Authorization: `Bearer ${authStore.getToken()}` }

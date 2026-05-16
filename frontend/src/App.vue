@@ -8,12 +8,12 @@ import RunsView from '@/views/RunsView.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 import { store as UseStore } from '@/stores/store'
-import { UserStore as UseUserStore } from '@/stores/UserStore'
+import { userStore as UseUserStore } from '@/stores/UserStore'
 
 const store: ReturnType<typeof UseStore> = UseStore()
-const UserStore: ReturnType<typeof UseUserStore> = UseUserStore()
+const userStore: ReturnType<typeof UseUserStore> = UseUserStore()
 const { isLoading } = storeToRefs(store)
-const { user } = storeToRefs(UserStore)
+const { user } = storeToRefs(userStore)
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const { user } = storeToRefs(UserStore)
   <SiteHeader :user="user" />
   <div class="min-h-[800px] p-2 bg-white flex">
     <Toast />
-    <RunsView v-if="user.IsAuthenticated" :user="user" />
+    <RunsView v-if="user.isAuthenticated" :user="user" />
     <HomeView v-else :user="user" />
   </div>
   <SiteFooter />

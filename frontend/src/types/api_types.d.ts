@@ -4,5 +4,5 @@ export interface IApiResponse<T> {
 }
 
 export interface IAccessTokenResponse {
-  access_token: string
+  token: string
 }
