@@ -10,6 +10,8 @@ class CSRFMiddleware(BaseHTTPMiddleware):
     CSRF_ERROR_MESSAGE: str = "CSRF token missing"
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        return await call_next(request)
+
         if request.method in ["GET", "HEAD", "OPTIONS"]:
             return await call_next(request)
 

@@ -17,7 +17,7 @@ from app.api.runs.enums import Interval
 
 
 class RunsRepository(Repository):
-    def get_run(self, user_id: int, run_id: int | None) -> Type[Run] | None:
+    def get_run(self, user_id: int, run_id: int | None) -> Run | None:
         """retrieve a single run"""
         if not run_id:
             return None

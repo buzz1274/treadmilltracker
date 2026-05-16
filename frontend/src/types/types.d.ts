@@ -44,8 +44,6 @@ export interface IUser {
   authenticated: boolean
   registrationDate: string
   isAuthenticated: boolean
-  login(): void
-  logout(): void
 }
 
 export interface ILoadingState {

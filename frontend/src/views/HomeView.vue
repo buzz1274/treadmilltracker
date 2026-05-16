@@ -1,12 +1,55 @@
 <script setup lang="ts">
-import type { IUser } from '@/types/types'
-import BaseButton from '@/components/base/BaseButton.vue'
+/*global google */
+import { onMounted } from 'vue'
+import { useToast } from 'primevue/usetoast'
 
+import type { IUser } from '@/types/types'
+import { UserStore as UseUserStore } from '@/stores/UserStore'
+const UserStore: ReturnType<typeof UseUserStore> = UseUserStore()
+const { login } = UserStore
+
+const toast = useToast()
 const props: {
   user: IUser
 } = defineProps<{
   user: IUser
 }>()
+
+onMounted(() => {
+  if (typeof google !== 'undefined' && typeof google.accounts !== 'undefined') {
+    initSignIn()
+  }
+})
+
+const initSignIn = () => {
+  google.accounts.id.initialize({
+    client_id:
+      '805742976196-mf8qb4ok4gc216g6d4oascohmbor6ghh.apps.googleusercontent.com',
+    auto_select: true,
+    callback: loginCallback,
+  })
+
+  google.accounts.id.renderButton(document.getElementById('gSignInButton'), {
+    type: 'standard',
+    text: 'sign_in_with',
+    theme: 'outline',
+    size: 'large',
+    width: '80',
+  })
+}
+
+const loginCallback = async (credentials) => {
+  try {
+    await login(credentials)
+  } catch (ApiError) {
+    toast.add({
+      severity: 'error',
+      summary: ApiError.status,
+      detail: ApiError.message,
+      life: 3000,
+    })
+  }
+}
 </script>
 
 <template>
@@ -33,13 +76,9 @@ const props: {
         dignissim ante. Phasellus molestie suscipit suscipit. Integer tristique
         tincidunt
       </p>
-      <p class="pt-6">
-        <BaseButton
-          label="Login"
-          severity="primary"
-          @click="props.user.login()"
-        />
-      </p>
+      <div class="pt-6 flex justify-center">
+        <div id="gSignInButton" />
+      </div>
     </div>
   </div>
 </template>

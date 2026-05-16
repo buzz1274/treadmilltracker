@@ -31,7 +31,7 @@ async def validation_exception_handler(
 
 
 # noinspection PyTypeChecker
-app.add_middleware(CSRFMiddleware)  # ty: ignore[invalid-argument-type]
+# app.add_middleware(CSRFMiddleware)  # ty: ignore[invalid-argument-type]
 
 # noinspection PyTypeChecker
 app.add_middleware(

@@ -24,12 +24,14 @@ class Repository:
         if commit:
             self.commit()
 
-    def add(self, model: object, commit: bool = True) -> None:
+    def add(self, model: object, commit: bool = True) -> object:
         """insert/update a model instance"""
         self.session.add(model)
 
         if commit:
             self.commit()
+
+        return model
 
     def commit(self):
         """commit session"""

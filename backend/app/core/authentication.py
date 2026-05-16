@@ -1,2 +1,16 @@
-def get_current_user() -> int:
-    return 4
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer
+
+from app.api.user.models import User
+from app.api.auth.service import AuthService
+
+security = HTTPBearer()
+
+
+def get_current_user(
+    token=Depends(security), authentication_service=Depends(AuthService)
+) -> User:
+    try:
+        return authentication_service.get_authenticated_user(token)
+    except RuntimeError as e:
+        raise HTTPException(status_code=401, detail=str(e))

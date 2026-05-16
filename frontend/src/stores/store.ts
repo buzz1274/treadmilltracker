@@ -1,27 +1,11 @@
-import { type Reactive, reactive, type Ref, ref, type UnwrapRef } from 'vue'
+import { type Ref, ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useLoadingState } from '@/composables/LoadingState.ts'
-import type { IUser } from '@/types/types.d.ts'
 
 export const store = defineStore('store', () => {
   const resyncRuns: Ref<number> = ref(0)
   const { apiCalls, addAPICall, completeAPICall, isLoading } = useLoadingState()
 
-  const user: Reactive<UnwrapRef<IUser>> = reactive<IUser>({
-    authenticated: false,
-    name: 'David',
-    registrationDate: '2025-01-01',
-    get isAuthenticated(): boolean {
-      return this.authenticated
-    },
-    login(): void {
-      this.authenticated = true
-    },
-    logout(): void {
-      this.authenticated = false
-    },
-  })
-
-  return { user, resyncRuns, apiCalls, addAPICall, completeAPICall, isLoading }
+  return { resyncRuns, apiCalls, addAPICall, completeAPICall, isLoading }
 })

@@ -1,16 +1,24 @@
-import secrets
-from fastapi import APIRouter, Request
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
 from fastapi_utils.cbv import cbv
+from app.api.auth.service import AuthService
+from app.api.auth.models import GoogleAuthRequest, AuthResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @cbv(router)
 class AuthRouter:
-    @router.get("/csrf")
-    def get_csrf_token(self, request: Request) -> str:
-        """retrieve csrf token"""
-        if "X-CSRF-Token" not in request.session:
-            request.session["X-CSRF-Token"] = secrets.token_urlsafe(32)
+    def __init__(
+        self,
+        auth_service: Annotated[AuthService, Depends(AuthService)],
+    ):
+        self.auth_service = auth_service
 
-        return request.session["X-CSRF-Token"]
+    @router.post("/login")
+    async def auth(self, payload: GoogleAuthRequest):
+        """authenticate credentials"""
+        return AuthResponse(
+            token=await self.auth_service.authenticate(payload.credential)
+        )
