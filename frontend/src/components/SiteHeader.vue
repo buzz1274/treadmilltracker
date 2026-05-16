@@ -14,8 +14,8 @@ const props = defineProps<{
   user: IUser
 }>()
 
-const signOut = async (): Promise<void> => {
-  await logout()
+const signOut = (): void => {
+  logout()
   toast.add({
     severity: 'success',
     summary: 'Logout',

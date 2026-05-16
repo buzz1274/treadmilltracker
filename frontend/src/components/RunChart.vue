@@ -43,7 +43,7 @@ const props = defineProps<{
 }>()
 
 const registrationDate: ComputedRef<Date> = computed(() =>
-  moment(props.user.registrationDate, 'YYYY-MM-DD').toDate(),
+  moment(props.user.date, 'YYYY-MM-DD').toDate(),
 )
 
 const formatData = (data: number, xAxis: string): number => {
@@ -219,7 +219,7 @@ const filterGraph = (reset = false): void => {
 
 const updateDate = (type: string): void => {
   if (type === 'start') {
-    filterModel.value.startDate = new Date(props.user.registrationDate)
+    filterModel.value.startDate = new Date(props.user.date)
   }
   if (type === 'end') {
     filterModel.value.endDate = new Date()

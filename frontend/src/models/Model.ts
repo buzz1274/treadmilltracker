@@ -126,15 +126,19 @@ export class Model {
     )
   }
 
-  private setHeaders = (headers: HeadersInit): HeadersInit => ({
-    ...headers,
-    ...(authStore.getToken()
-      ? { Authorization: `Bearer ${authStore.getToken()}` }
-      : {}),
-    'Access-Control-Allow-Origin': '',
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  })
+  private setHeaders = (headers: HeadersInit): HeadersInit => {
+    const token = authStore.getToken()
+
+    return {
+      ...headers,
+      ...(token
+        ? { Authorization: `Bearer ${token}` }
+        : {}),
+      'Access-Control-Allow-Origin': '',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }
 
   private errorMessage(response: IResponsePayload): string {
     if (

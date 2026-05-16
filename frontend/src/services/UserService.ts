@@ -20,7 +20,7 @@ export class UserService {
     return user
   }
 
-  public logout(): Promise<UserModel> {
+  public logout(): UserModel {
     return new UserModel()
   }
 }

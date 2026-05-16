@@ -1,23 +1,23 @@
-import { type IApiResponse } from '@/types/api_types.d.ts'
+import type { IApiResponse } from '@/types/api_types.d.ts'
 import { ApiError } from '@/api/ApiError.ts'
 import { authStore } from '@/api/AuthStore.ts'
 
 class HttpClient {
-  constructor(
-    private readonly baseUrl: string,
-    private readonly getToken: string,
-  ) {
+  private readonly baseUrl: string
+  private readonly getToken: string
+
+  constructor(baseUrl: string, getToken: string | null) {
     this.baseUrl = baseUrl
     this.getToken = getToken
   }
 
-  async get<T>(url: string): Promise<IApiResponse<T>> {
+  async get<T>(url: string): Promise<T> {
     const response: Response = await fetch(this.url(url), {
       method: 'GET',
       headers: this.setHeaders(),
     })
 
-    return this.handleResponse<IApiResponse<T>>(response)
+    return this.handleResponse<T>(response)
   }
 
   async post<T>(url: string, body?: unknown): Promise<T> {
@@ -45,12 +45,14 @@ class HttpClient {
   }
 
   private setHeaders(): HeadersInit {
+    const token = this.getToken()
+
     return {
       'Access-Control-Allow-Origin': '',
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...(this.getToken()
-        ? { Authorization: `Bearer ${this.getToken()}` }
+      ...(token
+        ? { Authorization: `Bearer ${token}` }
         : {}
       ),
     }

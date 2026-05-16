@@ -22,7 +22,11 @@ const loginCallback = async (credentials: { credential: string }) => {
 }
 
 const initSignIn = () => {
-  window.google.accounts.id.initialize({
+  // @ts-expect-error google script is loaded externally
+  const google = window.google?.accounts?.id
+  if (!google) return
+
+  google.initialize({
     client_id:
       '805742976196-mf8qb4ok4gc216g6d4oascohmbor6'+
       'ghh.apps.googleusercontent.com',
@@ -30,7 +34,7 @@ const initSignIn = () => {
     callback: loginCallback,
   })
 
-  window.google.accounts.id.renderButton(
+  google.renderButton(
     document.getElementById('gSignInButton'
   ), {
     type: 'standard',
@@ -42,7 +46,8 @@ const initSignIn = () => {
 }
 
 onMounted(() => {
-  if (window.google?.accounts) {
+  // @ts-expect-error google script is loaded externally
+  if (window.google?.accounts?.id) {
     initSignIn()
   }
 })

@@ -1,9 +1,10 @@
 import type { IUserDataResponse } from '@/types/api_types'
+import type { IUser } from '@/types/types'
 
-export class UserModel {
+export class UserModel implements IUser {
   public isAuthenticated = false
   public name = ''
-  public date: Date | null = null
+  public date: Date = new Date()
 
   static fromAPI(data: IUserDataResponse): UserModel {
     const user: UserModel = new UserModel()
