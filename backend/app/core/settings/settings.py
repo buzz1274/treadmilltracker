@@ -30,6 +30,13 @@ class Settings(BaseSettings):
 
     SQL_ALCHEMY_ECHO: bool = False
 
+    GOOGLE_OAUTH2_CLIENT_ID: str = os.environ.get(
+        "GOOGLE_OAUTH2_CLIENT_ID", ""
+    ).strip()
+    GOOGLE_OAUTH2_CLIENT_SECRET: str = os.environ.get(
+        ">GOOGLE_OAUTH2_CLIENT_SECRET", ""
+    ).strip()
+
     @computed_field
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:

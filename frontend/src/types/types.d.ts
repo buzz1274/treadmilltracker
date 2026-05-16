@@ -41,11 +41,8 @@ interface IDataArrayResponse<T = unknown> extends IResponsePayload {
 
 export interface IUser {
   name: string
-  authenticated: boolean
-  registrationDate: string
+  date: Date
   isAuthenticated: boolean
-  login(): void
-  logout(): void
 }
 
 export interface ILoadingState {

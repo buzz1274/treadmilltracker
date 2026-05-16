@@ -4,6 +4,9 @@ import type { ToastServiceMethods } from 'primevue'
 
 import BaseIcon from '@/components/base/BaseIcon.vue'
 import type { IUser } from '@/types/types'
+import { userStore as UseUserStore } from '@/stores/UserStore'
+const userStore: ReturnType<typeof UseUserStore> = UseUserStore()
+const { logout } = userStore
 
 const toast: ToastServiceMethods = useToast()
 
@@ -11,8 +14,8 @@ const props = defineProps<{
   user: IUser
 }>()
 
-const logout = (): void => {
-  props.user.logout()
+const signOut = (): void => {
+  logout()
   toast.add({
     severity: 'success',
     summary: 'Logout',
@@ -35,7 +38,7 @@ const logout = (): void => {
       <BaseIcon
         icon-css="pi pi-sign-out ml-2"
         icon-title="Logout"
-        @click="logout()"
+        @click="signOut()"
       />
     </nav>
   </header>

@@ -65,7 +65,7 @@ watch(
 const availableYears = computed(() => {
   const availableYears = []
 
-  const startYear = moment(props.user.registrationDate).year()
+  const startYear = moment(props.user.date).year()
   const endYear = moment().year()
 
   for (let year = startYear; year <= endYear; year++) {

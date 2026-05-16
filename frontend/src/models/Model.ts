@@ -1,30 +1,26 @@
 import { StatusCodes } from 'http-status-codes'
-import Cookies from 'js-cookie'
 
+import { authStore } from '@/api/AuthStore.ts'
 import type {
   IRunData,
   IResponsePayload,
   IDataArrayResponse,
 } from '@/types/types.d.ts'
 import { store as useStore } from '@/stores/store'
+import { userStore as useUserStore } from '@/stores/UserStore'
 
 export class Model {
   private _host = `https://${window.location.hostname}/`
   protected _store: ReturnType<typeof useStore> = useStore()
+  protected _userStore: ReturnType<typeof useUserStore> = useUserStore()
 
   protected fetch = async (
     endpointURL: string,
     request: RequestInit,
   ): Promise<IResponsePayload> => {
-    let updatedRequest: RequestInit = {
+    const updatedRequest: RequestInit = {
       ...request,
-    }
-
-    if (request['method'] !== 'GET') {
-      updatedRequest = {
-        ...request,
-        headers: await this.setHeaders(request['headers'] ?? {}),
-      }
+      headers: this.setHeaders(request['headers'] ?? {}),
     }
 
     const callId: number = this._store.addAPICall()
@@ -54,7 +50,7 @@ export class Model {
         ) {
           throw new Error(this.errorMessage(response))
         } else if (response.status === StatusCodes.FORBIDDEN) {
-          this._store.user.logout()
+          void this._userStore.logout()
           throw new Error('403: Forbidden')
         }
         return response
@@ -130,13 +126,17 @@ export class Model {
     )
   }
 
-  private setHeaders = async (headers: HeadersInit): Promise<HeadersInit> => ({
-    ...headers,
-    'X-CSRF-Token': await this.getCSRFToken(),
-    'Access-Control-Allow-Origin': '',
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  })
+  private setHeaders = (headers: HeadersInit): HeadersInit => {
+    const token = authStore.getToken()
+
+    return {
+      ...headers,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      'Access-Control-Allow-Origin': '',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }
 
   private errorMessage(response: IResponsePayload): string {
     if (
@@ -148,20 +148,6 @@ export class Model {
     } else {
       return 'An unknown error occurred'
     }
-  }
-
-  protected async getCSRFToken(): Promise<string> {
-    let csrfToken: string | undefined = Cookies.get('session')
-
-    if (!csrfToken) {
-      csrfToken = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(
-        (response: IResponsePayload) =>
-          typeof response.data === 'object' && response.data !== null
-            ? JSON.stringify(response.data)
-            : response.data?.toString() || '',
-      )
-    }
-    return csrfToken ?? ''
   }
 
   private apiUrl(endpoint: string): string {

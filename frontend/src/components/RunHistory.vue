@@ -203,6 +203,7 @@ watch(
         <Column
           v-if="isDistanceView || isCaloriesView"
           :sortable="true"
+          class="!text-end pr-3"
           field="duration_s"
           header="Time"
         >
@@ -219,10 +220,10 @@ watch(
         </Column>
         <Column class="w-4 !text-end">
           <template #header>
-            <div class="text-center">-</div>
+            <div class="!text-end">-</div>
           </template>
           <template #body="{ data }: { data: IRun }">
-            <div v-if="isDailyView" class="flex items-center">
+            <div v-if="isDailyView" class="flex items-center !text-end">
               <BaseIcon
                 icon-css="pi pi-pencil pr-1"
                 icon-title="Edit Run"
@@ -246,7 +247,7 @@ watch(
                 "
               />
             </div>
-            <div v-else class="flex items-center">-</div>
+            <div v-else class="!text-end">-</div>
           </template>
         </Column>
       </template>

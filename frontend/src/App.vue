@@ -7,10 +7,13 @@ import HomeView from '@/views/HomeView.vue'
 import RunsView from '@/views/RunsView.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import { store as useStore } from '@/stores/store'
+import { store as UseStore } from '@/stores/store'
+import { userStore as UseUserStore } from '@/stores/UserStore'
 
-const store: ReturnType<typeof useStore> = useStore()
-const { user, isLoading } = storeToRefs(store)
+const store: ReturnType<typeof UseStore> = UseStore()
+const userStore: ReturnType<typeof UseUserStore> = UseUserStore()
+const { isLoading } = storeToRefs(store)
+const { user } = storeToRefs(userStore)
 </script>
 
 <template>

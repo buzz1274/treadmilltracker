@@ -1,5 +1,4 @@
 from datetime import datetime, date
-from typing import Type
 
 from sqlalchemy import Sequence, Row, func, cast, String, DECIMAL, Select
 from sqlalchemy.exc import NoResultFound
@@ -17,7 +16,7 @@ from app.api.runs.enums import Interval
 
 
 class RunsRepository(Repository):
-    def get_run(self, user_id: int, run_id: int | None) -> Type[Run] | None:
+    def get_run(self, user_id: int, run_id: int | None) -> Run | None:
         """retrieve a single run"""
         if not run_id:
             return None
@@ -28,7 +27,7 @@ class RunsRepository(Repository):
 
     def delete_run(self, user_id: int, run_id: int) -> None:
         """delete a single run"""
-        run: Type[Run] | None = self.get_run(user_id, run_id)
+        run: Run | None = self.get_run(user_id, run_id)
 
         if not run:
             raise ValueError("Run not found")
@@ -43,7 +42,7 @@ class RunsRepository(Repository):
         self.add(run)
 
     def update_run(self, user_id: int, updated_run: RunPublic) -> None:
-        run: Type[Run] | None = self.get_run(user_id, updated_run.id)
+        run: Run | None = self.get_run(user_id, updated_run.id)
 
         if not run:
             raise NoResultFound("Run not found")

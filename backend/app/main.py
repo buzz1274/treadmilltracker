@@ -8,7 +8,6 @@ from starlette.responses import JSONResponse
 from app.core.config import settings
 from app.core.lifespan import lifespan
 from app.api.main import api_router
-from app.middleware.CSRFMiddleware import CSRFMiddleware
 
 
 app = FastAPI(
@@ -29,9 +28,6 @@ async def validation_exception_handler(
         ),
     )
 
-
-# noinspection PyTypeChecker
-app.add_middleware(CSRFMiddleware)  # ty: ignore[invalid-argument-type]
 
 # noinspection PyTypeChecker
 app.add_middleware(
