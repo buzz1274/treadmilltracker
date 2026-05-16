@@ -51,7 +51,8 @@ class HttpClient {
       'Content-Type': 'application/json',
       ...(this.getToken()
         ? { Authorization: `Bearer ${this.getToken()}` }
-        : {}),
+        : {}
+      ),
     }
   }
 }

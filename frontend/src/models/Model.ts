@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
-import Cookies from 'js-cookie'
+import { authStore } from '@/api/AuthStore.ts'
 
 import type {
   IRunData,
@@ -20,13 +20,11 @@ export class Model {
       ...request,
     }
 
-    if (request['method'] !== 'GET') {
-      updatedRequest = {
-        ...request,
-        headers: await this.setHeaders(request['headers'] ?? {}),
-      }
+    updatedRequest = {
+      ...request,
+      headers: await this.setHeaders(request['headers'] ?? {}),
     }
-
+    
     const callId: number = this._store.addAPICall()
 
     return fetch(this.apiUrl(endpointURL), {
@@ -132,7 +130,10 @@ export class Model {
 
   private setHeaders = async (headers: HeadersInit): Promise<HeadersInit> => ({
     ...headers,
-    'X-CSRF-Token': await this.getCSRFToken(),
+    ...(authStore.getToken()
+        ? { Authorization: `Bearer ${authStore.getToken()}` }
+        : {}
+    ),
     'Access-Control-Allow-Origin': '',
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -148,20 +149,6 @@ export class Model {
     } else {
       return 'An unknown error occurred'
     }
-  }
-
-  protected async getCSRFToken(): Promise<string> {
-    let csrfToken: string | undefined = Cookies.get('session')
-
-    if (!csrfToken) {
-      csrfToken = await this.fetch('/api/auth/csrf', { method: 'GET' }).then(
-        (response: IResponsePayload) =>
-          typeof response.data === 'object' && response.data !== null
-            ? JSON.stringify(response.data)
-            : response.data?.toString() || '',
-      )
-    }
-    return csrfToken ?? ''
   }
 
   private apiUrl(endpoint: string): string {
