@@ -9,7 +9,7 @@ export class PersonalBestsModel extends Model implements IPersonalBests {
   public getPersonalBests(): Promise<IResponsePayload | void> {
     this.personalBests = []
 
-    const url = 'api/runs/personal_bests/'
+    const url = 'api/runs/personal_bests'
 
     return this.fetch(url, { method: 'GET' }).then(
       (response: IResponsePayload | void) => {
