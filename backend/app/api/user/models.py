@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class User(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True)
+    id: int = Field(primary_key=True, index=True, default=None)
     email: str = Field(unique=True, index=True)
     full_name: Optional[str] = Field(default=None, max_length=255)
     registered_date: date = Field(default=date.today(), nullable=True)

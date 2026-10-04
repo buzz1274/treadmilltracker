@@ -6,9 +6,9 @@ from sqlmodel import select
 
 
 class UserRepository(Repository):
-    def create_user(self, email: str, name: str):
+    def create_user(self, email: str, full_name: str):
         """create a new user"""
-        return self.add(User(email=email, name=name))
+        return self.add(User(email=email, full_name=full_name))
 
     def get_user(
         self, *, user_id: Optional[int] = None, email: Optional[str] = None

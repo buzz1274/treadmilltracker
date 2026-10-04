@@ -17,4 +17,4 @@ class UserService:
         if user := self.user_repository.get_user(email=email):
             return user
 
-        return self.user_repository.create_user(email=email, name=name)
+        return self.user_repository.create_user(email=email, full_name=name)

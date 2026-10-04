@@ -3,7 +3,8 @@ from fastapi.security import HTTPAuthorizationCredentials
 from fastapi import Depends
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from jose import jwt, JWTError
+import jwt
+from jwt.exceptions import InvalidTokenError
 import datetime
 
 from app.api.user.repository import UserRepository
@@ -57,12 +58,12 @@ class AuthService:
                 algorithms=[self.JWT_ALGORITHM],
             )
         except (
-            JWTError,
+            InvalidTokenError,
             KeyError,
         ):
             raise RuntimeError(AuthService.INVALID_CREDENTIAL_ERROR)
 
-        user = self.user_repository.get_user(user_id=jwt_payload["user_id"])
+        user = self.user_repository.get_user(user_id=int(jwt_payload["sub"]))
 
         if not user:
             raise RuntimeError(AuthService.INVALID_CREDENTIAL_ERROR)
@@ -72,8 +73,7 @@ class AuthService:
     def _create_access_token(self, user_id: int) -> str:
         """create jwt access token for user"""
         payload: dict = {
-            "user_id": user_id,
-            "exp": self._calculate_token_expiry(),
+            "sub": str(user_id),
         }
 
         return jwt.encode(

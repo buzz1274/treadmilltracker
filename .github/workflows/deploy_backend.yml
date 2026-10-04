@@ -1,0 +1,62 @@
+
+name: Deploy Backend
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Deploy backend via SSM
+        id: deploy
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          COMMAND_ID=$(aws ssm send-command \
+            --region eu-west-2 \
+            --instance-ids i-011a162ba429e30d2 \
+            --document-name zz50-deploy-docker \
+            --parameters "Application=treadmilltracker,ImageTag=$IMAGE_TAG" \
+            --query 'Command.CommandId' \
+            --output text)
+
+          if [[ ! "$COMMAND_ID" =~ ^[a-f0-9-]{36}$ ]]; then
+            echo "Invalid SSM command ID: $COMMAND_ID" >&2
+            exit 1
+          fi
+
+          echo "command_id=$COMMAND_ID" >> "$GITHUB_OUTPUT"
+          echo "SSM command: $COMMAND_ID"
+
+      - name: Wait for deployment result
+        env:
+          COMMAND_ID: ${{ steps.deploy.outputs.command_id }}
+        run: |
+          if aws ssm wait command-executed \
+            --region eu-west-2 \
+            --command-id "$COMMAND_ID" \
+            --instance-id i-011a162ba429e30d2; then
+            echo "SSM deployment completed successfully."
+          else
+            aws ssm get-command-invocation \
+              --region eu-west-2 \
+              --command-id "$COMMAND_ID" \
+              --instance-id i-011a162ba429e30d2 \
+              --query '{Status:Status,Output:StandardOutputContent,Error:StandardErrorContent}'
+            exit 1
+          fi
