@@ -3,6 +3,10 @@ name: Deploy Frontend
 on:
   push:
     branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
+      - "index.html"
   workflow_dispatch:
 
 jobs:
@@ -50,7 +54,6 @@ jobs:
               --delete
 
       - name: Invalidate CloudFront cache
-        if: ${{ !env.ACT }}
         run: |
           aws cloudfront create-invalidation \
             --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
