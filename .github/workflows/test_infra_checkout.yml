@@ -1,0 +1,35 @@
+name: Test infrastructure repository access
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-checkout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.INFRA_APP_ID }}
+          private-key: ${{ secrets.INFRA_APP_PRIVATE_KEY }}
+          owner: buzz1274
+          repositories: infra
+          permission-contents: read
+
+      - name: Check out infrastructure repository
+        uses: actions/checkout@v4
+        with:
+          repository: buzz1274/infra
+          token: ${{ steps.app-token.outputs.token }}
+          path: infra
+          persist-credentials: false
+
+      - name: Verify checkout
+        run: |
+          test -d infra/.git
+          echo "Infrastructure repository checkout successful"
