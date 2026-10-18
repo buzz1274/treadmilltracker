@@ -1,4 +1,4 @@
-name: Build backend
+name: Deploy backend
 
 'on':
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
       - name: Check out infrastructure
         uses: actions/checkout@v4
         with:
-          repository: buzz1274/infra
+          repository: infra
           token: ${{ steps.app-token.outputs.token }}
           path: infra
           persist-credentials: false
