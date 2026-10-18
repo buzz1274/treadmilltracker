@@ -75,6 +75,26 @@ jobs:
         run: |
           docker push "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG"
 
+      - name: Deploy backend via SSM
+        id: deploy
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          COMMAND_ID=$(aws ssm send-command \
+            --region eu-west-2 \
+            --instance-ids i-011a162ba429e30d2 \
+            --document-name zz50-deploy-docker \
+            --parameters "Application=treadmilltracker,ImageTag=$IMAGE_TAG" \
+            --query 'Command.CommandId' \
+            --output text)
+
+          if [[ ! "$COMMAND_ID" =~ ^[a-f0-9-]{36}$ ]]; then
+            echo "Invalid SSM command ID: $COMMAND_ID" >&2
+            exit 1
+          fi          
+
       - name: Wait for deployment result
         env:
           COMMAND_ID: ${{ steps.deploy.outputs.command_id }}
