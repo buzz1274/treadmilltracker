@@ -1,0 +1,51 @@
+name: Build backend
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    environment: production
+
+    steps:
+      - name: Check out application
+        uses: actions/checkout@v4
+        with:
+          path: treadmilltracker
+
+      - name: Generate infrastructure access token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.INFRA_APP_ID }}
+          private-key: ${{ secrets.INFRA_APP_PRIVATE_KEY }}
+          owner: buzz1274
+          repositories: infra
+          permission-contents: read
+
+      - name: Check out infrastructure
+        uses: actions/checkout@v4
+        with:
+          repository: buzz1274/infra
+          token: ${{ steps.app-token.outputs.token }}
+          path: infra
+          persist-credentials: false
+
+      - name: Build ARM64 backend image
+        run: |
+          docker build \
+            --platform linux/arm64 \
+            --build-arg ENVIRONMENT=production \
+            --file infra/docker/websites/treadmilltracker/backend/Dockerfile \
+            --tag treadmilltracker-backend:${{ github.sha }} \
+            treadmilltracker
+
+      - name: Verify image architecture
+        run: |
+          docker image inspect \
+            treadmilltracker-backend:${{ github.sha }} \
+            --format '{{.Os}}/{{.Architecture}}'
