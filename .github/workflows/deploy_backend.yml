@@ -93,7 +93,10 @@ jobs:
           if [[ ! "$COMMAND_ID" =~ ^[a-f0-9-]{36}$ ]]; then
             echo "Invalid SSM command ID: $COMMAND_ID" >&2
             exit 1
-          fi          
+          fi      
+          
+          echo "command_id=$COMMAND_ID" >> "$GITHUB_OUTPUT"
+          echo "SSM command: $COMMAND_ID"
 
       - name: Wait for deployment result
         env:
