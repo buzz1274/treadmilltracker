@@ -23,7 +23,6 @@ jobs:
         with:
           app-id: ${{ secrets.INFRA_APP_ID }}
           private-key: ${{ secrets.INFRA_APP_PRIVATE_KEY }}
-          owner: buzz1274
           repositories: buzz1274/infra
           permission-contents: read
 
