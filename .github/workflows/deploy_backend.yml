@@ -74,3 +74,21 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker push "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG"
+
+      - name: Wait for deployment result
+        env:
+          COMMAND_ID: ${{ steps.deploy.outputs.command_id }}
+        run: |
+          if aws ssm wait command-executed \
+            --region eu-west-2 \
+            --command-id "$COMMAND_ID" \
+            --instance-id i-011a162ba429e30d2; then
+            echo "SSM deployment completed successfully."
+          else
+            aws ssm get-command-invocation \
+              --region eu-west-2 \
+              --command-id "$COMMAND_ID" \
+              --instance-id i-011a162ba429e30d2 \
+              --query '{Status:Status,Output:StandardOutputContent,Error:StandardErrorContent}'
+            exit 1
+          fi          
