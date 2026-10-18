@@ -1,10 +1,12 @@
-name: Deploy backend
+
+name: Build and publish backend
 
 'on':
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   build:
@@ -35,17 +37,40 @@ jobs:
           path: infra
           persist-credentials: false
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::902048811339:role/github-actions-deploy-role
+          aws-region: eu-west-2
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build ARM64 backend image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker build \
             --platform linux/arm64 \
             --build-arg ENVIRONMENT=production \
             --file infra/docker/websites/treadmilltracker/backend/Dockerfile \
-            --tag treadmilltracker-backend:${{ github.sha }} \
+            --tag "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
             treadmilltracker
 
       - name: Verify image architecture
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker image inspect \
-            treadmilltracker-backend:${{ github.sha }} \
+            "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
             --format '{{.Os}}/{{.Architecture}}'
+
+      - name: Push backend image to ECR
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker push "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG"
