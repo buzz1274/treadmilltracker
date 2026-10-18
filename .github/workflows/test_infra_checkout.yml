@@ -9,6 +9,7 @@ permissions:
 jobs:
   test-checkout:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Check GitHub App secrets
