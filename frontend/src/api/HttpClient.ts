@@ -38,7 +38,7 @@ class HttpClient {
   }
 
   private url(url: string): string {
-    return `${this.baseUrl}${url}`
+    return `${this.baseUrl.replace(/\/+$/, '')}/` + url.replace(/^\/+/, '')
   }
 
   private setHeaders(): HeadersInit {
