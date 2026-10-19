@@ -1,79 +1,24 @@
 
-name: Build and publish backend
+name: Deploy Backend
 
-'on':
-  workflow_dispatch:
+on:
+  workflow_call:
 
 permissions:
   contents: read
   id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-24.04-arm
+  deploy-backend:
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
-      - name: Check out application
-        uses: actions/checkout@v4
-        with:
-          path: treadmilltracker
-
-      - name: Generate infrastructure access token
-        id: app-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.INFRA_APP_ID }}
-          private-key: ${{ secrets.INFRA_APP_PRIVATE_KEY }}
-          owner: buzz1274
-          repositories: infra
-          permission-contents: read
-
-      - name: Check out infrastructure
-        uses: actions/checkout@v4
-        with:
-          repository: buzz1274/infra
-          token: ${{ steps.app-token.outputs.token }}
-          path: infra
-          persist-credentials: false
-
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::902048811339:role/github-actions-deploy-role
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-2
-
-      - name: Log in to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build ARM64 backend image
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker build \
-            --platform linux/arm64 \
-            --build-arg ENVIRONMENT=production \
-            --file infra/docker/websites/treadmilltracker/backend/Dockerfile \
-            --tag "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
-            treadmilltracker
-
-      - name: Verify image architecture
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker image inspect \
-            "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
-            --format '{{.Os}}/{{.Architecture}}'
-
-      - name: Push backend image to ECR
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        run: |
-          docker push "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG"
 
       - name: Deploy backend via SSM
         id: deploy
@@ -93,8 +38,8 @@ jobs:
           if [[ ! "$COMMAND_ID" =~ ^[a-f0-9-]{36}$ ]]; then
             echo "Invalid SSM command ID: $COMMAND_ID" >&2
             exit 1
-          fi      
-          
+          fi
+
           echo "command_id=$COMMAND_ID" >> "$GITHUB_OUTPUT"
           echo "SSM command: $COMMAND_ID"
 
@@ -114,4 +59,4 @@ jobs:
               --instance-id i-011a162ba429e30d2 \
               --query '{Status:Status,Output:StandardOutputContent,Error:StandardErrorContent}'
             exit 1
-          fi          
+          fi

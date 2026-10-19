@@ -1,0 +1,79 @@
+
+name: Build Backend
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-24.04-arm
+    environment: production
+
+    steps:
+      - name: Check out application
+        uses: actions/checkout@v5
+        with:
+          path: treadmilltracker
+
+      - name: Generate infrastructure access token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.INFRA_APP_ID }}
+          private-key: ${{ secrets.INFRA_APP_PRIVATE_KEY }}
+          owner: buzz1274
+          repositories: infra
+          permission-contents: read
+
+      - name: Check out infrastructure
+        uses: actions/checkout@v5
+        with:
+          repository: buzz1274/infra
+          token: ${{ steps.app-token.outputs.token }}
+          path: infra
+          persist-credentials: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build ARM64 backend image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build \
+            --platform linux/arm64 \
+            --build-arg ENVIRONMENT=production \
+            --file infra/docker/websites/treadmilltracker/backend/Dockerfile \
+            --tag "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
+            treadmilltracker
+
+      - name: Verify image architecture
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          ARCHITECTURE=$(docker image inspect \
+            "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG" \
+            --format '{{.Os}}/{{.Architecture}}')
+
+          echo "Image architecture: $ARCHITECTURE"
+          test "$ARCHITECTURE" = "linux/arm64"
+
+      - name: Push backend image to ECR
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker push "$ECR_REGISTRY/treadmilltracker-backend:$IMAGE_TAG"

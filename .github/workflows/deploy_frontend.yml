@@ -1,22 +1,17 @@
+
 name: Deploy Frontend
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "frontend/**"
-      - ".github/workflows/deploy_frontend.yml"
-      - "index.html"
-  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
     environment: production
-
-    permissions:
-      id-token: write
-      contents: read
 
     env:
       AWS_REGION: eu-west-2
@@ -24,23 +19,11 @@ jobs:
       CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: frontend/yarn.lock
-
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: yarn install --frozen-lockfile
-
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
+          name: frontend-dist
+          path: frontend/dist/
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -50,8 +33,15 @@ jobs:
 
       - name: Sync frontend to S3
         run: |
-            aws s3 sync frontend/dist/ "s3://${FRONTEND_BUCKET}" \
-              --delete
+          aws s3 sync frontend/dist/ "s3://${FRONTEND_BUCKET}" \
+            --delete
+
+      - name: Set index.html cache control
+        run: |
+          aws s3 cp frontend/dist/index.html \
+            "s3://${FRONTEND_BUCKET}/index.html" \
+            --content-type "text/html" \
+            --cache-control "no-cache"
 
       - name: Invalidate CloudFront cache
         run: |
