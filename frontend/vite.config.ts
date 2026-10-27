@@ -15,6 +15,11 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+    hmr: {
+      protocol: 'wss',
+      host: 'dev.treadmilltracker.zz50.co.uk',
+      clientPort: 443,
+    },
   },
   build: {
     rollupOptions: {
@@ -31,7 +36,6 @@ export default defineConfig({
     vue(),
     tailwindcss(),
     vueDevTools(),
-    mkcert(),
   ],
   resolve: {
     alias: {
