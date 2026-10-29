@@ -12,3 +12,7 @@ jobs:
   frontend-ci:
     name: Frontend CI
     uses: ./.github/workflows/ci_frontend.yml
+
+  backend-ci:
+    name: Backend CI
+    uses: ./.github/workflows/ci_backend.yml

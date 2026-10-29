@@ -1,0 +1,53 @@
+
+name: Backend CI
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        run: pipx install 'poetry>=2,<3'
+
+      - name: Install dependencies
+        run: poetry install --no-root --sync
+
+      - name: Install linting tools
+        run: |
+          pip install \
+            black==23.11.0 \
+            flake8==6.1.0 \
+            flake8-bugbear \
+            flake8-simplify \
+            bandit==1.7.4
+
+      - name: Black
+        run: black --check --line-length 80 app
+
+      - name: Flake8
+        run: flake8 --max-line-length=80 --extend-ignore=B008 app
+
+      - name: Bandit
+        run: bandit -r app -x app/alembic
+
+      - name: Type checking
+        run: poetry run ty check
