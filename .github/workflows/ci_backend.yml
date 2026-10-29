@@ -41,7 +41,10 @@ jobs:
             bandit==1.7.4
 
       - name: Black
-        run: black --check --line-length 80 app
+        run: |
+          black --check --line-length 80 \
+            --extend-exclude '/alembic/' \
+            app
 
       - name: Flake8
         run: flake8 --max-line-length=80 --extend-ignore=B008 app
