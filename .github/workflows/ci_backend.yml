@@ -29,11 +29,13 @@ jobs:
         run: pipx install 'poetry>=2,<3'
 
       - name: Install dependencies
-        run: poetry install --no-root --sync
+        run: |
+          poetry config --local installer.only-binary :all:
+          poetry install --no-root --sync
 
       - name: Install linting tools
         run: |
-          pip install \
+          pip install --only-binary=:all: \
             black==23.11.0 \
             flake8==6.1.0 \
             flake8-bugbear \
