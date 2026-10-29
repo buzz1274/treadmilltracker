@@ -29,9 +29,9 @@ jobs:
         run: pipx install 'poetry>=2,<3'
 
       - name: Install dependencies
-        run: |
-          poetry config --local installer.only-binary :all:
-          poetry install --no-root --sync
+        env:
+          POETRY_INSTALLER_ONLY_BINARY: ":all:"
+        run: poetry install --no-root --sync
 
       - name: Install linting tools
         run: |
