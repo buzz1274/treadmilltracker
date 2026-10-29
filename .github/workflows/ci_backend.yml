@@ -47,7 +47,11 @@ jobs:
             app
 
       - name: Flake8
-        run: flake8 --max-line-length=80 --extend-ignore=B008 app
+        run: |
+          flake8 --max-line-length=80 \
+            --extend-ignore=B008 \
+            --extend-exclude=app/alembic \
+            app
 
       - name: Bandit
         run: bandit -r app -x app/alembic
