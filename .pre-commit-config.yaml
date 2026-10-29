@@ -1,4 +1,4 @@
-exclude: ".git|k8s|helmfile|.conf|Dockerfile|migrations|docker-compose-PRODUCTION.yaml|.md|.ico|alembic"
+exclude: '.git|k8s|helmfile|\.conf$|Dockerfile|migrations|docker-compose-PRODUCTION.yaml|.md|.ico|alembic'
 default_stages: [pre-commit, pre-push]
 fail_fast: false
 
@@ -43,10 +43,7 @@ repos:
         language: python
         entry: docker
         args:
-          [
-            "exec",
-            "treadmilltracker-backend", "bash", "-c", '"./bin/ty.sh"'
-          ]
+          ["exec", "treadmilltracker-backend", "bash", "-c", '"./bin/ty.sh"']
   - repo: local
     hooks:
       - id: eslint
@@ -54,7 +51,4 @@ repos:
         language: python
         entry: docker
         args:
-          [
-            "exec",
-            "treadmilltracker-frontend", "sh", "-c", '"./bin/eslint.sh"'
-          ]
+          ["exec", "treadmilltracker-frontend", "sh", "-c", '"./bin/eslint.sh"']
