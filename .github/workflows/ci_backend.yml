@@ -38,7 +38,8 @@ jobs:
             flake8==6.1.0 \
             flake8-bugbear \
             flake8-simplify \
-            bandit==1.7.4
+            bandit==1.7.4 \
+            pbr
 
       - name: Black
         run: |
