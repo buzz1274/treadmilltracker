@@ -37,9 +37,9 @@ jobs:
         run: |
           pip install --only-binary=:all: \
             black==23.11.0 \
-            flake8==6.1.0 \
-            flake8-bugbear \
-            flake8-simplify \
+            flake8==7.2.0 \
+            flake8-bugbear==26.9.30 \
+            flake8-simplify==0.31.1 \
             bandit==1.9.4
 
       - name: Black
