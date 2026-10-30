@@ -148,6 +148,40 @@ describe('RunsModel.getRuns', () => {
     expect(useStore().isLoading).toBe(false)
   })
 
+  it.each(['json', 'text'])(
+    'clears authentication and reports a 401 with a %s body',
+    async (bodyType) => {
+      const userStore = useUserStore()
+      userStore.user.isAuthenticated = true
+      userStore.user.name = 'Test runner'
+      authStore.setToken('expired-token')
+      const logout = vi.spyOn(userStore, 'logout')
+      fetchMock.mockResolvedValueOnce(
+        bodyType === 'json'
+          ? jsonResponse({ detail: 'Invalid credentials' }, 401)
+          : new Response('Unauthorized', { status: 401 }),
+      )
+      const model = new RunsModel()
+
+      await expect(model.getRuns()).rejects.toThrow(
+        'Your session has ended. Please sign in again.',
+      )
+
+      expect(logout).toHaveBeenCalledOnce()
+      expect(userStore.user.isAuthenticated).toBe(false)
+      expect(userStore.user.name).toBe('')
+      expect(authStore.getToken()).toBeNull()
+      expect(model.runs.value).toEqual([])
+      expect(useStore().isLoading).toBe(false)
+
+      fetchMock.mockResolvedValueOnce(jsonResponse({ data: [] }))
+      await model.getRuns()
+      expect(fetchMock.mock.lastCall?.[1]?.headers).not.toHaveProperty(
+        'Authorization',
+      )
+    },
+  )
+
   it('logs out on a forbidden response', async () => {
     const userStore = useUserStore()
     userStore.user.isAuthenticated = true

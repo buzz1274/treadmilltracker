@@ -49,6 +49,10 @@ export class Model {
           response.status === StatusCodes.UNPROCESSABLE_ENTITY
         ) {
           throw new Error(this.errorMessage(response))
+        } else if (response.status === StatusCodes.UNAUTHORIZED) {
+          authStore.setToken(null)
+          this._userStore.logout()
+          throw new Error('Your session has ended. Please sign in again.')
         } else if (response.status === StatusCodes.FORBIDDEN) {
           void this._userStore.logout()
           throw new Error('403: Forbidden')

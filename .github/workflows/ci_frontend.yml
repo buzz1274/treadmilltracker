@@ -33,3 +33,7 @@ jobs:
       - name: TypeScript type checking
         working-directory: frontend
         run: yarn type-check
+
+      - name: Frontend tests
+        run: |
+          yarn run test        
