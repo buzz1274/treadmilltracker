@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
 import { userStore as UseUserStore } from '@/stores/UserStore'
@@ -43,11 +43,22 @@ const initSignIn = () => {
   })
 }
 
+let googleScript: HTMLScriptElement | null = null
+
 onMounted(() => {
   // @ts-expect-error google script is loaded externally
   if (window.google?.accounts?.id) {
     initSignIn()
+  } else {
+    googleScript = document.querySelector<HTMLScriptElement>(
+      '#google-sign-in-script',
+    )
+    googleScript?.addEventListener('load', initSignIn, { once: true })
   }
+})
+
+onBeforeUnmount(() => {
+  googleScript?.removeEventListener('load', initSignIn)
 })
 </script>
 
