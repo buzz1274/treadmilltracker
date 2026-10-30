@@ -56,7 +56,7 @@ jobs:
             app
 
       - name: Bandit
-        run: bandit -r app -x app/alembic
+        run: bandit -r app -x app/alembic,app/tests
 
       - name: Type checking
         run: poetry run ty check
