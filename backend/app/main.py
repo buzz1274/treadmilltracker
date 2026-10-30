@@ -9,7 +9,6 @@ from app.core.config import settings
 from app.core.lifespan import lifespan
 from app.api.main import api_router
 
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",

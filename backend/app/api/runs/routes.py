@@ -11,7 +11,6 @@ from app.api.runs.models import RunsPublic, RunPublic, PersonalBestsPublic
 from app.api.runs.repository import RunsRepository
 from app.api.runs.enums import Interval
 
-
 router = APIRouter(prefix="/runs", tags=["runs"])
 
 
