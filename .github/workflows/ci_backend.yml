@@ -62,4 +62,8 @@ jobs:
         run: poetry run ty check
 
       - name: Backend tests
-        run: poetry run pytest -v app/tests/
+        run: |
+          poetry run pytest app/tests/ \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
