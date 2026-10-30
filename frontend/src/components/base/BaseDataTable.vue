@@ -32,17 +32,17 @@ defineEmits(['rowSelect'])
     striped-rows
     selection-mode="single"
     :pt="{
-      tableContainer: 'w-full pt-1 pl-2',
-      table: 'w-95',
-      header: 'bg-black text-white',
+      tableContainer: 'w-full pt-1 overflow-x-auto',
+      table: 'w-full',
+      header: 'bg-transparent',
       bodyRow:
         'leading-loose text-xs hover:bg-gray-100 ' +
-        'hover:cursor-zoom-in even:bg-gray-50',
+        'hover:cursor-zoom-in even:bg-stone-50/60',
       column: {
         sort: 'pl-1 text-xs small-icon',
         sortIcon: 'text-xs w-3 h-3',
-        headerCell: 'text-left border-b border-black pb-2',
-        bodyCell: 'border-b border-gray-400 pt-1 pb-1',
+        headerCell: 'text-left border-b border-stone-200 pb-2',
+        bodyCell: 'border-b border-stone-100 pt-1 pb-1',
       },
     }"
     @row-select="(event) => $emit('rowSelect', event)"
@@ -76,7 +76,7 @@ defineEmits(['rowSelect'])
         class="flex w-full justify-center"
       >
         <div
-          class="flex items-middle justify-center border-b border-black w-95 py-3"
+          class="flex items-middle justify-center border-b border-stone-200 w-95 py-3"
         >
           <button
             class="size-4 pi pi-angle-double-left disabled:text-gray-200 enabled:cursor-pointer"

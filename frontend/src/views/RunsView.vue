@@ -13,15 +13,24 @@ const props: {
 </script>
 
 <template>
-  <div class="grid grid-cols-10 gap-4 w-screen">
-    <div class="col-span-3">
-      <PersonalBests class="mb-6" />
-      <RunHistory class="mb-6" />
-    </div>
-    <div class="col-span-7">
-      <RunChart :user="props.user" />
-      <div class="mb-6" />
-      <RunHeatmap :user="props.user" />
+  <div class="dashboard">
+    <div class="dashboard-grid">
+      <div class="dashboard-sidebar">
+        <section class="dashboard-card"><PersonalBests /></section>
+        <section class="dashboard-card"><RunHistory /></section>
+      </div>
+      <div class="dashboard-main">
+        <section class="dashboard-card chart-card">
+          <RunChart :user="props.user" />
+        </section>
+        <section class="dashboard-card">
+          <RunHeatmap :user="props.user" />
+        </section>
+        <div class="training-note">
+          <i class="pi pi-sparkles" aria-hidden="true"></i> Progress isn’t
+          always a straight line. Showing up counts.
+        </div>
+      </div>
     </div>
   </div>
 </template>

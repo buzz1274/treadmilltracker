@@ -19,10 +19,10 @@ const { user } = storeToRefs(userStore)
 <template>
   <BaseLoader :loading="isLoading" />
   <SiteHeader :user="user" />
-  <div class="min-h-[800px] p-2 bg-white flex">
-    <Toast />
+  <main class="site-main">
+    <Toast class="site-toast" />
     <RunsView v-if="user.isAuthenticated" :user="user" />
     <HomeView v-else :user="user" />
-  </div>
+  </main>
   <SiteFooter />
 </template>

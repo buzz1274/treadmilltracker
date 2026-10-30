@@ -117,7 +117,14 @@ const changeYear = (year: string): void => {
     :values="runs"
     no-data-text="<p class='text-xs'>No runs recorded</p>"
     :tooltip-formatter="(v) => tooltipFormatter(v)"
-    :range-color="['#e8e8e8', '#e8e8e8', '#000000']"
+    :range-color="[
+      '#eef1e7',
+      '#254d3c',
+      '#254d3c',
+      '#254d3c',
+      '#254d3c',
+      '#254d3c',
+    ]"
     :end-date="endDate"
     :week-start="1"
   />

@@ -5,8 +5,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="flex p-1 text-sm justify-between bg-black text-white">
-    <div class="font-semibold">
+  <div class="section-heading">
+    <div class="section-title">
       {{ props.tableTitle }}
     </div>
     <slot name="header_action" class="text-end"></slot>

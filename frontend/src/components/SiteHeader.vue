@@ -2,7 +2,6 @@
 import { useToast } from 'primevue/usetoast'
 import type { ToastServiceMethods } from 'primevue'
 
-import BaseIcon from '@/components/base/BaseIcon.vue'
 import type { IUser } from '@/types/types'
 import { userStore as UseUserStore } from '@/stores/UserStore'
 const userStore: ReturnType<typeof UseUserStore> = UseUserStore()
@@ -26,20 +25,31 @@ const signOut = (): void => {
 </script>
 
 <template>
-  <header
-    class="bg-black h-20 top-0 flex relative text-white leading-6 items-center"
-  >
-    <h1 class="text-4xl font-bold pl-4">TreadmillTracker</h1>
+  <header class="site-header">
+    <a href="/" class="brand" aria-label="TreadmillTracker home">
+      <span class="brand-mark"
+        ><i class="pi pi-bolt" aria-hidden="true"></i
+      ></span>
+      <span class="brand-copy">
+        <span
+          >Treadmill<span class="brand-light">Tracker</span
+          ><span class="brand-dot">.</span></span
+        >
+        <span class="brand-byline">YOUR TRAINING JOURNAL</span>
+      </span>
+    </a>
     <nav
       v-if="props.user.isAuthenticated"
-      class="absolute top-0 right-0 pr-4 pt-1 text-[0.90rem]"
+      class="user-nav"
+      aria-label="Account"
     >
-      Welcome back, {{ props.user.name }}
-      <BaseIcon
-        icon-css="pi pi-sign-out ml-2"
-        icon-title="Logout"
-        @click="signOut()"
-      />
+      <span class="user-greeting"
+        >Hello, <strong>{{ props.user.name }}</strong></span
+      >
+      <button class="sign-out-button" aria-label="Sign out" @click="signOut()">
+        <i class="pi pi-sign-out" aria-hidden="true"></i><span>Sign out</span>
+      </button>
     </nav>
+    <span v-else class="header-tagline">A little further, every day.</span>
   </header>
 </template>
