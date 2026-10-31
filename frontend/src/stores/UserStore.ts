@@ -25,8 +25,9 @@ export const userStore = defineStore('userStore', () => {
     try {
       if (!token) return
       const restoredUser = await userService.getCurrentUser()
-      if (authStore.getToken() === token)
+      if (authStore.getToken() === token) {
         Object.assign(user.value, restoredUser)
+      }
     } catch (error) {
       if (
         authStore.getToken() === token &&
