@@ -43,6 +43,9 @@ extend-ignore = ["B008"]
 [tool.bandit]
 exclude_dirs = ["app/tests/", "app/alembic/"]
 
+[tool.coverage.run]
+omit = ["app/alembic/*"]
+
 [dependency-groups]
 dev = [
     "ty (>=0.0.7,<0.0.8)",
