@@ -523,3 +523,23 @@ a:focus-visible {
     padding: 14px;
   }
 }
+
+/* Shared appearance for tooltips, including those rendered outside #app. */
+.p-tooltip {
+  --p-tooltip-background: #254d3c;
+  --p-tooltip-color: #fffef9;
+  --p-tooltip-border-radius: 6px;
+  --p-tooltip-padding: 4px 7px;
+  max-width: min(240px, calc(100vw - 24px));
+}
+.p-tooltip .p-tooltip-text {
+  background: #254d3c;
+  color: #fffef9;
+  border-radius: 6px;
+  padding: 4px 7px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px #183b2926;
+  overflow-wrap: anywhere;
+}
