@@ -117,6 +117,22 @@ const changeYear = (year: string): void => {
   <div class="heatmap-months">
     <section v-for="month in months" :key="month.key" class="heatmap-month">
       <h3>{{ month.label }}</h3>
+      <div class="month-weekdays" aria-label="Monday to Sunday">
+        <abbr
+          v-for="weekday in [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ]"
+          :key="weekday"
+          :title="weekday"
+          >{{ weekday[0] }}</abbr
+        >
+      </div>
       <div class="month-days">
         <span
           v-for="(day, index) in month.days"
@@ -150,10 +166,20 @@ const changeYear = (year: string): void => {
   font-weight: 600;
   margin: 0 0 8px;
 }
+.month-weekdays,
 .month-days {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 3px;
+}
+.month-weekdays {
+  margin-bottom: 5px;
+  color: #65765b;
+  font-size: 8px;
+  text-align: center;
+}
+.month-weekdays abbr {
+  text-decoration: none;
 }
 .day-cell {
   display: block;
