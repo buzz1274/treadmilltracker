@@ -37,4 +37,4 @@ jobs:
       - name: Frontend tests
         working-directory: frontend
         run: |
-          yarn run test        
+          yarn vitest run --coverage --coverage.reporter=lco        
