@@ -4,6 +4,7 @@
 @import 'vue3-calendar-heatmap/dist/style.css';
 
 body {
+  margin: 0;
   font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
@@ -29,9 +30,6 @@ text.vch__day__label {
   -webkit-font-smoothing: antialiased;
 }
 
-body {
-  margin: 0;
-}
 * {
   box-sizing: border-box;
 }
