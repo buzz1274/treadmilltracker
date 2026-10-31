@@ -37,4 +37,12 @@ jobs:
       - name: Frontend tests
         working-directory: frontend
         run: |
-          yarn vitest run --coverage --coverage.reporter=lco        
+          yarn vitest run --coverage --coverage.reporter=lco   
+
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/lcov.info
+          if-no-files-found: error
+          retention-days: 1
