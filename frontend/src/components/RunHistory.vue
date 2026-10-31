@@ -85,6 +85,7 @@ watch(
     <FilterHistoryModal
       v-model:visible="displayFilterHistoryModal"
       :model-value="filterHistoryModel"
+      @update:model-value="Object.assign(filterHistoryModel, $event)"
       @close="
         () => {
           displayFilterHistoryModal = false
@@ -119,6 +120,7 @@ watch(
     />
 
     <BaseDataTable
+      :key="filterHistoryModel.groupByChoices"
       :table-data="runs"
       table-title="History"
       :paginate="true"

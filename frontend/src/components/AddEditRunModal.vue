@@ -16,7 +16,7 @@ import type { IRun } from '@/types/types.d.ts'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { RunModel } from '@/models/RunModel'
 import { store as useStore } from '@/stores/store'
-import { convertToSeconds } from '@/helper/helper.ts'
+import { convertToSeconds, timePattern } from '@/helper/helper.ts'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 
 const toast = useToast()
@@ -45,9 +45,11 @@ const runModelValidationSchema: ObjectSchema<{
   run_date: date().required('Please enter a valid date'),
   formattedSeconds: string()
     .required('Please enter time in the format HH:MM:SS')
-    .matches(
-      /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/,
-      'Please enter time in the format HH:MM:SS',
+    .matches(timePattern, 'Please enter time in the format HH:MM:SS')
+    .test(
+      'positive-duration',
+      'Time must be greater than zero',
+      (value) => convertToSeconds(value) > 0,
     ),
   distance_m: number().required('Please enter a valid distance'),
   calories: number().required('Please enter valid value for calories'),
@@ -76,13 +78,13 @@ const save = (): void => {
   let validationError = false
 
   try {
-    run.value.formattedSeconds = run.value.secondsToHHMMSS()
     runModelValidationSchema.validateSync(run.value)
   } catch {
     validationError = true
   }
 
   if (!validationError) {
+    run.value.duration_s = convertToSeconds(run.value.formattedSeconds)
     run.value
       .save()
       .then(() => {
@@ -115,21 +117,13 @@ const runDateProxy = computed<Date | null>({
     run.value.run_date = val ? moment(val).format('YYYY-MM-DD') : ''
   },
 })
-
-const formattedSeconds = computed({
-  get(): string {
-    return run.value?.secondsToHHMMSS()
-  },
-  set(value: string) {
-    run.value.duration_s = convertToSeconds(value)
-  },
-})
 </script>
 
 <template>
   <Dialog
     v-model:visible="visible"
     modal
+    dismissable-mask
     :header="props.title"
     class="text-sm"
     position="top"
@@ -166,7 +160,7 @@ const formattedSeconds = computed({
       <div class="flex items-center gap-4 mb-4">
         <label for="time" class="font-semibold w-24">Time(hh:mm:ss)</label>
         <InputText
-          v-model="formattedSeconds"
+          v-model="run.formattedSeconds"
           autocomplete="off"
           name="formattedSeconds"
           class="text-xs"

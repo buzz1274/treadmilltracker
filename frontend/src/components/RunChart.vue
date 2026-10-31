@@ -251,6 +251,7 @@ const updateDate = (type: string): void => {
   <Dialog
     v-model:visible="graphFilterVisible"
     modal
+    dismissable-mask
     header="Filter Graph"
     class="text-sm"
     position="top"
