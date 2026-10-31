@@ -37,7 +37,7 @@ jobs:
       - name: Frontend tests
         working-directory: frontend
         run: |
-          yarn vitest run --coverage --coverage.reporter=lco   
+          yarn vitest run --coverage --coverage.reporter=lcov
 
       - name: Upload frontend coverage
         uses: actions/upload-artifact@v4
