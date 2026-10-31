@@ -10,12 +10,5 @@ const css = computed((): string => `${props.iconCss} cursor-pointer`)
 </script>
 
 <template>
-  <button
-    v-tooltip="{
-      value: props.iconTitle,
-      pt: { text: '!bg-black text-xs' },
-    }"
-    :class="css"
-    style="font-size: 0.95em"
-  />
+  <button v-tooltip="props.iconTitle" :class="css" style="font-size: 0.95em" />
 </template>

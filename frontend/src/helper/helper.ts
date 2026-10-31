@@ -19,8 +19,10 @@ const formatSecondsAsHHMMSS: (seconds: number) => string = (
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
+const timePattern = /^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$/
+
 const convertToSeconds: (time: string) => number = (time: string): number => {
-  if (!time || !/^\d{2}:\d{2}:\d{2}$/.test(time)) {
+  if (!timePattern.test(time)) {
     return 0
   }
 
@@ -54,6 +56,8 @@ const generateDateSequence = (
     ? endDate.clone()
     : moment(endDate)
 
+  if (start.isAfter(end)) return dateArray
+
   let current: Moment = config.adjustStart
     ? config.adjustStart(start.clone())
     : start.clone()
@@ -69,6 +73,7 @@ const generateDateSequence = (
 }
 
 export {
+  timePattern,
   formatSecondsAsHHMMSS,
   convertToSeconds,
   formatDate,

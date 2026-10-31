@@ -6,3 +6,7 @@ treadmilltracker.iws
 __pycache__/
 .env
 *.csv
+
+.coverage
+coverage.xml
+coverage

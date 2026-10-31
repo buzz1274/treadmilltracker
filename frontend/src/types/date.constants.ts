@@ -27,12 +27,14 @@ export const dateConfig = {
     format: 'MMM, YYYY',
     increment: 'months',
     label: 'Monthly',
+    adjustStart: (date: Moment) => date.startOf('month'),
     isChoice: true,
   },
   years: {
     format: 'YYYY',
     increment: 'years',
     label: 'Yearly',
+    adjustStart: (date: Moment) => date.startOf('year'),
     isChoice: true,
   },
   'ISO-8601': {

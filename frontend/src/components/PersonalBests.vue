@@ -64,6 +64,7 @@ watch(
     <Dialog
       v-model:visible="displayPersonalBestsModal"
       modal
+      dismissable-mask
       :header="personalBestTitle()"
       class="text-sm"
       position="top"

@@ -44,14 +44,19 @@ export class Model {
       .then((response: IResponsePayload) => {
         this._store.completeAPICall(callId)
 
-        if (
-          response.status === StatusCodes.INTERNAL_SERVER_ERROR ||
-          response.status === StatusCodes.UNPROCESSABLE_ENTITY
-        ) {
-          throw new Error(this.errorMessage(response))
+        if (response.status === StatusCodes.UNAUTHORIZED) {
+          authStore.setToken(null)
+          this._userStore.logout()
+          throw new Error('Your session has ended. Please sign in again.')
         } else if (response.status === StatusCodes.FORBIDDEN) {
           void this._userStore.logout()
           throw new Error('403: Forbidden')
+        }
+        if (
+          response.status >= StatusCodes.BAD_REQUEST &&
+          response.status !== StatusCodes.NOT_FOUND
+        ) {
+          throw new Error(this.errorMessage(response))
         }
         return response
       })
@@ -146,7 +151,7 @@ export class Model {
     ) {
       return response.data['detail'] as string
     } else {
-      return 'An unknown error occurred'
+      return `Request failed (HTTP ${response.status}). Please try again.`
     }
   }
 

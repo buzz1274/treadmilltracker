@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog'
 import { ref, type Ref, watch } from 'vue'
-import { Form } from '@primevue/forms'
+import { Form, type FormSubmitEvent } from '@primevue/forms'
 import RadioButton from 'primevue/radiobutton'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import Message from 'primevue/message'
@@ -9,6 +9,7 @@ import { yupResolver } from '@primeuix/forms/resolvers/yup'
 import type { ObjectSchema } from 'yup'
 import { object, string } from 'yup'
 
+import BaseButton from '@/components/base/BaseButton.vue'
 import { groupByChoices, type TInterval } from '@/types/date.constants'
 import type { IFilterHistoryModelType } from '@/types/types.d.ts'
 
@@ -48,6 +49,9 @@ const filterHistoryModelValidationSchema: ObjectSchema<{
     .required('Group by choice is required'),
 })
 
+const draftFilters = ref<IFilterHistoryModelType>({
+  ...filterHistoryModel.value,
+})
 const visible: Ref<boolean> = ref(props.visible)
 const emit = defineEmits<{
   (event: 'close'): void
@@ -56,6 +60,9 @@ const emit = defineEmits<{
 watch(
   () => props.visible,
   (newValue): void => {
+    if (newValue) {
+      draftFilters.value = { ...filterHistoryModel.value }
+    }
     visible.value = newValue
   },
 )
@@ -65,12 +72,19 @@ watch(visible, (newValue: boolean): void => {
     emit('close')
   }
 })
+const applyFilters = ({ valid }: FormSubmitEvent): void => {
+  if (!valid) return
+
+  filterHistoryModel.value = { ...draftFilters.value }
+  emit('close')
+}
 </script>
 
 <template>
   <Dialog
     v-model:visible="visible"
     modal
+    dismissable-mask
     :header="'Filter History'"
     class="text-sm"
     position="top"
@@ -79,15 +93,14 @@ watch(visible, (newValue: boolean): void => {
   >
     <Form
       v-slot="$form"
-      v-model="filterHistoryModel"
       :resolver="yupResolver(filterHistoryModelValidationSchema)"
-      :initial-values="filterHistoryModel"
+      :initial-values="draftFilters"
       class="p-4"
-      @submit="null"
+      @submit="applyFilters"
     >
       <div class="flex items-center gap-4 mb-4">
         <RadioButtonGroup
-          v-model="filterHistoryModel.viewChoices"
+          v-model="draftFilters.viewChoices"
           name="viewChoices"
           class="flex flex-wrap gap-4"
         >
@@ -118,7 +131,7 @@ watch(visible, (newValue: boolean): void => {
       </div>
       <div class="flex items-center gap-4 mb-4">
         <RadioButtonGroup
-          v-model="filterHistoryModel.groupByChoices"
+          v-model="draftFilters.groupByChoices"
           name="groupByChoices"
           class="flex flex-wrap gap-4"
         >
@@ -148,6 +161,14 @@ watch(visible, (newValue: boolean): void => {
         <Message severity="error" class="border w-100" size="small">
           {{ $form['groupByChoices'].error.message }}
         </Message>
+      </div>
+      <div class="flex justify-end gap-2 mt-10">
+        <BaseButton
+          label="Cancel"
+          severity="secondary"
+          @click="emit('close')"
+        />
+        <BaseButton type="submit" label="Apply filters" severity="primary" />
       </div>
     </Form>
   </Dialog>

@@ -1,0 +1,447 @@
+# serializer version: 1
+# name: test_authentication_required[delete-/api/runs/7]
+  dict({
+    'body': dict({
+      'detail': 'Not authenticated',
+    }),
+    'content_type': 'application/json',
+    'status_code': 401,
+  })
+# ---
+# name: test_authentication_required[get-/api/runs/]
+  dict({
+    'body': dict({
+      'detail': 'Not authenticated',
+    }),
+    'content_type': 'application/json',
+    'status_code': 401,
+  })
+# ---
+# name: test_authentication_required[get-/api/runs/personal_bests]
+  dict({
+    'body': dict({
+      'detail': 'Not authenticated',
+    }),
+    'content_type': 'application/json',
+    'status_code': 401,
+  })
+# ---
+# name: test_authentication_required[patch-/api/runs/]
+  dict({
+    'body': dict({
+      'detail': 'Not authenticated',
+    }),
+    'content_type': 'application/json',
+    'status_code': 401,
+  })
+# ---
+# name: test_authentication_required[post-/api/runs/]
+  dict({
+    'body': dict({
+      'detail': 'Not authenticated',
+    }),
+    'content_type': 'application/json',
+    'status_code': 401,
+  })
+# ---
+# name: test_delete_run
+  dict({
+    'body': '',
+    'content_type': 'application/json',
+    'status_code': 204,
+  })
+# ---
+# name: test_get_personal_bests
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'id': 3,
+          'max_distance_m': 5005,
+          'min_distance_m': 5000,
+          'runs': list([
+            dict({
+              'calories': 350,
+              'distance_m': 5000,
+              'duration_s': 1800,
+              'id': 7,
+              'pace': 10.0,
+              'run_date': '2026-10-20',
+              'vo2max': '45',
+            }),
+          ]),
+          'sort_order': 1,
+          'title': 'Fastest 5km',
+          'type': 'speed',
+        }),
+        dict({
+          'id': 4,
+          'max_distance_m': None,
+          'min_distance_m': None,
+          'runs': list([
+          ]),
+          'sort_order': 2,
+          'title': 'Longest run',
+          'type': 'distance',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_personal_bests_empty_result
+  dict({
+    'body': dict({
+      'data': list([
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_empty_result
+  dict({
+    'body': dict({
+      'data': list([
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_uses_default_filters
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'calories': 350,
+          'distance_m': 5000,
+          'duration_s': 1800,
+          'id': 7,
+          'pace': 10.0,
+          'run_date': '2026-10-20',
+          'vo2max': '45',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_with_filters[days]
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'calories': 350,
+          'distance_m': 5000,
+          'duration_s': 1800,
+          'id': 7,
+          'pace': 10.0,
+          'run_date': '2026-10-20',
+          'vo2max': '45',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_with_filters[months]
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'calories': 350,
+          'distance_m': 5000,
+          'duration_s': 1800,
+          'id': 7,
+          'pace': 10.0,
+          'run_date': '2026-10-20',
+          'vo2max': '45',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_with_filters[weeks]
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'calories': 350,
+          'distance_m': 5000,
+          'duration_s': 1800,
+          'id': 7,
+          'pace': 10.0,
+          'run_date': '2026-10-20',
+          'vo2max': '45',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_get_runs_with_filters[years]
+  dict({
+    'body': dict({
+      'data': list([
+        dict({
+          'calories': 350,
+          'distance_m': 5000,
+          'duration_s': 1800,
+          'id': 7,
+          'pace': 10.0,
+          'run_date': '2026-10-20',
+          'vo2max': '45',
+        }),
+      ]),
+    }),
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_invalid_group_by
+  dict({
+    'body': dict({
+      'detail': "Input should be 'days', 'weeks', 'months' or 'years'",
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_id
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer, unable to parse string as an integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-calories-patch]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer, unable to parse string as an integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-calories-post]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer, unable to parse string as an integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-distance-patch]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer, unable to parse string as an integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-distance-post]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer, unable to parse string as an integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-vo2max-patch]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid decimal',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[invalid-vo2max-post]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid decimal',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[missing-fields-patch]
+  dict({
+    'body': dict({
+      'detail': '''
+        Field required
+        Field required
+        Field required
+        Field required
+        Field required
+      ''',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[missing-fields-post]
+  dict({
+    'body': dict({
+      'detail': '''
+        Field required
+        Field required
+        Field required
+        Field required
+        Field required
+      ''',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[null-duration-patch]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_invalid_run_payload[null-duration-post]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_missing_request_body[patch]
+  dict({
+    'body': dict({
+      'detail': 'Field required',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_missing_request_body[post]
+  dict({
+    'body': dict({
+      'detail': 'Field required',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_repository_errors[bests-error]
+  dict({
+    'body': 'Internal Server Error',
+    'content_type': 'text/plain; charset=utf-8',
+    'status_code': 500,
+  })
+# ---
+# name: test_repository_errors[bests-missing]
+  dict({
+    'body': dict({
+      'detail': 'Run not found',
+    }),
+    'content_type': 'application/json',
+    'status_code': 404,
+  })
+# ---
+# name: test_repository_errors[create-error]
+  dict({
+    'body': dict({
+      'detail': 'Database unavailable',
+    }),
+    'content_type': 'application/json',
+    'status_code': 500,
+  })
+# ---
+# name: test_repository_errors[delete-error]
+  dict({
+    'body': dict({
+      'detail': 'Database unavailable',
+    }),
+    'content_type': 'application/json',
+    'status_code': 500,
+  })
+# ---
+# name: test_repository_errors[delete-missing]
+  dict({
+    'body': dict({
+      'detail': 'Run not found',
+    }),
+    'content_type': 'application/json',
+    'status_code': 404,
+  })
+# ---
+# name: test_repository_errors[delete-value-error]
+  dict({
+    'body': dict({
+      'detail': 'Run not found',
+    }),
+    'content_type': 'application/json',
+    'status_code': 404,
+  })
+# ---
+# name: test_repository_errors[list-error]
+  dict({
+    'body': dict({
+      'detail': 'Database unavailable',
+    }),
+    'content_type': 'application/json',
+    'status_code': 500,
+  })
+# ---
+# name: test_repository_errors[list-missing]
+  dict({
+    'body': dict({
+      'detail': 'Run not found',
+    }),
+    'content_type': 'application/json',
+    'status_code': 404,
+  })
+# ---
+# name: test_repository_errors[update-error]
+  dict({
+    'body': dict({
+      'detail': 'Database unavailable',
+    }),
+    'content_type': 'application/json',
+    'status_code': 500,
+  })
+# ---
+# name: test_repository_errors[update-missing]
+  dict({
+    'body': dict({
+      'detail': 'Run not found',
+    }),
+    'content_type': 'application/json',
+    'status_code': 404,
+  })
+# ---
+# name: test_save_run[patch-update_run-200]
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_save_run[post-add_run-201]
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 201,
+  })
+# ---

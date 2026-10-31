@@ -76,6 +76,7 @@ const deleteRun = (): void => {
   <Dialog
     v-model:visible="visible"
     modal
+    dismissable-mask
     :header="'Treadmill run on ' + moment(run?.run_date).format('MMMM Do YYYY')"
     class="text-sm"
     position="top"

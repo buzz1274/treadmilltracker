@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
 import { userStore as UseUserStore } from '@/stores/UserStore'
@@ -43,41 +43,69 @@ const initSignIn = () => {
   })
 }
 
+let googleScript: HTMLScriptElement | null = null
+
 onMounted(() => {
   // @ts-expect-error google script is loaded externally
   if (window.google?.accounts?.id) {
     initSignIn()
+  } else {
+    googleScript = document.querySelector<HTMLScriptElement>(
+      '#google-sign-in-script',
+    )
+    googleScript?.addEventListener('load', initSignIn, { once: true })
   }
+})
+
+onBeforeUnmount(() => {
+  googleScript?.removeEventListener('load', initSignIn)
 })
 </script>
 
 <template>
-  <div class="flex justify-center mx-auto pt-10">
-    <div class="text-center max-w-lg p-6 bg-white">
-      <p class="text-gray-700">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-        porttitor tortor id urna efficitur ultrices. Maecenas fringilla dapibus
-        condimentum. Duis ut sapien non leo feugiat tempus non ac dolor. Ut
-        accumsan rhoncus pulvinar. Mauris tincidunt est vitae ex ornare varius.
-        Phasellus id dolor in felis molestie bibendum non eu arcu. Nunc molestie
-        maximus vestibulum. Ut tempor nunc a nisi suscipit, ac ullamcorper massa
-        mattis. Etiam justo lacus, scelerisque non quam in, suscipit vehicula
-        neque. Phasellus non diam ac lorem ornare
-        <br /><br />
-        Nulla eu ullamcorper libero, vel eleifend orci. Cras massa erat, rhoncus
-        facilisis enim at, maximus varius mauris. Fusce at sapien vitae velit
-        laoreet suscipit. In finibus molestie rhoncus. Donec risus velit,
-        hendrerit ut quam quis, hendrerit finibus purus. Nam quis faucibus
-        lorem. Pellentesque at sem quam. Fusce rhoncus orci vitae iaculis
-        efficitur. Maecenas elit purus, pharetra at lectus id, accumsan gravida
-        enim. Duis elementum velit non leo ultrices, a rutrum eros cursus. Morbi
-        nec finibus risus. Cras lacus sapien, pretium at nisi quis, consequat
-        dignissim ante. Phasellus molestie suscipit suscipit. Integer tristique
-        tincidunt
+  <section class="landing">
+    <div class="landing-copy">
+      <p class="eyebrow">
+        <span class="status-dot"></span> YOUR RUN. YOUR RHYTHM.
       </p>
-      <div class="pt-6 flex justify-center">
-        <div id="gSignInButton" />
+      <h1>
+        Small steps.<br />
+        <em>Stronger you.</em>
+      </h1>
+      <p class="landing-description">
+        Every session adds up. Keep your treadmill runs in one place, discover
+        your personal bests, and see your progress take shape.
+      </p>
+      <div class="sign-in-card">
+        <p class="sign-in-title">Your next chapter starts here.</p>
+        <p>Sign in to start your training journal.</p>
+        <div id="gSignInButton" class="google-sign-in" />
+      </div>
+      <div class="landing-features">
+        <span
+          ><i class="pi pi-check" aria-hidden="true"></i> Track every
+          session</span
+        >
+        <span
+          ><i class="pi pi-check" aria-hidden="true"></i> See your
+          progress</span
+        >
       </div>
     </div>
-  </div>
+    <div class="landing-art" aria-hidden="true">
+      <div class="art-topline">
+        <span>BUILT ONE RUN AT A TIME</span><i class="pi pi-arrow-up-right"></i>
+      </div>
+      <div class="track-illustration">
+        <div class="track-lane lane-one"></div>
+        <div class="track-lane lane-two"></div>
+        <div class="track-lane lane-three"></div>
+        <div class="track-lane lane-four"></div>
+        <div class="track-marker"><i class="pi pi-bolt"></i></div>
+      </div>
+      <div class="art-caption">
+        <span>Find your stride.</span><span>KEEP GOING ↗</span>
+      </div>
+    </div>
+  </section>
 </template>

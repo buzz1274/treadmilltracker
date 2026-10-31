@@ -6,6 +6,7 @@ import { RunModel } from '@/models/RunModel'
 import type { TInterval } from '@/types/date.constants'
 
 export class RunsModel extends Model {
+  private _requestId = 0
   public runs: Ref<Array<IRun>> = ref([])
 
   public getRuns(
@@ -13,6 +14,7 @@ export class RunsModel extends Model {
     start_date: string | null = null,
     end_date: string | null = null,
   ): Promise<IResponsePayload | void> {
+    const requestId = ++this._requestId
     this.runs.value = []
 
     let url = `api/runs/?group_by=${group_by}`
@@ -22,10 +24,10 @@ export class RunsModel extends Model {
 
     return this.fetch(url, { method: 'GET' }).then(
       (response: IResponsePayload | void) => {
+        if (requestId !== this._requestId) return
+
         if (this.isValidResponse<IRunData>(response)) {
-          for (const run of response.data.data) {
-            this.runs.value.push(new RunModel(run))
-          }
+          this.runs.value = response.data.data.map((run) => new RunModel(run))
         }
       },
     )

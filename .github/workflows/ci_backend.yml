@@ -1,0 +1,77 @@
+
+name: Backend CI
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        run: pipx install 'poetry>=2,<3'
+
+      - name: Install dependencies
+        env:
+          POETRY_INSTALLER_ONLY_BINARY: ":all:"
+        run: poetry install --no-root --sync
+
+      - name: Install linting tools
+        run: |
+          pip install --only-binary=:all: \
+            black==23.11.0 \
+            flake8==7.2.0 \
+            flake8-bugbear==26.10.27 \
+            flake8-simplify==0.31.1 \
+            bandit==1.9.4
+
+      - name: Black
+        run: |
+          black --check --line-length 80 \
+            --extend-exclude '/alembic/' \
+            app
+
+      - name: Flake8
+        run: |
+          flake8 --max-line-length=80 \
+            --extend-ignore=B008 \
+            --extend-exclude=app/alembic \
+            app
+
+      - name: Bandit
+        run: bandit -r app -x app/alembic,app/tests
+
+      - name: Type checking
+        run: poetry run ty check
+
+      - name: Backend tests
+        run: |
+          poetry run pytest app/tests/ \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
+
+      - name: Upload backend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/coverage.xml
+          if-no-files-found: error
+          retention-days: 1
