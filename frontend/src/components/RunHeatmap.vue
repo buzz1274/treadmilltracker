@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {
-  CalendarHeatmap,
-  type CalendarItem,
-  type Value as HeatmapValue,
-} from 'vue3-calendar-heatmap'
 import moment from 'moment'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import type { Moment } from 'moment/moment'
@@ -11,9 +6,10 @@ import { useToast } from 'primevue/usetoast'
 import { storeToRefs } from 'pinia'
 
 import { RunsModel } from '@/models/RunsModel.ts'
-import type { IUser, IRun } from '@/types/types'
+import type { IUser, IRunData } from '@/types/types'
 import { store as useStore } from '@/stores/store'
 import BaseComponentHeader from '@/components/base/BaseComponentHeader.vue'
+import { buildHeatmapMonths } from '@/helper/heatmap'
 
 const store = useStore()
 const { resyncRuns } = storeToRefs(store)
@@ -23,10 +19,12 @@ const props = defineProps<{
 
 const toast = useToast()
 const runsModel = new RunsModel()
-const runs = ref<HeatmapValue[]>([])
+const runs = ref<IRunData[]>([])
 
 const endDate: Ref<Moment> = ref(moment())
-const startDate: Ref<Moment> = ref(moment().subtract(1, 'years'))
+const startDate: Ref<Moment> = ref(
+  moment().subtract(11, 'months').startOf('month'),
+)
 
 const getRuns = (): void => {
   runsModel
@@ -36,10 +34,7 @@ const getRuns = (): void => {
       endDate.value.format('YYYY-MM-DD'),
     )
     .then(() => {
-      runs.value = runsModel.runs.value.map((run: IRun) => ({
-        date: new Date(run.run_date),
-        count: Number((run.distance_m / 1000).toFixed(2)),
-      }))
+      runs.value = [...runsModel.runs.value]
     })
     .catch((error: unknown) => {
       toast.add({
@@ -75,10 +70,13 @@ const availableYears = computed(() => {
   return availableYears.reverse()
 })
 
-const tooltipFormatter = (run: CalendarItem): string =>
-  `<p class="text-xs">${run.count} Km ran on ${moment(run.date).format(
-    'Do MMM YYYY',
-  )}</p>`
+const months = computed(() =>
+  buildHeatmapMonths(
+    startDate.value.format('YYYY-MM-DD'),
+    endDate.value.format('YYYY-MM-DD'),
+    runs.value,
+  ),
+)
 
 const changeYear = (year: string): void => {
   const parsedYear = parseInt(year, 10)
@@ -88,7 +86,9 @@ const changeYear = (year: string): void => {
     endDate.value = moment().year(parsedYear).endOf('year')
   } else {
     endDate.value = moment()
-    startDate.value = moment(endDate.value).subtract(1, 'years')
+    startDate.value = moment(endDate.value)
+      .subtract(11, 'months')
+      .startOf('month')
   }
   getRuns()
 }
@@ -99,6 +99,7 @@ const changeYear = (year: string): void => {
     <template #header_action>
       <select
         class="bg-white text-black text-xs mr-1"
+        aria-label="Heatmap year"
         @change="changeYear(($event.target as HTMLSelectElement)?.value)"
       >
         <option value="">Last 12 months</option>
@@ -113,19 +114,70 @@ const changeYear = (year: string): void => {
     </template>
   </BaseComponentHeader>
 
-  <CalendarHeatmap
-    :values="runs"
-    no-data-text="<p class='text-xs'>No runs recorded</p>"
-    :tooltip-formatter="(v) => tooltipFormatter(v)"
-    :range-color="[
-      '#eef1e7',
-      '#254d3c',
-      '#254d3c',
-      '#254d3c',
-      '#254d3c',
-      '#254d3c',
-    ]"
-    :end-date="endDate"
-    :week-start="1"
-  />
+  <div class="heatmap-months">
+    <section v-for="month in months" :key="month.key" class="heatmap-month">
+      <h3>{{ month.label }}</h3>
+      <div class="month-days">
+        <span
+          v-for="(day, index) in month.days"
+          :key="day?.date ?? index"
+          v-tooltip="day?.label"
+          class="day-cell"
+          :class="{
+            'day-recorded': day?.recorded,
+            'day-future': day?.future,
+            'day-placeholder': !day,
+          }"
+          :aria-label="day?.label"
+          :aria-hidden="!day"
+          :tabindex="day?.recorded ? 0 : undefined"
+        ></span>
+      </div>
+    </section>
+  </div>
 </template>
+
+<style scoped>
+.heatmap-months {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px 14px;
+  padding-top: 4px;
+}
+.heatmap-month h3 {
+  color: #65765b;
+  font-size: 10px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.month-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+.day-cell {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: #eef1e7;
+}
+.day-recorded {
+  background: #254d3c;
+}
+.day-future {
+  opacity: 0.4;
+}
+.day-placeholder {
+  visibility: hidden;
+}
+.day-cell:not(.day-placeholder):hover,
+.day-cell:focus-visible {
+  outline: 1px solid #658052;
+  outline-offset: 1px;
+}
+@media (max-width: 520px) {
+  .heatmap-months {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+</style>

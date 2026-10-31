@@ -163,12 +163,97 @@ describe('RunsModel.getRuns', () => {
     expect(useStore().isLoading).toBe(false)
   })
 
-  it.each([500, 422])('reports the API error for HTTP %s', async (status) => {
-    fetchMock.mockResolvedValue(
-      jsonResponse({ detail: 'Request failed' }, status),
-    )
+  it.each([400, 408, 422, 429, 500, 502, 503, 504])(
+    'reports the API error for HTTP %s',
+    async (status) => {
+      fetchMock.mockResolvedValue(
+        jsonResponse({ detail: 'Request failed' }, status),
+      )
+      const model = new RunsModel()
+      await expect(model.getRuns()).rejects.toThrow('Request failed')
+      expect(model.runs.value).toEqual([])
+      expect(useStore().isLoading).toBe(false)
+    },
+  )
+
+  it.each([502, 503, 504])(
+    'reports a useful error for an HTML HTTP %s response',
+    async (status) => {
+      fetchMock.mockResolvedValue(
+        new Response('<h1>Unavailable</h1>', {
+          status,
+          headers: { 'Content-Type': 'text/html' },
+        }),
+      )
+      const model = new RunsModel()
+      await expect(model.getRuns()).rejects.toThrow(
+        `Request failed (HTTP ${status}). Please try again.`,
+      )
+      expect(model.runs.value).toEqual([])
+      expect(useStore().isLoading).toBe(false)
+    },
+  )
+
+  it.each(['old-first', 'new-first'])(
+    'keeps only the latest grouping when requests finish %s',
+    async (order) => {
+      let finishOld!: (response: Response) => void
+      let finishNew!: (response: Response) => void
+      fetchMock
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              finishOld = resolve
+            }),
+        )
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              finishNew = resolve
+            }),
+        )
+      const model = new RunsModel()
+      const oldRequest = model.getRuns('days')
+      const newRequest = model.getRuns('months')
+      const oldResponse = jsonResponse({ data: [runData] })
+      const newResponse = jsonResponse({ data: [{ ...runData, id: 8 }] })
+
+      if (order === 'old-first') {
+        finishOld(oldResponse)
+        await oldRequest
+        expect(model.runs.value).toEqual([])
+        expect(useStore().isLoading).toBe(true)
+        finishNew(newResponse)
+        await newRequest
+      } else {
+        finishNew(newResponse)
+        await newRequest
+        expect(model.runs.value.map((run) => run.id)).toEqual([8])
+        expect(useStore().isLoading).toBe(true)
+        finishOld(oldResponse)
+        await oldRequest
+      }
+
+      expect(model.runs.value.map((run) => run.id)).toEqual([8])
+      expect(useStore().isLoading).toBe(false)
+    },
+  )
+
+  it('ignores an old response after the latest grouping request fails', async () => {
+    let finishOld!: (response: Response) => void
+    fetchMock
+      .mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            finishOld = resolve
+          }),
+      )
+      .mockResolvedValueOnce(jsonResponse({ detail: 'Unavailable' }, 503))
     const model = new RunsModel()
-    await expect(model.getRuns()).rejects.toThrow('Request failed')
+    const oldRequest = model.getRuns('days')
+    await expect(model.getRuns('months')).rejects.toThrow('Unavailable')
+    finishOld(jsonResponse({ data: [runData] }))
+    await oldRequest
     expect(model.runs.value).toEqual([])
     expect(useStore().isLoading).toBe(false)
   })
