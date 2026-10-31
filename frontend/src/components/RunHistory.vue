@@ -207,7 +207,7 @@ watch(
           :sortable="true"
           class="!text-end pr-3"
           field="duration_s"
-          header="Time"
+          header="Time(HH:MM:SS)"
         >
           <template #body="{ data }: { data: IRun }">
             {{ data.secondsToHHMMSS() }}
