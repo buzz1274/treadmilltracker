@@ -15,11 +15,18 @@ export class UserService {
 
     authStore.setToken(loginResponse.token)
 
+    try {
+      return await this.getCurrentUser()
+    } catch (error) {
+      authStore.setToken(null)
+      throw error
+    }
+  }
+
+  public async getCurrentUser(): Promise<UserModel> {
     const userResponse = await httpClient.get<IUserDataResponse>('api/users/me')
-
-    const user: UserModel = UserModel.fromAPI(userResponse)
+    const user = UserModel.fromAPI(userResponse)
     user.isAuthenticated = true
-
     return user
   }
 
