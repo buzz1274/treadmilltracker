@@ -24,6 +24,7 @@ export class UserService {
   }
 
   public logout(): UserModel {
+    authStore.setToken(null)
     return new UserModel()
   }
 }

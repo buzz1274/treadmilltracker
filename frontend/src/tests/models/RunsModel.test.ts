@@ -95,6 +95,31 @@ describe('RunsModel.getRuns', () => {
     )
   })
 
+  it('stops sending the bearer token after manual logout', async () => {
+    const userStore = useUserStore()
+    userStore.user.isAuthenticated = true
+    userStore.user.name = 'Test runner'
+    authStore.setToken('test-token')
+    fetchMock.mockResolvedValue(jsonResponse({ data: [] }))
+    const model = new RunsModel()
+
+    await model.getRuns()
+    expect(fetchMock.mock.lastCall?.[1]?.headers).toHaveProperty(
+      'Authorization',
+      'Bearer test-token',
+    )
+
+    userStore.logout()
+
+    expect(authStore.getToken()).toBeNull()
+    expect(userStore.user.isAuthenticated).toBe(false)
+    expect(userStore.user.name).toBe('')
+    await model.getRuns()
+    expect(fetchMock.mock.lastCall?.[1]?.headers).not.toHaveProperty(
+      'Authorization',
+    )
+  })
+
   it('hydrates every returned run with display helpers and preserves order', async () => {
     const secondRun = { ...runData, id: 8, distance_m: 2500 }
     fetchMock.mockResolvedValue(jsonResponse({ data: [runData, secondRun] }))
