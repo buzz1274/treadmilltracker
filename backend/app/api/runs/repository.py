@@ -77,6 +77,7 @@ class RunsRepository(Repository):
                 personal_best_type.type,
                 personal_best_type.min_distance_m,
                 personal_best_type.max_distance_m,
+                personal_best_type.max_duration_s,
             )
 
             personal_bests.append(personal_bests_public)
@@ -112,6 +113,7 @@ class RunsRepository(Repository):
         personal_best_type: str,
         min_distance_m: int | None,
         max_distance_m: int | None,
+        max_duration_s: int | None,
     ) -> list[RunPublic | None]:
         """get personal best runs for a user, ordered by distance or duration"""
         query: Select = select(Run).where(Run.user_id == user_id).limit(10)
@@ -121,6 +123,9 @@ class RunsRepository(Repository):
 
         if min_distance_m:
             query = query.where(col(Run.distance_m) >= min_distance_m)
+
+        if max_duration_s:
+            query = query.where(col(Run.duration_s) <= max_duration_s)
 
         if personal_best_type == PersonalBestType.SPEED:
             query = query.order_by(col(Run.duration_s).asc())
