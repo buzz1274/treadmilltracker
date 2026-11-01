@@ -21,6 +21,3 @@ api_router.include_router(runs_routes.router)
 api_router.include_router(auth_routes.router)
 api_router.include_router(user_routes.router)
 api_router.include_router(main_router)
-
-
-# forced change
