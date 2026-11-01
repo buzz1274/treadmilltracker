@@ -58,6 +58,7 @@
         dict({
           'id': 3,
           'max_distance_m': 5005,
+          'max_duration_s': None,
           'min_distance_m': 5000,
           'runs': list([
             dict({
@@ -77,6 +78,7 @@
         dict({
           'id': 4,
           'max_distance_m': None,
+          'max_duration_s': None,
           'min_distance_m': None,
           'runs': list([
           ]),

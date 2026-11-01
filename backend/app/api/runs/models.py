@@ -49,6 +49,7 @@ class PersonalBestsBase(SQLModel):
     type: PersonalBestType
     min_distance_m: int | None = None
     max_distance_m: int | None = None
+    max_duration_s: int | None = None
 
 
 class PersonalBests(PersonalBestsBase, table=True):
