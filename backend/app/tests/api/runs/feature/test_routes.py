@@ -478,3 +478,51 @@ def test_submitted_calories_must_remain_positive(
     payload = {**run_payload, **METRICS, "id": 7, "calories": calories}
     assert client.request(method, "/api/runs/", json=payload).status_code == 422
     assert repository.mock_calls == []
+
+
+@pytest.mark.parametrize("method", ["post", "patch"])
+@pytest.mark.parametrize(
+    "field", ["vo2max", "weight_kg", "avg_heart_rate", "max_heart_rate"]
+)
+@pytest.mark.parametrize("value", [0, -1])
+def test_rejects_non_positive_metrics(
+    client, repository, run_payload, method, field, value
+):
+    payload = {**run_payload, **METRICS, "id": 7, field: value}
+    response = client.request(method, "/api/runs/", json=payload)
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Input should be greater than 0"
+    assert repository.mock_calls == []
+
+
+@pytest.mark.parametrize("method", ["post", "patch"])
+def test_rejects_average_heart_rate_above_max(
+    client, repository, run_payload, method
+):
+    payload = {
+        **run_payload,
+        **METRICS,
+        "id": 7,
+        "avg_heart_rate": 180,
+        "max_heart_rate": 140,
+    }
+    response = client.request(method, "/api/runs/", json=payload)
+    assert response.status_code == 422
+    assert (
+        "Average heart rate cannot exceed max heart rate"
+        in response.json()["detail"]
+    )
+    assert repository.mock_calls == []
+
+
+@pytest.mark.parametrize("method", ["post", "patch"])
+def test_accepts_equal_heart_rates(client, repository, run_payload, method):
+    payload = {
+        **run_payload,
+        **METRICS,
+        "id": 7,
+        "avg_heart_rate": 140,
+        "max_heart_rate": 140,
+    }
+    response = client.request(method, "/api/runs/", json=payload)
+    assert response.status_code == (201 if method == "post" else 200)

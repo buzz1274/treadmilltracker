@@ -27,6 +27,16 @@ class RunBase(SQLModel):
         default=None, max_digits=5, decimal_places=2, nullable=True, gt=0
     )
 
+    @model_validator(mode="after")
+    def validate_heart_rate_range(self) -> Self:
+        if (
+            self.avg_heart_rate is not None
+            and self.max_heart_rate is not None
+            and self.avg_heart_rate > self.max_heart_rate
+        ):
+            raise ValueError("Average heart rate cannot exceed max heart rate")
+        return self
+
 
 class Run(RunBase, table=True):
     id: int = Field(primary_key=True, index=True, default=None)
@@ -53,7 +63,7 @@ class RunPublic(RunBase):
     id: int | None = None
     run_date: str | date
     calories: int | None = Field(default=None, ge=0)
-    vo2max: decimal.Decimal | None
+    vo2max: decimal.Decimal | None = Field(gt=0)
 
     @model_validator(mode="after")
     def validate_metrics(self, info: ValidationInfo) -> Self:
@@ -93,9 +103,9 @@ class RunUpdate(RunPublic):
 
 
 class RunCreate(RunUpdate):
-    avg_heart_rate: int
-    max_heart_rate: int
-    weight_kg: Decimal = Field(max_digits=5, decimal_places=2)
+    avg_heart_rate: int = Field(gt=0)
+    max_heart_rate: int = Field(gt=0)
+    weight_kg: Decimal = Field(max_digits=5, decimal_places=2, gt=0)
 
 
 class RunsPublic(SQLModel):
