@@ -53,7 +53,7 @@ class RunPublic(RunBase):
     id: int | None = None
     run_date: str | date
     calories: int | None = Field(default=None, ge=0)
-    vo2max: decimal.Decimal
+    vo2max: decimal.Decimal | None
 
     @model_validator(mode="after")
     def validate_metrics(self, info: ValidationInfo) -> Self:

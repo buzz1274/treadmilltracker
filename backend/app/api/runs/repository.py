@@ -56,7 +56,9 @@ class RunsRepository(Repository):
 
         updates = updated_run.model_dump(exclude={"id", "pace"})
         updates["run_date"] = self._parse_date(updated_run.run_date)
-        updates["vo2max"] = int(updated_run.vo2max)
+        updates["vo2max"] = (
+            int(updated_run.vo2max) if updated_run.vo2max is not None else None
+        )
 
         run.sqlmodel_update(updates)
         self.add(run)
