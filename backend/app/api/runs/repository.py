@@ -38,6 +38,8 @@ class RunsRepository(Repository):
         run: Run = Run(**run.model_dump(exclude={"user_id"}))
         run.user_id = user_id
         run.run_date = self._parse_date(run.run_date)
+        if run.vo2max is not None:
+            run.vo2max = int(run.vo2max)
 
         self.add(run)
 
@@ -47,12 +49,16 @@ class RunsRepository(Repository):
         if not run:
             raise NoResultFound("Run not found")
 
-        run.run_date = self._parse_date(updated_run.run_date)
-        run.distance_m = updated_run.distance_m
-        run.duration_s = updated_run.duration_s
-        run.calories = updated_run.calories
-        run.vo2max = int(updated_run.vo2max)
+        RunPublic.model_validate(
+            updated_run,
+            context={"existing": run},
+        )
 
+        updates = updated_run.model_dump(exclude={"id", "pace"})
+        updates["run_date"] = self._parse_date(updated_run.run_date)
+        updates["vo2max"] = int(updated_run.vo2max)
+
+        run.sqlmodel_update(updates)
         self.add(run)
 
     def personal_bests(self, user_id: int) -> list[PersonalBestPublic]:

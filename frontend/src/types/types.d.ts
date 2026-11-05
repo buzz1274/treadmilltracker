@@ -12,6 +12,9 @@ export interface IRunData {
   calories: number
   vo2max: number
   pace: number
+  weight_kg: number | null
+  avg_heart_rate: number | null
+  max_heart_rate: number | null
 }
 
 export interface IRun extends IRunData {

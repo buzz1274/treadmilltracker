@@ -1,13 +1,19 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import ValidationError
 
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.user.models import User
 from app.core.authentication import get_current_user
 from fastapi_utils.cbv import cbv
-from app.api.runs.models import RunsPublic, RunPublic, PersonalBestsPublic
+from app.api.runs.models import (
+    RunsPublic,
+    RunUpdate,
+    RunCreate,
+    PersonalBestsPublic,
+)
 from app.api.runs.repository import RunsRepository
 from app.api.runs.enums import Interval
 
@@ -46,6 +52,7 @@ class RunRouter:
                 detail=self.ERROR_MESSAGE_404,
             )
         except Exception as e:
+            print(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
             )
@@ -64,7 +71,7 @@ class RunRouter:
             )
 
     @router.post("/", status_code=status.HTTP_201_CREATED)
-    def post(self, run: RunPublic) -> None:
+    def post(self, run: RunCreate) -> None:
         """create a run"""
         try:
             self.runs_repository.add_run(self.user.id, run)
@@ -74,10 +81,15 @@ class RunRouter:
             )
 
     @router.patch("/", status_code=status.HTTP_200_OK)
-    def patch(self, run: RunPublic) -> None:
+    def patch(self, run: RunUpdate) -> None:
         """update a run"""
         try:
             self.runs_repository.update_run(self.user.id, run)
+        except ValidationError as e:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="\n".join(error["msg"] for error in e.errors()),
+            )
         except NoResultFound:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

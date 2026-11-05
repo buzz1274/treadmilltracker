@@ -10,6 +10,9 @@ export class RunModel extends Model implements IRun {
   public calories!: number
   public vo2max!: number
   public pace!: number
+  public weight_kg!: number
+  public avg_heart_rate!: number
+  public max_heart_rate!: number
   public formattedSeconds!: string
 
   constructor(run: IRunData | null = null) {
@@ -39,6 +42,9 @@ export class RunModel extends Model implements IRun {
         duration_s: this.duration_s,
         calories: this.calories,
         vo2max: this.vo2max,
+        weight_kg: this.weight_kg,
+        avg_heart_rate: this.avg_heart_rate,
+        max_heart_rate: this.max_heart_rate,
       },
       !!this.id,
     )

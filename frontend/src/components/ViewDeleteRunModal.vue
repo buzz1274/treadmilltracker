@@ -103,6 +103,18 @@ const deleteRun = (): void => {
       <div class="font-semibold w-24">VO₂ Max</div>
       <div>{{ run?.vo2max }}</div>
     </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="font-semibold w-24">Weight(kg)</div>
+      <div>{{ run?.weight_kg }}</div>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="font-semibold w-24">Max heartrate</div>
+      <div>{{ run?.max_heart_rate }}</div>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="font-semibold w-24">Avg Heartrate</div>
+      <div>{{ run?.avg_heart_rate }}</div>
+    </div>
     <div v-if="props.delete" class="flex justify-end gap-2 mt-10">
       <BaseButton label="Cancel" severity="secondary" @click="emit('close')" />
       <BaseButton label="Delete" severity="primary" @click="deleteRun" />
