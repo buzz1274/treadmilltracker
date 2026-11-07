@@ -14,4 +14,6 @@ elif [ "$ACTION" == "ty" ]; then
   docker exec -it treadmilltracker-backend sh -c "./bin/ty.sh"
 elif [ "$ACTION" == "connect-frontend" ]; then
   docker exec -it treadmilltracker-frontend sh
+elif [ "$ACTION" == "pytest" ]; then
+  docker exec -it treadmilltracker-backend bash -c "poetry run pytest"
 fi

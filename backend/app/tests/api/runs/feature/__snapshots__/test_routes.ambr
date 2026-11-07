@@ -44,6 +44,135 @@
     'status_code': 401,
   })
 # ---
+# name: test_can_add_and_update_metrics
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_can_add_and_update_metrics.1
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 200,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[null-avg_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Value error, avg_heart_rate cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[null-max_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Value error, max_heart_rate cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[null-weight_kg]
+  dict({
+    'body': dict({
+      'detail': 'Value error, weight_kg cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[omitted-avg_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Value error, avg_heart_rate cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[omitted-max_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Value error, max_heart_rate cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_cannot_clear_recorded_metric[omitted-weight_kg]
+  dict({
+    'body': dict({
+      'detail': 'Value error, weight_kg cannot be removed once recorded',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_persists_metrics
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 201,
+  })
+# ---
+# name: test_create_requires_metrics[null-avg_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_requires_metrics[null-max_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Input should be a valid integer',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_requires_metrics[null-weight_kg]
+  dict({
+    'body': dict({
+      'detail': 'Decimal input should be an integer, float, string or Decimal object',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_requires_metrics[omitted-avg_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Field required',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_requires_metrics[omitted-max_heart_rate]
+  dict({
+    'body': dict({
+      'detail': 'Field required',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
+# name: test_create_requires_metrics[omitted-weight_kg]
+  dict({
+    'body': dict({
+      'detail': 'Field required',
+    }),
+    'content_type': 'application/json',
+    'status_code': 422,
+  })
+# ---
 # name: test_delete_run
   dict({
     'body': '',
@@ -62,13 +191,16 @@
           'min_distance_m': 5000,
           'runs': list([
             dict({
+              'avg_heart_rate': None,
               'calories': 350,
               'distance_m': 5000,
               'duration_s': 1800,
               'id': 7,
+              'max_heart_rate': None,
               'pace': 10.0,
               'run_date': '2026-10-20',
               'vo2max': '45',
+              'weight_kg': None,
             }),
           ]),
           'sort_order': 1,
@@ -117,13 +249,16 @@
     'body': dict({
       'data': list([
         dict({
+          'avg_heart_rate': None,
           'calories': 350,
           'distance_m': 5000,
           'duration_s': 1800,
           'id': 7,
+          'max_heart_rate': None,
           'pace': 10.0,
           'run_date': '2026-10-20',
           'vo2max': '45',
+          'weight_kg': None,
         }),
       ]),
     }),
@@ -136,13 +271,16 @@
     'body': dict({
       'data': list([
         dict({
+          'avg_heart_rate': None,
           'calories': 350,
           'distance_m': 5000,
           'duration_s': 1800,
           'id': 7,
+          'max_heart_rate': None,
           'pace': 10.0,
           'run_date': '2026-10-20',
           'vo2max': '45',
+          'weight_kg': None,
         }),
       ]),
     }),
@@ -155,13 +293,16 @@
     'body': dict({
       'data': list([
         dict({
+          'avg_heart_rate': None,
           'calories': 350,
           'distance_m': 5000,
           'duration_s': 1800,
           'id': 7,
+          'max_heart_rate': None,
           'pace': 10.0,
           'run_date': '2026-10-20',
           'vo2max': '45',
+          'weight_kg': None,
         }),
       ]),
     }),
@@ -174,13 +315,16 @@
     'body': dict({
       'data': list([
         dict({
+          'avg_heart_rate': None,
           'calories': 350,
           'distance_m': 5000,
           'duration_s': 1800,
           'id': 7,
+          'max_heart_rate': None,
           'pace': 10.0,
           'run_date': '2026-10-20',
           'vo2max': '45',
+          'weight_kg': None,
         }),
       ]),
     }),
@@ -193,13 +337,16 @@
     'body': dict({
       'data': list([
         dict({
+          'avg_heart_rate': None,
           'calories': 350,
           'distance_m': 5000,
           'duration_s': 1800,
           'id': 7,
+          'max_heart_rate': None,
           'pace': 10.0,
           'run_date': '2026-10-20',
           'vo2max': '45',
+          'weight_kg': None,
         }),
       ]),
     }),
@@ -287,7 +434,6 @@
         Field required
         Field required
         Field required
-        Field required
       ''',
     }),
     'content_type': 'application/json',
@@ -298,6 +444,8 @@
   dict({
     'body': dict({
       'detail': '''
+        Field required
+        Field required
         Field required
         Field required
         Field required
@@ -325,6 +473,13 @@
     }),
     'content_type': 'application/json',
     'status_code': 422,
+  })
+# ---
+# name: test_legacy_run_can_keep_null_metrics
+  dict({
+    'body': None,
+    'content_type': 'application/json',
+    'status_code': 200,
   })
 # ---
 # name: test_missing_request_body[patch]

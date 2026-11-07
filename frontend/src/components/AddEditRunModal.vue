@@ -18,6 +18,7 @@ import { RunModel } from '@/models/RunModel'
 import { store as useStore } from '@/stores/store'
 import { convertToSeconds, timePattern } from '@/helper/helper.ts'
 import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
+import { createRunMetricFields } from '@/validation/runMetrics'
 
 const toast = useToast()
 const store = useStore()
@@ -53,6 +54,7 @@ const runModelValidationSchema: ObjectSchema<{
     ),
   distance_m: number().required('Please enter a valid distance'),
   calories: number().required('Please enter valid value for calories'),
+  ...createRunMetricFields(runData.value),
   vo2max: number().required('Please enter valid value for VO2 max'),
 })
 
@@ -140,7 +142,7 @@ const runDateProxy = computed<Date | null>({
       @submit="save()"
     >
       <div class="flex items-center gap-4 mb-4">
-        <label for="date" class="font-semibold w-24">Date</label>
+        <label for="date" class="font-semibold w-36">Date</label>
         <BaseDatePicker
           v-model="runDateProxy"
           name="run_date"
@@ -152,13 +154,14 @@ const runDateProxy = computed<Date | null>({
         v-if="$form['run_date']?.invalid"
         class="flex items-center gap-4 mb-4"
       >
-        <div class="w-24"></div>
+        <div class="w-36"></div>
         <Message severity="error" class="border w-100" size="small">
           {{ $form['run_date'].error.message }}
         </Message>
       </div>
+
       <div class="flex items-center gap-4 mb-4">
-        <label for="time" class="font-semibold w-24">Time(hh:mm:ss)</label>
+        <label for="time" class="font-semibold w-36">Time(hh:mm:ss)</label>
         <InputText
           v-model="run.formattedSeconds"
           autocomplete="off"
@@ -170,13 +173,14 @@ const runDateProxy = computed<Date | null>({
         v-if="$form['formattedSeconds']?.invalid"
         class="flex items-center gap-4 mb-4"
       >
-        <div class="w-24"></div>
+        <div class="w-36"></div>
         <Message severity="error" class="border w-100" size="small">
           {{ $form['formattedSeconds'].error.message }}
         </Message>
       </div>
+
       <div class="flex items-center gap-4 mb-4">
-        <label for="distance" class="font-semibold w-24">Distance(m)</label>
+        <label for="distance" class="font-semibold w-36">Distance(m)</label>
         <InputNumber
           v-model="run.distance_m"
           name="distance_m"
@@ -187,13 +191,14 @@ const runDateProxy = computed<Date | null>({
         v-if="$form['distance_m']?.invalid"
         class="flex items-center gap-4 mb-4"
       >
-        <div class="w-24"></div>
+        <div class="w-36"></div>
         <Message severity="error" class="border w-100" size="small">
           {{ $form['distance_m'].error.message }}
         </Message>
       </div>
+
       <div class="flex items-center gap-4 mb-4">
-        <label for="distance" class="font-semibold w-24">Calories(kcal)</label>
+        <label for="distance" class="font-semibold w-36">Calories(kcal)</label>
         <InputNumber
           v-model="run.calories"
           autocomplete="off"
@@ -205,13 +210,14 @@ const runDateProxy = computed<Date | null>({
         v-if="$form['calories']?.invalid"
         class="flex items-center gap-4 mb-4"
       >
-        <div class="w-24"></div>
+        <div class="w-36"></div>
         <Message severity="error" class="border w-100" size="small">
           {{ $form['calories'].error.message }}
         </Message>
       </div>
+
       <div class="flex items-center gap-4 mb-4">
-        <label for="vo2" class="font-semibold w-24">VO₂ Max</label>
+        <label for="vo2" class="font-semibold w-36">VO₂ Max</label>
         <InputNumber
           v-model="run.vo2max"
           autocomplete="off"
@@ -220,11 +226,74 @@ const runDateProxy = computed<Date | null>({
         />
       </div>
       <div v-if="$form['vo2max']?.invalid" class="flex items-center gap-4 mb-4">
-        <div class="w-24"></div>
+        <div class="w-36"></div>
         <Message severity="error" class="border w-100" size="small">
           {{ $form['vo2max'].error.message }}
         </Message>
       </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <label for="weight_kg" class="font-semibold w-36">Weight(kg)</label>
+        <InputNumber
+          v-model="run.weight_kg"
+          autocomplete="off"
+          name="weight_kg"
+          class="text-xs"
+        />
+      </div>
+      <div
+        v-if="$form['weight_kg']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
+        <div class="w-36"></div>
+        <Message severity="error" class="border w-100" size="small">
+          {{ $form['weight_kg'].error.message }}
+        </Message>
+      </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <label for="avg_heart_rate" class="font-semibold w-36">
+          Avg. Heart Rate
+        </label>
+        <InputNumber
+          v-model="run.avg_heart_rate"
+          autocomplete="off"
+          name="avg_heart_rate"
+          class="text-xs"
+        />
+      </div>
+
+      <div
+        v-if="$form['avg_heart_rate']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
+        <div class="w-36"></div>
+        <Message severity="error" class="border w-100" size="small">
+          {{ $form['avg_heart_rate'].error.message }}
+        </Message>
+      </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <label for="max_heart_rate" class="font-semibold w-36">
+          Max. Heart Rate
+        </label>
+        <InputNumber
+          v-model="run.max_heart_rate"
+          autocomplete="off"
+          name="max_heart_rate"
+          class="text-xs"
+        />
+      </div>
+      <div
+        v-if="$form['max_heart_rate']?.invalid"
+        class="flex items-center gap-4 mb-4"
+      >
+        <div class="w-36"></div>
+        <Message severity="error" class="border w-100" size="small">
+          {{ $form['max_heart_rate'].error.message }}
+        </Message>
+      </div>
+
       <div class="flex justify-end gap-2 mt-10">
         <BaseButton
           label="Cancel"
