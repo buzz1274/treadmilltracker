@@ -13,6 +13,10 @@ from app.api.user.service import UserService
 from app.core.config import settings
 
 
+class AuthError(Exception):
+    pass
+
+
 class AuthService:
     INVALID_CREDENTIAL_ERROR: str = "Invalid credentials"
     TOKEN_EXPIRY_MINUTES: int = 15
@@ -33,14 +37,14 @@ class AuthService:
                 credential, requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID
             )
         except ValueError:
-            raise ValueError(self.INVALID_CREDENTIAL_ERROR)
+            raise AuthError(self.INVALID_CREDENTIAL_ERROR)
 
         if (
             not user_info.get("email")
             or not user_info.get("given_name")
             or not user_info.get("email_verified")
         ):
-            raise ValueError(self.INVALID_CREDENTIAL_ERROR)
+            raise AuthError(self.INVALID_CREDENTIAL_ERROR)
 
         user = self.user_service.get_or_create(
             user_info.get("email"), user_info.get("given_name")
@@ -61,12 +65,12 @@ class AuthService:
             InvalidTokenError,
             KeyError,
         ):
-            raise RuntimeError(AuthService.INVALID_CREDENTIAL_ERROR)
+            raise AuthError(AuthService.INVALID_CREDENTIAL_ERROR)
 
         user = self.user_repository.get_user(user_id=int(jwt_payload["sub"]))
 
         if not user:
-            raise RuntimeError(AuthService.INVALID_CREDENTIAL_ERROR)
+            raise AuthError(AuthService.INVALID_CREDENTIAL_ERROR)
 
         return user
 
