@@ -12,7 +12,7 @@ class User(SQLModel, table=True):
     id: int = Field(primary_key=True, index=True, default=None)
     email: str = Field(unique=True, index=True)
     full_name: Optional[str] = Field(default=None, max_length=255)
-    registered_date: date = Field(default=date.today(), nullable=True)
+    registered_date: date = Field(default_factory=date.today, nullable=False)
     runs: List["Run"] = Relationship(back_populates="user")
     personal_bests: List["PersonalBests"] = Relationship(back_populates="user")
 
