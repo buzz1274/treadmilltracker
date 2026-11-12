@@ -236,7 +236,10 @@ const runDateProxy = computed<Date | null>({
         <label for="weight_kg" class="font-semibold w-36">Weight(kg)</label>
         <InputNumber
           v-model="run.weight_kg"
+          mode="decimal"
           autocomplete="off"
+          :min-fraction-digits="2"
+          :max-fraction-digits="2"
           name="weight_kg"
           class="text-xs"
         />
